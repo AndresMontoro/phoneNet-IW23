@@ -1,9 +1,10 @@
-package es.uca.iw.views;
+package es.uca.iw.views.misFacturas;
 
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
+import es.uca.iw.views.MainLayout;
 import jakarta.annotation.security.RolesAllowed;
 
 @Route(value = "MisFacturas", layout = MainLayout.class)

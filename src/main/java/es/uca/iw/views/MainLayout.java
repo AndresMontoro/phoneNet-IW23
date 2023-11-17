@@ -11,6 +11,11 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 
+import es.uca.iw.views.miPerfil.MiPerfilView;
+import es.uca.iw.views.misConsumos.MisConsumosView;
+import es.uca.iw.views.misFacturas.MisFacturasView;
+import es.uca.iw.views.misProductos.MisProductosView;
+
 public class MainLayout extends AppLayout{
     public MainLayout() {
         DrawerToggle toggle = new DrawerToggle();

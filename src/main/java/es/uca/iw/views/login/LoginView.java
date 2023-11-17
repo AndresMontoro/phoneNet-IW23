@@ -1,4 +1,4 @@
-package es.uca.iw.views;
+package es.uca.iw.views.login;
 
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.html.Div;

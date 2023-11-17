@@ -7,8 +7,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 
-import es.uca.iw.views.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
+
+import es.uca.iw.views.login.LoginView;
+
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 @EnableWebSecurity
