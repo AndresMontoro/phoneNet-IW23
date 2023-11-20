@@ -23,11 +23,11 @@ public class ProductService {
 
     public void crearProductos() {
         Product p1 = new Product();
-        p1.setName("Tarifa de veano");
+        p1.setName("Tarifa de vuelta al cole");
         p1.setAvailable(true);
-        p1.setDescription("Tarifa de verano para aprovechar el sol.");
-        p1.setImage("https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw");
-        p1.setPrice(new BigDecimal(21.50));
+        p1.setDescription("Tarifa todo en uno para estudiantes. Garantiza una experiencia de navegación de 600Mb simétricos, llamadas ilimitadas en tu fijo y móvil y 20GB de datos móviles.");
+        p1.setImage("https://www.elmira.es/asset/thumbnail,992,558,center,center/media/elmira/images/2023/04/28/2023042809092957303.jpg");
+        p1.setPrice(new BigDecimal(30.99));
 
         // Crea un set de tipos de productos
         Set<Product.ProductType> productTypes = new HashSet<Product.ProductType>();

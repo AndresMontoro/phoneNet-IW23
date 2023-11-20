@@ -2,6 +2,7 @@ package es.uca.iw.views.productosDisponibles;
 
 import jakarta.annotation.security.PermitAll;
 import com.vaadin.flow.router.Route;
+
 import java.util.List;
 
 import com.vaadin.flow.component.html.H2;
@@ -39,22 +40,22 @@ public class ProductosDisponiblesView extends VerticalLayout {
 
         for (Product product : products) {
             if (product.getAvailable())
-                imageContainer.add(new ImageGalleryViewCard(product.getName(), product.getImage(), product.getDescription(), product.getPrice()));
+                imageContainer.add(new ImageGalleryViewCard(product.getName(), product.getImage(), product.getDescription(), product.getPrice(), true));
         }
     }   
 
     private void constructUI() {
         addClassNames("image-gallery-view");
-        addClassNames(MaxWidth.SCREEN_LARGE, Margin.Horizontal.AUTO, Padding.Bottom.LARGE, Padding.Horizontal.LARGE);
+        addClassNames(MaxWidth.SCREEN_LARGE, Margin.Horizontal.AUTO, Padding.Horizontal.LARGE);
 
         HorizontalLayout container = new HorizontalLayout();
         container.addClassNames(AlignItems.CENTER, JustifyContent.BETWEEN);
 
         VerticalLayout headerContainer = new VerticalLayout();
         H2 header = new H2("Productos disponibles");
-        header.addClassNames(Margin.Bottom.NONE, Margin.Top.XLARGE, FontSize.XXXLARGE);
+        header.addClassNames(Margin.Bottom.NONE, Margin.Top.SMALL, FontSize.XXXLARGE);
         Paragraph description = new Paragraph("Aqui tiene todas las tarifas disponibles.");
-        description.addClassNames(Margin.Bottom.XLARGE, Margin.Top.NONE, TextColor.SECONDARY);
+        description.addClassNames(Margin.Bottom.XSMALL, Margin.Top.NONE, TextColor.SECONDARY);
         headerContainer.add(header, description);
 
         // Select<String> sortBy = new Select<>();
@@ -67,6 +68,5 @@ public class ProductosDisponiblesView extends VerticalLayout {
 
         container.add(headerContainer);
         add(container, imageContainer);
-        
     }
 }

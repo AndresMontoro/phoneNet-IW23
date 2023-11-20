@@ -24,14 +24,15 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Width;
 
 public class ImageGalleryViewCard extends ListItem {
 
-    public ImageGalleryViewCard(String productName, String productUrl, String productDescription, BigDecimal productPrice) {
+    public ImageGalleryViewCard(String productName, String productUrl, String productDescription, BigDecimal productPrice, boolean hireVisible) {
         addClassNames(Background.CONTRAST_5, Display.FLEX, FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 BorderRadius.LARGE);
 
         Div div = new Div();
         div.addClassNames(Background.CONTRAST, Display.FLEX, AlignItems.CENTER, JustifyContent.CENTER,
-                Margin.Bottom.MEDIUM, Overflow.HIDDEN, BorderRadius.MEDIUM, Width.FULL);
-        div.setHeight("160px");
+                Margin.Bottom.SMALL, Overflow.HIDDEN, BorderRadius.MEDIUM, Width.FULL);
+        div.setHeight("250px");
+        div.getStyle().set("width", "100%");
 
         Image image = new Image();
         image.setWidth("100%");
@@ -46,7 +47,7 @@ public class ImageGalleryViewCard extends ListItem {
 
         Span subtitle = new Span();
         subtitle.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
-        subtitle.setText(productPrice.toString() + "€");
+        subtitle.setText(productPrice.toString() + "€/mes");
 
         Paragraph description = new Paragraph(productDescription);
         description.addClassName(Margin.Vertical.MEDIUM);
@@ -55,8 +56,11 @@ public class ImageGalleryViewCard extends ListItem {
         // badge.getElement().setAttribute("theme", "badge");
         // badge.setText("Label");
 
-        Button badge = new Button("Contratarlo");
+        add(div, header, subtitle, description);
 
-        add(div, header, subtitle, description, badge);
+        if (hireVisible) {
+            Button badge = new Button("Contratarlo");
+            add(badge);
+        }
     }
 }

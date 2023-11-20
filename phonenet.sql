@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-11-2023 a las 14:09:54
+-- Tiempo de generación: 20-11-2023 a las 20:10:43
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -31,19 +31,20 @@ USE `phonenet`;
 
 CREATE TABLE `product` (
   `_id` bigint(20) NOT NULL,
-  `_available` bit(1) NOT NULL,
-  `_description` varchar(255) NOT NULL,
-  `_image` varchar(255) NOT NULL,
-  `_name` varchar(255) NOT NULL,
-  `_price` decimal(38,2) NOT NULL
+  `available` bit(1) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `price` decimal(38,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `product`
 --
 
-INSERT INTO `product` (`_id`, `_available`, `_description`, `_image`, `_name`, `_price`) VALUES
-(52, b'1', 'Tarifa de verano para aprovechar el sol.', 'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw', 'Tarifa de verano', 21.50);
+INSERT INTO `product` (`_id`, `available`, `description`, `image`, `name`, `price`) VALUES
+(1, b'1', 'Tarifa de verano para aprovechar el sol.', 'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw', 'Tarifa de veano', 21.50),
+(102, b'1', 'Tarifa todo en uno para estudiantes. Garantiza una experiencia de navegación de 600Mb simétricos, llamadas ilimitadas en tu fijo y móvil y 20GB de datos móviles.', 'https://www.elmira.es/asset/thumbnail,992,558,center,center/media/elmira/images/2023/04/28/2023042809092957303.jpg', 'Tarifa de vuelta al cole', 30.99);
 
 -- --------------------------------------------------------
 
@@ -60,7 +61,7 @@ CREATE TABLE `product_seq` (
 --
 
 INSERT INTO `product_seq` (`next_val`) VALUES
-(251);
+(201);
 
 -- --------------------------------------------------------
 
@@ -78,7 +79,8 @@ CREATE TABLE `product_type` (
 --
 
 INSERT INTO `product_type` (`product_id`, `type`) VALUES
-(52, 'FIBRA');
+(1, 'FIBRA'),
+(102, 'FIBRA');
 
 -- --------------------------------------------------------
 
@@ -87,14 +89,14 @@ INSERT INTO `product_type` (`product_id`, `type`) VALUES
 --
 
 CREATE TABLE `user` (
-  `_id` bigint(20) NOT NULL,
-  `_dni` varchar(255) DEFAULT NULL,
-  `_email` varchar(255) DEFAULT NULL,
-  `_name` varchar(255) DEFAULT NULL,
-  `_password` varchar(255) DEFAULT NULL,
-  `_role` enum('ADMIN','USER') DEFAULT NULL,
-  `_surname` varchar(255) DEFAULT NULL,
-  `_username` varchar(255) DEFAULT NULL
+  `id` bigint(20) NOT NULL,
+  `dni` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `role` enum('ADMIN','USER') DEFAULT NULL,
+  `surname` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -123,9 +125,9 @@ INSERT INTO `user_seq` (`next_val`) VALUES
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`_id`),
-  ADD UNIQUE KEY `UK_rw33wtljvi9h7l5v4uqycihq3` (`_description`),
-  ADD UNIQUE KEY `UK_lt2m1onuw72qvum1jy5e3lgeo` (`_image`),
-  ADD UNIQUE KEY `UK_c9p1sts3pcc0wt0566b3f5m7n` (`_name`);
+  ADD UNIQUE KEY `UK_q2n3melweyrl5d4rqkg7pq6ra` (`description`),
+  ADD UNIQUE KEY `UK_k522ciwe39etspfr4ncb790m2` (`image`),
+  ADD UNIQUE KEY `UK_jmivyxk9rmgysrmsqw15lqr5b` (`name`);
 
 --
 -- Indices de la tabla `product_type`
@@ -137,9 +139,9 @@ ALTER TABLE `product_type`
 -- Indices de la tabla `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`_id`),
-  ADD UNIQUE KEY `UK_b4nqsxutego7y366l8ikjwe6s` (`_email`),
-  ADD UNIQUE KEY `UK_lc3t0kmaui70w895g3vkwcupq` (`_username`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UK_ob8kqyqqgmefl0aco34akdtpe` (`email`),
+  ADD UNIQUE KEY `UK_sb8bbouer5wak8vyiiy4pf2bx` (`username`);
 
 --
 -- Restricciones para tablas volcadas

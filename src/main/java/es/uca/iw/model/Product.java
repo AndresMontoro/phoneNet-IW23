@@ -21,57 +21,59 @@ public class Product {
 
     @Column(unique = true, nullable = false)
     @NotEmpty(message = "Incluya el nombre, por favor")
-    private String _name;
-    public String getName() { return _name; }
+    private String name;
+    public String getName() { return name; }
     public void setName(String name) {
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
-        _name = name;
+        this.name = name;
     }
 
     @Column(unique = true, nullable = false)
     @NotEmpty(message = "Incluya la descripción, por favor")
-    private String _description;
-    public String getDescription() { return _description; }
+    private String description;
+    public String getDescription() { return description; }
     public void setDescription(String description) {
         if (description == null || description.isEmpty())
             throw new IllegalArgumentException("La descripción no puede ser nula o vacía");
-        _description = description;
+        this.description = description;
     }
 
     @NotEmpty(message = "Incluya la imagen, por favor")
     @Column(unique = true, nullable = false)
-    private String _image;
-    public String getImage() { return _image; }
+    private String image;
+    public String getImage() { return image; }
     public void setImage(String image) {
         if (image == null || image.isEmpty())
             throw new IllegalArgumentException("La imagen no puede ser nula o vacía");
-        _image = image;
+        this.image = image;
     }
 
     @NotNull(message = "Incluya el precio, por favor")
     @Column(nullable = false)
-    private BigDecimal _price;
-    public BigDecimal getPrice() { return _price; }
+    private BigDecimal price;
+    public BigDecimal getPrice() { return price; }
     public void setPrice(BigDecimal price) {
         if (price.compareTo(BigDecimal.ZERO) < 0)
             throw new IllegalArgumentException("El precio no puede ser negativo");
-        _price = price;
+        this.price = price;
     }
 
     @Column(nullable = false)
-    private boolean _available;
-    public boolean getAvailable() { return _available; }
-    public void setAvailable(boolean available) { _available = available; }
+    private boolean available;
+    public boolean getAvailable() { return available; }
+    public void setAvailable(boolean available) { this.available = available; }
 
     @ElementCollection(targetClass = ProductType.class)
     @CollectionTable(name = "product_type", joinColumns = @JoinColumn(name = "product_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     @NotEmpty(message = "Incluya el tipo, por favor")
-    private Set<ProductType> _productType;
-    public Set<ProductType> getProductType() { return _productType; }
-    public void setProductType(Set<ProductType> productType) { _productType = productType; }
+    private Set<ProductType> productType;
+    public Set<ProductType> getProductType() { return productType; }
+    public void setProductType(Set<ProductType> productType) { 
+        this.productType = productType; 
+    }
 
     public Product() {}
 }
