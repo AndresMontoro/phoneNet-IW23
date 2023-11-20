@@ -1,5 +1,6 @@
 package es.uca.iw.views.productosDisponibles;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.ListItem;
@@ -49,11 +50,12 @@ public class ImageGalleryViewCard extends ListItem {
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.");
         description.addClassName(Margin.Vertical.MEDIUM);
 
-        Span badge = new Span();
-        badge.getElement().setAttribute("theme", "badge");
-        badge.setText("Label");
+        // Span badge = new Span();
+        // badge.getElement().setAttribute("theme", "badge");
+        // badge.setText("Label");
+
+        Button badge = new Button("Más información");
 
         add(div, header, subtitle, description, badge);
-
     }
 }

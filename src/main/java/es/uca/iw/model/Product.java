@@ -1,11 +1,20 @@
 package es.uca.iw.model;
 
-import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Set;
+
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
 
 @Entity
 public class Product {
+
+    public enum ProductType {
+        FIBRA, MOVIL, FIJO
+    }
+
     @Id 
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long _id;
@@ -40,12 +49,12 @@ public class Product {
         _image = image;
     }
 
-    @NotEmpty(message = "Incluya el precio, por favor")
+    @NotNull(message = "Incluya el precio, por favor")
     @Column(nullable = false)
-    private double _price;
-    public double getPrice() { return _price; }
-    public void setPrice(double price) {
-        if (price < 0)
+    private BigDecimal _price;
+    public BigDecimal getPrice() { return _price; }
+    public void setPrice(BigDecimal price) {
+        if (price.compareTo(BigDecimal.ZERO) < 0)
             throw new IllegalArgumentException("El precio no puede ser negativo");
         _price = price;
     }
@@ -54,4 +63,15 @@ public class Product {
     private boolean _available;
     public boolean getAvailable() { return _available; }
     public void setAvailable(boolean available) { _available = available; }
+
+    @ElementCollection(targetClass = ProductType.class)
+    @CollectionTable(name = "product_type", joinColumns = @JoinColumn(name = "product_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    @NotEmpty(message = "Incluya el tipo, por favor")
+    private Set<ProductType> _productType;
+    public Set<ProductType> getProductType() { return _productType; }
+    public void setProductType(Set<ProductType> productType) { _productType = productType; }
+
+    public Product() {}
 }

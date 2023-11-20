@@ -1,4 +1,4 @@
-package es.uca.iw;
+package es.uca.iw.services;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

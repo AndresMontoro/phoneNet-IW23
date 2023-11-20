@@ -1,6 +1,6 @@
 package es.uca.iw.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import jakarta.validation.constraints.NotEmpty;
 

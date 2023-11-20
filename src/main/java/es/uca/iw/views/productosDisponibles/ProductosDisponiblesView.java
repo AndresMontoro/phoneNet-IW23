@@ -2,6 +2,7 @@ package es.uca.iw.views.productosDisponibles;
 
 import jakarta.annotation.security.PermitAll;
 import com.vaadin.flow.router.Route;
+
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.OrderedList;
 import com.vaadin.flow.component.html.Paragraph;
@@ -15,6 +16,9 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
+
+import es.uca.iw.services.ProductService;
+
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import com.vaadin.flow.theme.lumo.LumoUtility.Display;
 
@@ -22,9 +26,12 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Display;
 @PermitAll
 public class ProductosDisponiblesView extends VerticalLayout {
     
+    private final ProductService _productService;
     private OrderedList imageContainer;
+    
+    public ProductosDisponiblesView(ProductService productService) {
+        _productService = productService;
 
-    public ProductosDisponiblesView() {
         // Utilizar componente de vaadin para mostrar imagenes
         constructUI();
 
@@ -44,7 +51,7 @@ public class ProductosDisponiblesView extends VerticalLayout {
         VerticalLayout headerContainer = new VerticalLayout();
         H2 header = new H2("Productos disponibles");
         header.addClassNames(Margin.Bottom.NONE, Margin.Top.XLARGE, FontSize.XXXLARGE);
-        Paragraph description = new Paragraph("Para más información, contacte con el vendedor");
+        Paragraph description = new Paragraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
         description.addClassNames(Margin.Bottom.XLARGE, Margin.Top.NONE, TextColor.SECONDARY);
         headerContainer.add(header, description);
 

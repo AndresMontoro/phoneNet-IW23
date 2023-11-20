@@ -1,20 +1,34 @@
 package es.uca.iw.services;
 
-import es.uca.iw.data.ProductRepository;
-import java.util.List;
-import es.uca.iw.model.Product;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.springframework.stereotype.Service;
+import es.uca.iw.model.Product;
+import es.uca.iw.data.ProductRepository;
+
+@Service
 public class ProductService {
-    private ProductRepository _productRepository;
+    private ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
-        _productRepository = productRepository;
+        this.productRepository = productRepository;
     }
 
-    // Metodo para consultar los productos que tiene un usuario
+    public void crearProductos() {
+        Product p1 = new Product();
+        p1.setName("Tarifa de veano");
+        p1.setAvailable(true);
+        p1.setDescription("Tarifa de verano para aprovechar el sol.");
+        p1.setImage("https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw");
+        p1.setPrice(new BigDecimal(21.50));
 
-    // Metodo para consultar todos los productos disponibles en el sistema
-    public List<Product> listAvailableProducts() {
-        return _productRepository.findByAvailable(true);
+        // Crea un set de tipos de productos
+        Set<Product.ProductType> productTypes = new HashSet<Product.ProductType>();
+        productTypes.add(Product.ProductType.FIBRA);
+        p1.setProductType(productTypes);
+
+        productRepository.save(p1);
     }
 }
