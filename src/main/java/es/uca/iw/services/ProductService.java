@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
 import es.uca.iw.model.Product;
 import es.uca.iw.data.ProductRepository;
@@ -14,6 +15,10 @@ public class ProductService {
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
+    }
+
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 
     public void crearProductos() {

@@ -1,5 +1,7 @@
 package es.uca.iw.views.productosDisponibles;
 
+import java.math.BigDecimal;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -22,7 +24,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Width;
 
 public class ImageGalleryViewCard extends ListItem {
 
-    public ImageGalleryViewCard(String text, String url) {
+    public ImageGalleryViewCard(String productName, String productUrl, String productDescription, BigDecimal productPrice) {
         addClassNames(Background.CONTRAST_5, Display.FLEX, FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 BorderRadius.LARGE);
 
@@ -33,28 +35,27 @@ public class ImageGalleryViewCard extends ListItem {
 
         Image image = new Image();
         image.setWidth("100%");
-        image.setSrc(url);
-        image.setAlt(text);
+        image.setSrc(productUrl);
+        image.setAlt(productDescription);
 
         div.add(image);
 
         Span header = new Span();
         header.addClassNames(FontSize.XLARGE, FontWeight.SEMIBOLD);
-        header.setText("Title");
+        header.setText(productName);
 
         Span subtitle = new Span();
         subtitle.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
-        subtitle.setText("Card subtitle");
+        subtitle.setText(productPrice.toString() + "€");
 
-        Paragraph description = new Paragraph(
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.");
+        Paragraph description = new Paragraph(productDescription);
         description.addClassName(Margin.Vertical.MEDIUM);
 
         // Span badge = new Span();
         // badge.getElement().setAttribute("theme", "badge");
         // badge.setText("Label");
 
-        Button badge = new Button("Más información");
+        Button badge = new Button("Contratarlo");
 
         add(div, header, subtitle, description, badge);
     }

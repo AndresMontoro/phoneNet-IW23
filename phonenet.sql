@@ -43,7 +43,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`_id`, `_available`, `_description`, `_image`, `_name`, `_price`) VALUES
-(52, b'1', 'Tarifa de verano para aprovechar el sol.', 'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw', 'Tarifa de veano', 21.50);
+(52, b'1', 'Tarifa de verano para aprovechar el sol.', 'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw', 'Tarifa de verano', 21.50);
 
 -- --------------------------------------------------------
 
