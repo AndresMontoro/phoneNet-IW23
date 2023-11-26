@@ -1,19 +1,27 @@
 package es.uca.iw.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import java.util.Optional;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
 
 import es.uca.iw.data.UserRepository;
+import es.uca.iw.model.User;
+import es.uca.iw.model.Product;
 
-public class UserService implements UserDetailsService{
-    @Autowired
-    private UserRepository userRepository;
+@Service
+public class UserService {
+    private final UserRepository userRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) userRepository.findByusername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("No se ha encontrado el usuario"));
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByusername(username);
+    }
+
+    public Set<Product> getUserProducts(User user) {
+        return user.getProducts();
     }
 }

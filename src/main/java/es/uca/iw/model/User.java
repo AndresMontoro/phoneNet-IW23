@@ -1,14 +1,16 @@
 package es.uca.iw.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import jakarta.persistence.*;
-
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class User { 
     
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     public Long getId() { return id; }
 
@@ -35,7 +37,7 @@ public class User {
     private String username;
     public String getUsername() { return username; }
     public void setUsername(String username) {
-        if (username == null || username.isEmpty() || username.length() < 8)
+        if (username == null || username.isEmpty() || username.length() < 5)
             throw new IllegalArgumentException("El nombre de usuario no valido");
         this.username = username;
     }
@@ -43,9 +45,14 @@ public class User {
     @NotEmpty(message = "Incluya la contrasenna, por favor")
     private String password;
     public String getPassword() { return password; }
+    public void setPassword(String password) {
+        if (password == null || password.isEmpty() || password.length() < 5)
+            throw new IllegalArgumentException("La contraseña no puede ser nula o vacía");
+        this.password = password;
+    }
 
     public enum Role { ADMIN, USER }  
-    @NotEmpty
+    @NotNull(message = "Incluya el rol, por favor")
     @Enumerated(EnumType.STRING)
     private Role role;
     public Role getRole() { return role; }
@@ -57,7 +64,7 @@ public class User {
 
     private String dni;
     public String getDni() { return dni; }
-    public void setString(String dni) {
+    public void setDni(String dni) {
         if (dni == null || dni.isEmpty() || dni.length() != 9)
             throw new IllegalArgumentException("DNI invalido");
         this.dni = dni;
@@ -72,5 +79,12 @@ public class User {
         this.email = email;
     }
 
-    // Falta poner tamannio maximo a los datos
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Product> products = new HashSet<>();
+    public Set<Product> getProducts() { return products; }
+    public void setProducts(Set<Product> products) {
+        if (products == null)
+            throw new IllegalArgumentException("Los productos no pueden ser nulos");
+        this.products = products;
+    }
 }

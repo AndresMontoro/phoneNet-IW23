@@ -1,6 +1,7 @@
 package es.uca.iw.model;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -16,7 +17,7 @@ public class Product {
     }
 
     @Id 
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long _id;
 
     @Column(unique = true, nullable = false)
@@ -69,11 +70,9 @@ public class Product {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     @NotEmpty(message = "Incluya el tipo, por favor")
-    private Set<ProductType> productType;
+    private Set<ProductType> productType = new HashSet<>();
     public Set<ProductType> getProductType() { return productType; }
     public void setProductType(Set<ProductType> productType) { 
         this.productType = productType; 
     }
-
-    public Product() {}
 }

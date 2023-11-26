@@ -61,6 +61,9 @@ public class ImageGalleryViewCard extends ListItem {
         if (hireVisible) {
             Button badge = new Button("Contratarlo");
             add(badge);
+        } else {
+            Button badgeUnhire = new Button("Descontratarlo");
+            add(badgeUnhire);
         }
     }
 }
