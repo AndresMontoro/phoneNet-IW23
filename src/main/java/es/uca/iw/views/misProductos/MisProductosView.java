@@ -17,6 +17,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Horizontal;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Vertical;
 import com.vaadin.flow.theme.lumo.LumoUtility.Background;
 
+import es.uca.iw.services.ProductService;
 import es.uca.iw.services.UserService;
 import es.uca.iw.model.User;
 import es.uca.iw.model.Product;
@@ -27,9 +28,11 @@ import es.uca.iw.views.productosDisponibles.ImageGalleryViewCard;
 // @RolesAllowed(value = "USER")
 public class MisProductosView extends VerticalLayout{
     private UserService userService;
+    private ProductService productService;
 
-    public MisProductosView(UserService userService) {
+    public MisProductosView(UserService userService, ProductService productService) {
         this.userService = userService;
+        this.productService = productService;
 
         addClassNames(Padding.MEDIUM, Display.FLEX, FlexDirection.COLUMN, Gap.LARGE,Horizontal.AUTO, Vertical.AUTO);
     
@@ -44,7 +47,7 @@ public class MisProductosView extends VerticalLayout{
         Set<Product> actualUserProducts = this.userService.getUserProducts(actualUser);
         if (actualUserProducts.size() != 0) {
             for (Product product : actualUserProducts) {
-                add(new ImageGalleryViewCard(product.getName(), product.getImage(), product.getDescription(), product.getPrice(), false));
+                add(new ImageGalleryViewCard(productService, product.getName(), product.getImage(), product.getDescription(), product.getPrice(), false));
             }
         }
 

@@ -40,7 +40,7 @@ public class ProductosDisponiblesView extends VerticalLayout {
 
         for (Product product : products) {
             if (product.getAvailable())
-                imageContainer.add(new ImageGalleryViewCard(product.getName(), product.getImage(), product.getDescription(), product.getPrice(), true));
+                imageContainer.add(new ImageGalleryViewCard(productService, product.getName(), product.getImage(), product.getDescription(), product.getPrice(), true));
         }
     }   
 
