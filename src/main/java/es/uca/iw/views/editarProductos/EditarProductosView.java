@@ -20,7 +20,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import es.uca.iw.model.Product;
 import es.uca.iw.services.ProductService;
 import es.uca.iw.views.MainLayout;
-
 import com.vaadin.flow.component.button.Button;
 import es.uca.iw.services.EditarProductosService;
 
