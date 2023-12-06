@@ -1,5 +1,6 @@
 package es.uca.iw.services;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,7 +22,19 @@ public class UserService {
         return userRepository.findByusername(username);
     }
 
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
     public Set<Product> getUserProducts(User user) {
         return user.getProducts();
+    }
+
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+    public void deleteUser(Long id){
+        userRepository.deleteById(id);
     }
 }
