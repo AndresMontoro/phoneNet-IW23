@@ -112,7 +112,7 @@ public class ImageGalleryViewCard2 extends ListItem {
                     product.setPrice(newProductPrice);
         
                     // Actualizar cambios en la BD
-                    editarProductosService.guardarProducto(product);
+                    editarProductosService.saveProduct(product);
                     dialog.close();
         
                     // Recargar la página
@@ -134,7 +134,7 @@ public class ImageGalleryViewCard2 extends ListItem {
         Button deleteButton = new Button("Borrar Producto", event -> {
             Optional<Product> optionalProduct = editarProductosService.findById(productId);
             if (optionalProduct.isPresent()) {
-                editarProductosService.borrarProducto(optionalProduct.get().getId());
+                editarProductosService.deleteProduct(optionalProduct.get().getId());
                 Notification.show("Producto borrado correctamente");
 
                 // Recarga la página para que se actualice la lista de productos
