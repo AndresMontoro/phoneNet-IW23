@@ -15,6 +15,7 @@ import es.uca.iw.views.miPerfil.MiPerfilView;
 import es.uca.iw.views.misConsumos.MisConsumosView;
 import es.uca.iw.views.misFacturas.MisFacturasView;
 import es.uca.iw.views.misProductos.MisProductosView;
+import es.uca.iw.views.editarProductos.EditarProductosView;
 
 public class MainLayout extends AppLayout{
     public MainLayout() {
@@ -35,7 +36,8 @@ public class MainLayout extends AppLayout{
         tabs.add(createTab(VaadinIcon.USER_HEART, "Mi perfil", MiPerfilView.class),
             createTab(VaadinIcon.CART, "Mis productos", MisProductosView.class),
             createTab(VaadinIcon.CHART, "Mis Consumos", MisConsumosView.class),
-            createTab(VaadinIcon.CLIPBOARD, "Mis facturas", MisFacturasView.class));
+            createTab(VaadinIcon.CLIPBOARD, "Mis facturas", MisFacturasView.class),
+            createTab(VaadinIcon.CLIPBOARD, "Editar Productos", EditarProductosView.class));
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;
     }
