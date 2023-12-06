@@ -19,6 +19,7 @@ public class Product {
     @Id 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long _id;
+    public Long getId() { return _id; }
 
     @Column(unique = true, nullable = false)
     @NotEmpty(message = "Incluya el nombre, por favor")
