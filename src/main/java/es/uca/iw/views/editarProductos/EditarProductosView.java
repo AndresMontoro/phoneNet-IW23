@@ -1,12 +1,16 @@
 package es.uca.iw.views.editarProductos;
 import jakarta.annotation.security.PermitAll;
+import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.OrderedList;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
 import com.vaadin.flow.theme.lumo.LumoUtility.Display;
@@ -20,9 +24,12 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import es.uca.iw.model.Product;
 import es.uca.iw.services.ProductService;
 import es.uca.iw.views.MainLayout;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import es.uca.iw.services.EditarProductosService;
-
+import java.util.Set;
+import com.vaadin.flow.component.notification.Notification;
 
 @Route(value = "EditarProductos", layout = MainLayout.class)
 @PermitAll
@@ -34,6 +41,7 @@ public class EditarProductosView extends VerticalLayout {
     private OrderedList imageContainer;
     private ComboBox<String> nameComboBox;
     private Button clearFilterButton;
+    private Button addButton;
 
     public EditarProductosView(ProductService productService, EditarProductosService editarProductosService) {
         this.productService = productService;
@@ -76,19 +84,92 @@ public class EditarProductosView extends VerticalLayout {
             showAllProducts();
         });
 
+
+
+    //////////////////////////////////////////////////////////////////////////////
+        addButton = new Button("Añadir Nuevo Producto", event -> {
+            Dialog dialog = new Dialog();
+
+            TextField newNameField = new TextField("Nombre");
+            TextField newDescriptionField = new TextField("Descripción");
+            TextField newImageUrlField = new TextField("URL de Imagen");
+            TextField newPriceField = new TextField("Precio");
+
+            Checkbox availableCheckbox = new Checkbox("Disponible");
+            Checkbox fiberTypeCheckbox = new Checkbox("Fibra");
+            Checkbox mobileTypeCheckbox = new Checkbox("Móvil");
+            Checkbox fixedTypeCheckbox = new Checkbox("Fijo");
+
+            //No se puede seleccionar mas de un tipo de producto a la vez
+            fiberTypeCheckbox.addValueChangeListener(fiberEvent -> {
+                if (fiberEvent.getValue()) {
+                    mobileTypeCheckbox.setValue(false);
+                    fixedTypeCheckbox.setValue(false);
+                }
+            });
+            
+            mobileTypeCheckbox.addValueChangeListener(mobileEvent -> {
+                if (mobileEvent.getValue()) {
+                    fiberTypeCheckbox.setValue(false);
+                    fixedTypeCheckbox.setValue(false);
+                }
+            });
+            
+            fixedTypeCheckbox.addValueChangeListener(fixedEvent -> {
+                if (fixedEvent.getValue()) {
+                    fiberTypeCheckbox.setValue(false);
+                    mobileTypeCheckbox.setValue(false);
+                }
+            });
+
+            Button saveButton = new Button("Guardar", saveEvent -> {
+                String newProductName = newNameField.getValue();
+                String newProductDescription = newDescriptionField.getValue();
+                String newProductImageUrl = newImageUrlField.getValue();
+                BigDecimal newProductPrice = new BigDecimal(newPriceField.getValue());
+
+                Product newProduct = new Product();
+                newProduct.setName(newProductName);
+                newProduct.setDescription(newProductDescription);
+                newProduct.setImage(newProductImageUrl);
+                newProduct.setPrice(newProductPrice);
+                newProduct.setAvailable(availableCheckbox.getValue());
+                Set<Product.ProductType> productTypes = new HashSet<>();
+                if (fiberTypeCheckbox.getValue()) productTypes.add(Product.ProductType.FIBRA);
+                if (mobileTypeCheckbox.getValue()) productTypes.add(Product.ProductType.MOVIL);
+                if (fixedTypeCheckbox.getValue()) productTypes.add(Product.ProductType.FIJO);
+                newProduct.setProductType(productTypes);
+
+                //Guardar producto
+                editarProductosService.saveProduct(newProduct);
+                Notification.show("Producto añadido con éxito.");
+                dialog.close();
+                UI.getCurrent().getPage().reload();
+            });
+
+            Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
+
+            dialog.add(newNameField, newDescriptionField, newImageUrlField, newPriceField, availableCheckbox, fiberTypeCheckbox, mobileTypeCheckbox, fixedTypeCheckbox,
+                    saveButton, cancelButton);
+
+            dialog.open();
+        });
+    //////////////////////////////////////////////////////////////////////////////
+
         // Configuracion de estilos
         nameComboBox.getStyle().set("align-self", "center");
-        nameComboBox.getStyle().set("margin-bottom", "2em"); 
-        
+        nameComboBox.getStyle().set("margin-bottom", "2em");    
         clearFilterButton.getStyle().set("align-self", "center");
-
+        addButton.getStyle().set("margin-top", "2.25em");
+        
         add(headerContainer);
-        add(new HorizontalLayout(nameComboBox, clearFilterButton));
+        add(new HorizontalLayout(nameComboBox, clearFilterButton, addButton));
 
         imageContainer = new OrderedList();
         imageContainer.addClassNames(Gap.MEDIUM, Display.GRID, ListStyleType.NONE, Margin.NONE, Padding.NONE);
         add(imageContainer);
     }
+
 
 
 
