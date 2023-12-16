@@ -1,13 +1,21 @@
 package es.uca.iw.model;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class User { 
+public class User implements UserDetails{ 
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -50,16 +58,15 @@ public class User {
             throw new IllegalArgumentException("La contraseña no puede ser nula o vacía");
         this.password = password;
     }
-
-    public enum Role { ADMIN, USER }  
+ 
     @NotNull(message = "Incluya el rol, por favor")
-    @Enumerated(EnumType.STRING)
-    private Role role;
-    public Role getRole() { return role; }
-    public void setRole(Role role) {
-        if (role == null)
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<UserRole> roles = new HashSet<>();
+    public Set<UserRole> getRoles() { return roles; }
+    public void setRoles(Set<UserRole> roles) {
+        if (roles == null)
             throw new IllegalArgumentException("El rol no puede ser nulo o vacio");
-        this.role = role;
+        this.roles = roles;
     }
 
     private String dni;
@@ -79,12 +86,51 @@ public class User {
         this.email = email;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Product> products = new HashSet<>();
-    public Set<Product> getProducts() { return products; }
-    public void setProducts(Set<Product> products) {
-        if (products == null)
-            throw new IllegalArgumentException("Los productos no pueden ser nulos");
-        this.products = products;
+    private String phoneNumber;
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.isEmpty() || phoneNumber.length() != 9)
+            throw new IllegalArgumentException("El número de teléfono no puede ser nulo o vacío");
+        this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) { 
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if(getClass() != obj.getClass()) return false;
+        User other = (User) obj;
+        return Objects.equals(id, other.id);
+    }
+    @Override
+    public List<GrantedAuthority> getAuthorities() {
+        return this.getRoles().stream()
+            .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+            .collect(Collectors.toList());
+    }
+    
+    @Override
+    public boolean isAccountNonExpired() {
+        // TODO Auto-generated method stub
+        return true;
+    }
+    @Override
+    public boolean isAccountNonLocked() {
+        // TODO Auto-generated method stub
+        return true;
+    }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        // TODO Auto-generated method stub
+        return true;
+    }
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

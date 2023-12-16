@@ -3,8 +3,6 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import com.vaadin.flow.component.UI;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
@@ -31,13 +29,10 @@ import es.uca.iw.services.EditarProductosService;
 import es.uca.iw.model.Product;
 import es.uca.iw.services.ProductService;
 
-
 public class ImageGalleryViewCard2 extends ListItem {
     private ProductService productService;
     private EditarProductosService editarProductosService;
     private final long productId;
-
-
 
     public ImageGalleryViewCard2(ProductService productService, EditarProductosService editarProductosService,long productId, String productName, String productUrl, String productDescription, BigDecimal productPrice, boolean hireVisible) {
 

@@ -1,6 +1,6 @@
 package es.uca.iw.views.misProductos;
 
-import java.util.Set;
+import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
@@ -17,22 +17,23 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Horizontal;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Vertical;
 import com.vaadin.flow.theme.lumo.LumoUtility.Background;
 
-import es.uca.iw.services.ProductService;
-import es.uca.iw.services.UserService;
+import es.uca.iw.services.ContractService;
+import es.uca.iw.services.UserDetailsServiceImpl;
 import es.uca.iw.model.User;
 import es.uca.iw.model.Product;
 import es.uca.iw.views.MainLayout;
 import es.uca.iw.views.productosDisponibles.ImageGalleryViewCard;
+import jakarta.annotation.security.PermitAll;
 
 @Route(value = "MisProductos", layout = MainLayout.class)
-// @RolesAllowed(value = "USER")
+@PermitAll
 public class MisProductosView extends VerticalLayout{
-    private UserService userService;
-    private ProductService productService;
+    private UserDetailsServiceImpl userDetailsServiceImpl;
+    private ContractService contractService;
 
-    public MisProductosView(UserService userService, ProductService productService) {
-        this.userService = userService;
-        this.productService = productService;
+    public MisProductosView(UserDetailsServiceImpl userDetailsServiceImpl, ContractService contractService) {
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
+        this.contractService = contractService;
 
         addClassNames(Padding.MEDIUM, Display.FLEX, FlexDirection.COLUMN, Gap.LARGE,Horizontal.AUTO, Vertical.AUTO);
     
@@ -43,15 +44,18 @@ public class MisProductosView extends VerticalLayout{
         add(header);
 
         // Ahora es un usuario de prueba, en un futuro sera el usuario que inicie sesion
-        User actualUser = this.userService.findByUsername("andresmontoro").orElse(null); 
-        Set<Product> actualUserProducts = this.userService.getUserProducts(actualUser);
+        User actualUser = this.userDetailsServiceImpl.findByUsername("andresmontoro").orElse(null); 
+        List<Product> actualUserProducts = this.contractService.getContractProducts(actualUser);
+        
         if (actualUserProducts.size() != 0) {
             for (Product product : actualUserProducts) {
-                add(new ImageGalleryViewCard(productService, product.getName(), product.getImage(), product.getDescription(), product.getPrice(), false));
+                add(new ImageGalleryViewCard(contractService, product.getName(), product.getImage(), product.getDescription(), product.getPrice(), false));
             }
+        } else {
+            add(new H2("No tienes productos contratados"));
         }
 
-        Button seeMoreButton = new Button("Ver más");
+        Button seeMoreButton = new Button("Catálogo de productos");
         seeMoreButton.addClickListener(event -> {
             seeMoreButton.getUI().ifPresent(ui -> ui.navigate("productosDisponibles"));
         });

@@ -58,8 +58,6 @@ public class EditarProductosView extends VerticalLayout {
         }
     }
 
-
-
     private void creartext() {
         addClassNames("image-gallery-view");
         addClassNames(MaxWidth.SCREEN_LARGE, Margin.Horizontal.AUTO, Padding.Bottom.LARGE, Padding.Horizontal.LARGE);
@@ -73,20 +71,15 @@ public class EditarProductosView extends VerticalLayout {
         header.addClassNames(Margin.Bottom.NONE, Margin.Top.XLARGE, FontSize.XXXLARGE);
         headerContainer.add(header);
 
-        // Filtro de productos
         nameComboBox = new ComboBox<>("Seleccione un Producto");
         nameComboBox.setAllowCustomValue(true);
         nameComboBox.addValueChangeListener(event -> filterProductsByName(event.getValue()));
 
-        // Botón para limpiar el filtro
         clearFilterButton = new Button("Limpiar filtro", event -> {
             nameComboBox.setValue(null);
             showAllProducts();
         });
 
-
-
-    //////////////////////////////////////////////////////////////////////////////
         addButton = new Button("Añadir Nuevo Producto", event -> {
             Dialog dialog = new Dialog();
 
@@ -140,7 +133,6 @@ public class EditarProductosView extends VerticalLayout {
                 if (fixedTypeCheckbox.getValue()) productTypes.add(Product.ProductType.FIJO);
                 newProduct.setProductType(productTypes);
 
-                //Guardar producto
                 editarProductosService.saveProduct(newProduct);
                 Notification.show("Producto añadido con éxito.");
                 dialog.close();
@@ -154,9 +146,7 @@ public class EditarProductosView extends VerticalLayout {
 
             dialog.open();
         });
-    //////////////////////////////////////////////////////////////////////////////
 
-        // Configuracion de estilos
         nameComboBox.getStyle().set("align-self", "center");
         nameComboBox.getStyle().set("margin-bottom", "2em");    
         clearFilterButton.getStyle().set("align-self", "center");
@@ -170,14 +160,9 @@ public class EditarProductosView extends VerticalLayout {
         add(imageContainer);
     }
 
-
-
-
     private void loadComboBoxItems() {
         nameComboBox.setItems(products.stream().map(Product::getName).collect(Collectors.toList()));
     }
-
-    
 
     private void filterProductsByName(String selectedName) {
         if (selectedName == null || selectedName.isEmpty()) {
@@ -185,16 +170,12 @@ public class EditarProductosView extends VerticalLayout {
             return;
         }
 
-        // Filtrar la lista de productos según el nombre seleccionado
         List<Product> filteredProducts = products.stream()
                 .filter(product -> product.getName().equals(selectedName))
                 .collect(Collectors.toList());
 
-        // Limpiar y volver a mostrar los productos filtrados o todos los productos
         updateImageContainer(filteredProducts);
     }
-
-
 
     private void updateImageContainer(List<Product> filteredProducts) {
         imageContainer.removeAll();
@@ -210,8 +191,6 @@ public class EditarProductosView extends VerticalLayout {
             }
         }
     }
-
-
 
     public void showAllProducts() {
         // Mostrar todos los productos

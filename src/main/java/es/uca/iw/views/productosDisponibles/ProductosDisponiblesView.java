@@ -18,29 +18,39 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
-
-import es.uca.iw.services.ProductService;
-import es.uca.iw.model.Product;
-
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import com.vaadin.flow.theme.lumo.LumoUtility.Display;
+
+import es.uca.iw.services.ContractService;
+import es.uca.iw.services.ProductService;
+import es.uca.iw.data.UserRepository;
+import es.uca.iw.model.Product;
 
 @Route(value = "productosDisponibles")
 @PermitAll
 public class ProductosDisponiblesView extends VerticalLayout {
     
     private final ProductService productService;
+    private final ContractService contractService;
+    private UserRepository userRepository;
+
+    private List<Product> contractProducts;
     private List<Product> products;
     private OrderedList imageContainer;
     
-    public ProductosDisponiblesView(ProductService productService) {
+    public ProductosDisponiblesView(ProductService productService, ContractService contractService, UserRepository userRepository) {
         this.productService = productService;
-        products = productService.findAll();
+        this.contractService = contractService;
+        this.userRepository = userRepository;
+        
+        this.products = productService.findAll();
+        this.contractProducts = contractService.getContractProducts(userRepository.findByusername("andresmontoro").orElse(null));
+
         constructUI();
 
         for (Product product : products) {
-            if (product.getAvailable())
-                imageContainer.add(new ImageGalleryViewCard(productService, product.getName(), product.getImage(), product.getDescription(), product.getPrice(), true));
+            if (product.getAvailable() && !contractProducts.contains(product))
+                imageContainer.add(new ImageGalleryViewCard(contractService, product.getName(), product.getImage(), product.getDescription(), product.getPrice(), true));
         }
     }   
 
@@ -57,11 +67,6 @@ public class ProductosDisponiblesView extends VerticalLayout {
         Paragraph description = new Paragraph("Aqui tiene todas las tarifas disponibles.");
         description.addClassNames(Margin.Bottom.XSMALL, Margin.Top.NONE, TextColor.SECONDARY);
         headerContainer.add(header, description);
-
-        // Select<String> sortBy = new Select<>();
-        // sortBy.setLabel("Sort by");
-        // sortBy.setItems("Popularity", "Newest first", "Oldest first");
-        // sortBy.setValue("Popularity");
 
         imageContainer = new OrderedList();
         imageContainer.addClassNames(Gap.MEDIUM, Display.GRID, ListStyleType.NONE, Margin.NONE, Padding.NONE);

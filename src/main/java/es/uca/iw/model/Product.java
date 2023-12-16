@@ -2,6 +2,7 @@ package es.uca.iw.model;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -18,8 +19,8 @@ public class Product {
 
     @Id 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long _id;
-    public Long getId() { return _id; }
+    private Long id;
+    public Long getId() { return id; }
 
     @Column(unique = true, nullable = false)
     @NotEmpty(message = "Incluya el nombre, por favor")
@@ -75,5 +76,19 @@ public class Product {
     public Set<ProductType> getProductType() { return productType; }
     public void setProductType(Set<ProductType> productType) { 
         this.productType = productType; 
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) { 
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if(getClass() != obj.getClass()) return false;
+        Product other = (Product) obj;
+        return Objects.equals(id, other.id);
     }
 }

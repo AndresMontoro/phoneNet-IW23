@@ -2,9 +2,6 @@ package es.uca.iw.views.productosDisponibles;
 
 import java.math.BigDecimal;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -26,14 +23,14 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
 import com.vaadin.flow.theme.lumo.LumoUtility.Width;
 
-import es.uca.iw.services.ProductService;
+import es.uca.iw.services.ContractService;
 
 public class ImageGalleryViewCard extends ListItem {
-    private ProductService productService;
+    private ContractService contractService;
 
-    public ImageGalleryViewCard(ProductService productService, String productName, String productUrl, String productDescription, BigDecimal productPrice, boolean hireVisible) {
+    public ImageGalleryViewCard(ContractService contractService, String productName, String productUrl, String productDescription, BigDecimal productPrice, boolean hireVisible) {
 
-        this.productService = productService;
+        this.contractService = contractService;
 
         addClassNames(Background.CONTRAST_5, Display.FLEX, FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 BorderRadius.LARGE);
@@ -62,23 +59,28 @@ public class ImageGalleryViewCard extends ListItem {
         Paragraph description = new Paragraph(productDescription);
         description.addClassName(Margin.Vertical.MEDIUM);
 
-        // Span badge = new Span();
-        // badge.getElement().setAttribute("theme", "badge");
-        // badge.setText("Label");
-
         add(div, header, subtitle, description);
 
         if (hireVisible) {
             Button badge = new Button("Contratarlo");
             badge.addClickListener(event -> {
-                if (this.productService.hireProduct(productName))
+                if (this.contractService.hireProduct(productName)) {
+                    badge.getUI().ifPresent(ui -> ui.navigate("MisProductos"));
                     Notification.show("Producto contratado correctamente");
-                else
+                } else
                     Notification.show("No se ha podido contratar el producto");
             });
             add(badge);
         } else {
             Button badgeUnhire = new Button("Descontratarlo");
+            badgeUnhire.addClickListener(event -> {
+                if (this.contractService.unhireProduct(productName)) {
+                    badgeUnhire.getUI().ifPresent(ui -> ui.navigate("MisProductos"));
+                    Notification.show("Producto descontratado correctamente");
+                }
+                else
+                    Notification.show("No se ha podido descontratar el producto");
+            });
             add(badgeUnhire);
         }
     }

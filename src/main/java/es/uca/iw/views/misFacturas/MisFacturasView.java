@@ -5,10 +5,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
 import es.uca.iw.views.MainLayout;
-import jakarta.annotation.security.RolesAllowed;
+import jakarta.annotation.security.PermitAll;
 
 @Route(value = "MisFacturas", layout = MainLayout.class)
-@RolesAllowed(value = "USER")
+@PermitAll
 public class MisFacturasView extends VerticalLayout{
     public MisFacturasView() {
         /*
