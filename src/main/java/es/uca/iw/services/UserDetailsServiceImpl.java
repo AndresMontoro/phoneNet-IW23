@@ -3,6 +3,8 @@ package es.uca.iw.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -47,5 +49,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return true;
         }
         return false;
+    }
+
+    public Optional<User> getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            String username = authentication.getName();
+            return userRepository.findByusername(username);
+        }
+
+        else
+            return Optional.empty();
     }
 }

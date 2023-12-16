@@ -36,7 +36,7 @@ public class MiPerfilView extends VerticalLayout {
         add(header);
 
         // Ahora es un usuario de prueba, en un futuro sera el usuario que inicie sesion
-        User actualUser = this.userService.findByUsername("andresmontoro").orElse(null);
+        User actualUser = this.userService.getAuthenticatedUser().orElse(null);
 
         if (actualUser != null) {
             // Cuadro de informacion del usuario
