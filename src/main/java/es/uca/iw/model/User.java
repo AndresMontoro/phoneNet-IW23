@@ -89,8 +89,8 @@ public class User implements UserDetails{
     private String phoneNumber;
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) {
-        if (phoneNumber == null || phoneNumber.isEmpty() || phoneNumber.length() != 9)
-            throw new IllegalArgumentException("El número de teléfono no puede ser nulo o vacío");
+        if (phoneNumber != null && phoneNumber != "" && phoneNumber.length() != 9)
+            throw new IllegalArgumentException("Formato del número de teléfono incorrecto");
         this.phoneNumber = phoneNumber;
     }
 
@@ -116,19 +116,19 @@ public class User implements UserDetails{
     
     @Override
     public boolean isAccountNonExpired() {
-        // TODO Auto-generated method stub
         return true;
     }
+    
     @Override
     public boolean isAccountNonLocked() {
-        // TODO Auto-generated method stub
         return true;
     }
+
     @Override
     public boolean isCredentialsNonExpired() {
-        // TODO Auto-generated method stub
         return true;
     }
+
     @Override
     public boolean isEnabled() {
         return true;

@@ -1,8 +1,10 @@
 package es.uca.iw.views.miPerfil;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Background;
 import com.vaadin.flow.theme.lumo.LumoUtility.BorderRadius;
@@ -23,7 +25,6 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = "", layout = MainLayout.class)
 @PermitAll
 public class MiPerfilView extends VerticalLayout {
-
     private UserDetailsServiceImpl userService;
 
     public MiPerfilView(UserDetailsServiceImpl userService) {
@@ -35,18 +36,51 @@ public class MiPerfilView extends VerticalLayout {
         header.getStyle().set("color", "blue");
         add(header);
 
-        // Ahora es un usuario de prueba, en un futuro sera el usuario que inicie sesion
         User actualUser = this.userService.getAuthenticatedUser().orElse(null);
-
         if (actualUser != null) {
-            // Cuadro de informacion del usuario
-            VerticalLayout userInfo = new VerticalLayout();
-            userInfo.addClassNames(Background.CONTRAST_10, BorderRadius.MEDIUM, Padding.MEDIUM, Margin.SMALL);
-            userInfo.getStyle().set("color", "blue");
-            userInfo.add(new Span("Nombre: " + actualUser.getName()));
-            userInfo.add(new Span("Apellidos: " + actualUser.getSurname()));
+            TextField nameField = new TextField("Nombre");
+            nameField.setValue(actualUser.getName());
+            nameField.setReadOnly(true);
 
-            add (userInfo);
+            TextField surnameField = new TextField("Apellido");
+            surnameField.setValue(actualUser.getSurname());
+            surnameField.setReadOnly(true);
+
+            TextField usernameField = new TextField("Usuario");
+            usernameField.setValue(actualUser.getUsername());
+
+            TextField dniField = new TextField("DNI");
+            dniField.setValue(actualUser.getDni());
+            dniField.setReadOnly(true);
+
+            TextField emailField = new TextField("Email");
+            emailField.setValue(actualUser.getEmail());
+
+            TextField phoneNumberField = new TextField("Teléfono");
+            phoneNumberField.setValue(actualUser.getPhoneNumber() != null ? actualUser.getPhoneNumber() : "");
+
+            Button saveButton = new Button("Guardar");
+            saveButton.addClickListener(event -> {
+                try {
+                    userService.updateActualUser(surnameField.getValue(), emailField.getValue(), phoneNumberField.getValue());
+                    Notification.show("Usuario actualizado correctamente");
+                } catch(Exception e) {
+                    Notification.show("Error al actualizar el usuario: " + e.getMessage());
+                }
+                
+            });
+
+            setAlignItems(Alignment.CENTER);
+            setJustifyContentMode(JustifyContentMode.CENTER);
+
+            VerticalLayout container = new VerticalLayout(
+                nameField, surnameField, dniField, emailField, phoneNumberField, saveButton 
+            );
+
+            container.getStyle().set("border", "1px solid #ccc");
+            container.setAlignItems(Alignment.CENTER);
+            container.setJustifyContentMode(JustifyContentMode.CENTER);
+            add(container);
         }
     }
 }

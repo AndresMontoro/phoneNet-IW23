@@ -26,7 +26,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.err.println(userRepository.findByusername(username).get().getUsername());
         return userRepository.findByusername(username).orElseThrow(() ->
             new UsernameNotFoundException("No user present with username: " + username));
     }
@@ -61,5 +60,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         else
             return Optional.empty();
+    }
+
+    public void updateActualUser(String username, String email, String phoneNumber) {
+        User actualUser = getAuthenticatedUser().orElse(null);
+        if (actualUser != null) {
+            // Verificamos que el usuario
+            if (userRepository.findByEmail(email).isPresent() && !actualUser.getEmail().equals(email) &&
+                userRepository.findByusername(username).isPresent() && !actualUser.getUsername().equals(username))
+                throw new IllegalArgumentException("El nombre de usuario o el email ya están en uso");
+            else {
+                actualUser.setUsername(username);
+                actualUser.setEmail(email);
+                actualUser.setPhoneNumber(phoneNumber);
+                userRepository.save(actualUser);
+            }
+        }
     }
 }

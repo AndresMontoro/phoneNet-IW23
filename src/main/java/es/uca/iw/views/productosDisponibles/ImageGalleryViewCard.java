@@ -75,7 +75,7 @@ public class ImageGalleryViewCard extends ListItem {
             Button badgeUnhire = new Button("Descontratarlo");
             badgeUnhire.addClickListener(event -> {
                 if (this.contractService.unhireProduct(productName)) {
-                    badgeUnhire.getUI().ifPresent(ui -> ui.navigate("MisProductos"));
+                    getElement().executeJs("location.reload()");
                     Notification.show("Producto descontratado correctamente");
                 }
                 else
