@@ -23,7 +23,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Display;
 
 import es.uca.iw.services.ContractService;
 import es.uca.iw.services.ProductService;
-import es.uca.iw.data.UserRepository;
 import es.uca.iw.model.Product;
 
 @Route(value = "productosDisponibles")
@@ -32,19 +31,17 @@ public class ProductosDisponiblesView extends VerticalLayout {
     
     private final ProductService productService;
     private final ContractService contractService;
-    private UserRepository userRepository;
 
     private List<Product> contractProducts;
     private List<Product> products;
     private OrderedList imageContainer;
     
-    public ProductosDisponiblesView(ProductService productService, ContractService contractService, UserRepository userRepository) {
+    public ProductosDisponiblesView(ProductService productService, ContractService contractService) {
         this.productService = productService;
         this.contractService = contractService;
-        this.userRepository = userRepository;
         
         this.products = productService.findAll();
-        this.contractProducts = contractService.getContractProducts(userRepository.findByusername("andresmontoro").orElse(null));
+        this.contractProducts = contractService.getContractProducts();
 
         constructUI();
 

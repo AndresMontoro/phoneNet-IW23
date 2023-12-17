@@ -18,8 +18,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Vertical;
 import com.vaadin.flow.theme.lumo.LumoUtility.Background;
 
 import es.uca.iw.services.ContractService;
-import es.uca.iw.services.UserDetailsServiceImpl;
-import es.uca.iw.model.User;
 import es.uca.iw.model.Product;
 import es.uca.iw.views.MainLayout;
 import es.uca.iw.views.productosDisponibles.ImageGalleryViewCard;
@@ -28,11 +26,9 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = "MisProductos", layout = MainLayout.class)
 @PermitAll
 public class MisProductosView extends VerticalLayout{
-    private UserDetailsServiceImpl userDetailsServiceImpl;
     private ContractService contractService;
 
-    public MisProductosView(UserDetailsServiceImpl userDetailsServiceImpl, ContractService contractService) {
-        this.userDetailsServiceImpl = userDetailsServiceImpl;
+    public MisProductosView(ContractService contractService) {
         this.contractService = contractService;
 
         addClassNames(Padding.MEDIUM, Display.FLEX, FlexDirection.COLUMN, Gap.LARGE,Horizontal.AUTO, Vertical.AUTO);
@@ -43,9 +39,7 @@ public class MisProductosView extends VerticalLayout{
 
         add(header);
 
-        // Ahora es un usuario de prueba, en un futuro sera el usuario que inicie sesion
-        User actualUser = this.userDetailsServiceImpl.findByUsername("andresmontoro").orElse(null); 
-        List<Product> actualUserProducts = this.contractService.getContractProducts(actualUser);
+        List<Product> actualUserProducts = this.contractService.getContractProducts();
         
         if (actualUserProducts.size() != 0) {
             for (Product product : actualUserProducts) {

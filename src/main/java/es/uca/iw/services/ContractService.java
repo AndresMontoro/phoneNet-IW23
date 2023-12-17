@@ -11,21 +11,21 @@ import org.springframework.stereotype.Service;
 
 import es.uca.iw.data.ContractRepository;
 import es.uca.iw.data.ProductRepository;
-import es.uca.iw.data.UserRepository;
 
 @Service
 public class ContractService {
     private ProductRepository productRepository;
-    private UserRepository userRepository;
+    private UserDetailsServiceImpl userDetailsServiceImpl;
     private ContractRepository contractRepository;
 
-    public ContractService(ProductRepository productRepository, UserRepository userRepository, ContractRepository contractRepository) {
+    public ContractService(ProductRepository productRepository, UserDetailsServiceImpl userDetailsServiceImpl, ContractRepository contractRepository) {
         this.productRepository = productRepository;
-        this.userRepository = userRepository;
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.contractRepository = contractRepository;
     }
 
-    public List<Product> getContractProducts(User actualUser) {
+    public List<Product> getContractProducts() {
+        User actualUser = userDetailsServiceImpl.getAuthenticatedUser().orElse(null);
         List<Contract> contracts = contractRepository.findByUser(actualUser);
         List<Product> contractProducts = new ArrayList<Product>();
 
@@ -42,7 +42,7 @@ public class ContractService {
             return false;
         
         // En un futuro se obtendra el usuario que ha iniciado la sesion
-        User actualUser = userRepository.findByusername("andresmontoro").orElse(null);
+        User actualUser = userDetailsServiceImpl.getAuthenticatedUser().orElse(null);
         if (actualUser == null)
             return false;
 
@@ -63,7 +63,7 @@ public class ContractService {
             return false;
         
         // En un futuro se obtendra el usuario que ha iniciado la sesion
-        User actualUser = userRepository.findByusername("andresmontoro").orElse(null);
+        User actualUser = userDetailsServiceImpl.getAuthenticatedUser().orElse(null);
         if (actualUser == null)
             return false;
 
