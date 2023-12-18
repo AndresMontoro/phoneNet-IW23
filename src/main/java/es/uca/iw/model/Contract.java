@@ -40,6 +40,7 @@ public class Contract {
         this.endDate = endDate;
     }
 
+    @NotNull
     @ManyToOne
     private User user;
     public User getUser() { return user; }
@@ -49,6 +50,7 @@ public class Contract {
         this.user = user;
     }
 
+    @NotNull
     @ManyToOne
     private Product product;
     public Product getProduct() { return product; }

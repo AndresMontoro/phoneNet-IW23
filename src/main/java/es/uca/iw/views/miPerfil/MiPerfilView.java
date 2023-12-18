@@ -1,9 +1,12 @@
 package es.uca.iw.views.miPerfil;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Background;
@@ -59,6 +62,10 @@ public class MiPerfilView extends VerticalLayout {
             TextField phoneNumberField = new TextField("Teléfono");
             phoneNumberField.setValue(actualUser.getPhoneNumber() != null ? actualUser.getPhoneNumber() : "");
 
+            HorizontalLayout buttonLayout = new HorizontalLayout();
+            buttonLayout.setAlignItems(Alignment.CENTER);
+            buttonLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+
             Button saveButton = new Button("Guardar");
             saveButton.addClickListener(event -> {
                 try {
@@ -67,14 +74,53 @@ public class MiPerfilView extends VerticalLayout {
                 } catch(Exception e) {
                     Notification.show("Error al actualizar el usuario: " + e.getMessage());
                 }
-                
             });
+
+            Button changePasswordButton = new Button("Cambiar contraseña");
+            changePasswordButton.addClickListener(event -> {
+                Dialog changePasswordDialog = new Dialog();
+                changePasswordDialog.setCloseOnEsc(false);
+                changePasswordDialog.setCloseOnOutsideClick(false);
+                
+                PasswordField oldPasswordField = new PasswordField("Contraseña actual");
+                oldPasswordField.setRequired(true);
+                oldPasswordField.setRequiredIndicatorVisible(true);
+                oldPasswordField.setAutofocus(true);
+                PasswordField newPasswordField = new PasswordField("Nueva contraseña");
+                newPasswordField.setRequired(true);
+                newPasswordField.setRequiredIndicatorVisible(true);
+
+                PasswordField newPasswordConfirmationField = new PasswordField("Confirmación de la nueva contraseña");
+                newPasswordConfirmationField.setRequired(true);
+                newPasswordConfirmationField.setRequiredIndicatorVisible(true);
+                
+                Button cancelBtn = new Button("Cancel", e -> changePasswordDialog.close());
+                Button saveBtn = new Button("Save", e -> {
+                    try {
+                        userService.changePassword(oldPasswordField.getValue(), newPasswordField.getValue(), newPasswordConfirmationField.getValue());
+                        getElement().executeJs("location.reload()");
+                        Notification.show("Contraseña cambiada correctamente");
+                    } catch (Exception exception) {
+                        Notification.show("Error al cambiar la contraseña: " + exception.getMessage());
+                    }
+                });
+
+                HorizontalLayout dialogButtonLayout = new HorizontalLayout(cancelBtn, saveBtn);
+                dialogButtonLayout.setAlignItems(Alignment.CENTER);
+                dialogButtonLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+
+                VerticalLayout container = new VerticalLayout(oldPasswordField, newPasswordField, newPasswordConfirmationField, dialogButtonLayout);
+                changePasswordDialog.add(container);
+                changePasswordDialog.open();
+            });
+
+            buttonLayout.add(saveButton, changePasswordButton);
 
             setAlignItems(Alignment.CENTER);
             setJustifyContentMode(JustifyContentMode.CENTER);
 
             VerticalLayout container = new VerticalLayout(
-                nameField, surnameField, dniField, emailField, phoneNumberField, saveButton 
+                nameField, surnameField, dniField, emailField, phoneNumberField, buttonLayout
             );
 
             container.getStyle().set("border", "1px solid #ccc");

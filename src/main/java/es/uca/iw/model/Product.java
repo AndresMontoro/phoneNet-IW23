@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
+import java.util.UUID;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -53,7 +53,6 @@ public class Product {
     }
 
     @NotNull(message = "Incluya el precio, por favor")
-    @Column(nullable = false)
     private BigDecimal price;
     public BigDecimal getPrice() { return price; }
     public void setPrice(BigDecimal price) {
@@ -61,6 +60,14 @@ public class Product {
             throw new IllegalArgumentException("El precio no puede ser negativo");
         this.price = price;
     }
+
+    private String phoneNumber;
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    private UUID apiId;
+    public UUID getApiId() { return apiId; }
+    public void setApiId(UUID apiId) { this.apiId = apiId; }
 
     @Column(nullable = false)
     private boolean available;

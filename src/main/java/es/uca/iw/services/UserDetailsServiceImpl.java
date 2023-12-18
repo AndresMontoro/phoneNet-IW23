@@ -1,5 +1,6 @@
 package es.uca.iw.services;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import es.uca.iw.data.UserRepository;
@@ -15,9 +17,11 @@ import es.uca.iw.model.User;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
+    private final PasswordEncoder bCryptPasswordEncoder;
 
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public Optional<User> findByUsername(String username) {
@@ -76,5 +80,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 userRepository.save(actualUser);
             }
         }
+    }
+
+    public void changePassword(String oldPassword, String newPassword, String newPasswordConfirmation) throws IOException {
+        if (!newPassword.equals(newPasswordConfirmation))
+            throw new IllegalArgumentException("Las contraseñas no coinciden");
+        
+        User actualUser = getAuthenticatedUser().orElse(null);
+        newPassword = bCryptPasswordEncoder.encode(newPassword);
+        // oldPassword = bCryptPasswordEncoder.encode(oldPassword);
+
+        if (actualUser == null) 
+            throw new IOException("El usuario no existe");           
+        
+        if (!bCryptPasswordEncoder.matches(oldPassword, actualUser.getPassword())) {
+            System.err.println("La contraseña antigua no es correcta" + oldPassword);
+            throw new IllegalArgumentException("La contraseña antigua no es correcta");
+        }
+           
+
+        actualUser.setPassword(newPassword);
+        userRepository.save(actualUser);
     }
 }
