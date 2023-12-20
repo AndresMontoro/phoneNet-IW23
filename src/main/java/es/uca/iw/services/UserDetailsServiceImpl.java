@@ -69,7 +69,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public void updateActualUser(String username, String email, String phoneNumber) {
         User actualUser = getAuthenticatedUser().orElse(null);
         if (actualUser != null) {
-            // Verificamos que el usuario
             if (userRepository.findByEmail(email).isPresent() && !actualUser.getEmail().equals(email) &&
                 userRepository.findByusername(username).isPresent() && !actualUser.getUsername().equals(username))
                 throw new IllegalArgumentException("El nombre de usuario o el email ya están en uso");
@@ -88,7 +87,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         
         User actualUser = getAuthenticatedUser().orElse(null);
         newPassword = bCryptPasswordEncoder.encode(newPassword);
-        // oldPassword = bCryptPasswordEncoder.encode(oldPassword);
 
         if (actualUser == null) 
             throw new IOException("El usuario no existe");           
@@ -97,8 +95,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             System.err.println("La contraseña antigua no es correcta" + oldPassword);
             throw new IllegalArgumentException("La contraseña antigua no es correcta");
         }
-           
-
+        
         actualUser.setPassword(newPassword);
         userRepository.save(actualUser);
     }

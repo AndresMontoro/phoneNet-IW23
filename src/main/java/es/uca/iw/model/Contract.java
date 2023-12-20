@@ -1,12 +1,14 @@
 package es.uca.iw.model;
 
 import java.util.Date;
+import java.util.UUID;
 import java.util.Calendar;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Temporal;
@@ -40,6 +42,21 @@ public class Contract {
         this.endDate = endDate;
     }
 
+    // private String phoneNumber;
+    // public String getPhoneNumber() { return phoneNumber; }
+    // public void setPhoneNumber(String phoneNumber) {
+    //     if (phoneNumber.length() != 9)
+    //         throw new IllegalArgumentException("Formato del número de teléfono incorrecto");
+    //     this.phoneNumber = phoneNumber;
+    // }
+
+    private String carrier = "PhoneNet";
+    public String getCarrier() { return carrier; }
+
+    private UUID apiId;
+    public UUID getApiId() { return apiId; }
+    public void setApiId(UUID apiId) { this.apiId = apiId; }
+
     @NotNull
     @ManyToOne
     private User user;
@@ -60,6 +77,14 @@ public class Contract {
         this.product = product;
     }
 
+    @NotNull
+    @OneToOne
+    private PhoneNumber phoneNumber;
+    public PhoneNumber getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(PhoneNumber phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     @PrePersist
     public void PrePersist() {
         // Actual date (milisenconds)
@@ -72,4 +97,3 @@ public class Contract {
         endDate = new Date(calendar.getTime().getTime());
     }
 }
-

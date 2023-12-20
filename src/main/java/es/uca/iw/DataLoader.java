@@ -9,8 +9,10 @@
 // import org.springframework.security.crypto.password.PasswordEncoder;
 // import org.springframework.stereotype.Component;
 
+// import es.uca.iw.data.PhoneNumberRepository;
 // import es.uca.iw.data.UserRepository;
 // import es.uca.iw.data.UserRoleRepository;
+// import es.uca.iw.model.PhoneNumber;
 // import es.uca.iw.model.User;
 // import es.uca.iw.model.UserRole;
 
@@ -20,30 +22,33 @@
 //     private final UserRepository userRepository;
 //     private final PasswordEncoder bCryptPasswordEncoder;
 //     private final UserRoleRepository userRoleRepository;
+//     private final PhoneNumberRepository phoneNumberRepository;
 
-//     public DataLoader(UserRepository userRepository, PasswordEncoder bCryptPasswordEncoder, UserRoleRepository userRoleRepository) {
+//     public DataLoader(UserRepository userRepository, PasswordEncoder bCryptPasswordEncoder, 
+//         UserRoleRepository userRoleRepository, PhoneNumberRepository phoneNumberRepository) {
 //         this.userRepository = userRepository;
 //         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 //         this.userRoleRepository = userRoleRepository;
+//         this.phoneNumberRepository = phoneNumberRepository;
 //     }
 
 //     @Override
 //     public void run(String... args) throws Exception {
-//         User user = new User();
-//         user.setUsername("admin");
-//         user.setPassword(bCryptPasswordEncoder.encode("admin"));
-//         user.setName("Admin");
-//         user.setSurname("Admin");
-//         user.setDni("32094459Y");
-//         user.setEmail("AdminPhoneNet@gmail.com");
-//         Set<UserRole> roles = new HashSet<>();
-//         UserRole userRole = new UserRole();
-//         userRole.setRole(UserRole.Role.ADMIN);
-//         userRoleRepository.save(userRole);
+//         // User user = new User();
+//         // user.setUsername("admin");
+//         // user.setPassword(bCryptPasswordEncoder.encode("admin"));
+//         // user.setName("Admin");
+//         // user.setSurname("Admin");
+//         // user.setDni("32094459Y");
+//         // user.setEmail("AdminPhoneNet@gmail.com");
+//         // Set<UserRole> roles = new HashSet<>();
+//         // UserRole userRole = new UserRole();
+//         // userRole.setRole(UserRole.Role.ADMIN);
+//         // userRoleRepository.save(userRole);
         
-//         roles.add(userRole);
-//         user.setRoles(roles);
-//         userRepository.save(user);
+//         // roles.add(userRole);
+//         // user.setRoles(roles);
+//         // userRepository.save(user);
 
 //         // user.setUsername("andres");
 //         // user.setPassword(bCryptPasswordEncoder.encode("andres"));
@@ -57,5 +62,15 @@
 //         // roles.add(userRole);
 //         // user.setRoles(roles);
 //         // userRepository.save(user);
+
+//         // PhoneNumber phoneNumber = new PhoneNumber();
+//         // phoneNumber.setNumber("679109619");
+//         // phoneNumber.setAvailable(true);
+//         // phoneNumberRepository.save(phoneNumber);
+
+//         // phoneNumber = new PhoneNumber();
+//         // phoneNumber.setNumber("601488514");
+//         // phoneNumber.setAvailable(true);
+//         // phoneNumberRepository.save(phoneNumber);
 //     }
 // }

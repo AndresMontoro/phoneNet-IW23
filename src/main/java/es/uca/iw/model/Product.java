@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -61,13 +60,21 @@ public class Product {
         this.price = price;
     }
 
-    private String phoneNumber;
-    public String getPhoneNumber() { return phoneNumber; }
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    private BigDecimal dataUsagePrice;
+    public BigDecimal getDataUsagePrice() { return dataUsagePrice; }
+    public void setDataUsagePrice(BigDecimal dataUsagePrice) {
+        if (dataUsagePrice == null || dataUsagePrice.compareTo(BigDecimal.ZERO) < 0)
+            throw new IllegalArgumentException("El precio no puede ser negativo");
+        this.dataUsagePrice = dataUsagePrice;
+    }
 
-    private UUID apiId;
-    public UUID getApiId() { return apiId; }
-    public void setApiId(UUID apiId) { this.apiId = apiId; }
+    private BigDecimal callPrice;
+    public BigDecimal getCallPrice() { return callPrice; }
+    public void setCallPrice(BigDecimal callPrice) {
+        if (callPrice == null || callPrice.compareTo(BigDecimal.ZERO) < 0)
+            throw new IllegalArgumentException("El precio no puede ser negativo");
+        this.callPrice = callPrice;
+    }
 
     @Column(nullable = false)
     private boolean available;

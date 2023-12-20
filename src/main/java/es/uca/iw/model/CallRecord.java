@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -49,4 +51,8 @@ public class CallRecord {
     private UUID apiId;
     public UUID getApiId() { return apiId; }
     public void setApiId(UUID apiId) { this.apiId = apiId; }
+
+    @NotNull
+    @ManyToOne
+    private Contract contract;
 }
