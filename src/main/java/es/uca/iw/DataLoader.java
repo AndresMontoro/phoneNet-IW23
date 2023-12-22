@@ -3,11 +3,14 @@
 // package es.uca.iw;
 
 // import java.util.HashSet;
+// import java.util.List;
 // import java.util.Set;
 
+// import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.boot.CommandLineRunner;
 // import org.springframework.security.crypto.password.PasswordEncoder;
 // import org.springframework.stereotype.Component;
+// import org.springframework.web.client.RestTemplate;
 
 // import es.uca.iw.data.PhoneNumberRepository;
 // import es.uca.iw.data.UserRepository;
@@ -15,22 +18,18 @@
 // import es.uca.iw.model.PhoneNumber;
 // import es.uca.iw.model.User;
 // import es.uca.iw.model.UserRole;
+// import es.uca.iw.model.CallRecord;
 
 // @Component
 // public class DataLoader implements CommandLineRunner {
 
-//     private final UserRepository userRepository;
-//     private final PasswordEncoder bCryptPasswordEncoder;
-//     private final UserRoleRepository userRoleRepository;
-//     private final PhoneNumberRepository phoneNumberRepository;
+//     // private final UserRepository userRepository;
+//     // private final PasswordEncoder bCryptPasswordEncoder;
+//     // private final UserRoleRepository userRoleRepository;
+//     // private final PhoneNumberRepository phoneNumberRepository;
 
-//     public DataLoader(UserRepository userRepository, PasswordEncoder bCryptPasswordEncoder, 
-//         UserRoleRepository userRoleRepository, PhoneNumberRepository phoneNumberRepository) {
-//         this.userRepository = userRepository;
-//         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-//         this.userRoleRepository = userRoleRepository;
-//         this.phoneNumberRepository = phoneNumberRepository;
-//     }
+//     @Autowired
+//     private RestTemplate restTemplate;
 
 //     @Override
 //     public void run(String... args) throws Exception {
@@ -72,5 +71,10 @@
 //         // phoneNumber.setNumber("601488514");
 //         // phoneNumber.setAvailable(true);
 //         // phoneNumberRepository.save(phoneNumber);
+
+//         List<CallRecord> respuesta = restTemplate.getForObject("http://omr-simulator.us-east-1.elasticbeanstalk.com/10e68f12-b113-42ba-bf9b-f4bee0cb4f74/callrecords?carrier=UCA", 
+//             List.class);
+        
+//         System.out.println(respuesta);
 //     }
 // }

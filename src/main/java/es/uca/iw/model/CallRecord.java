@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
@@ -16,9 +14,9 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 public class CallRecord {
     @Id 
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
-    public Long getId() { return id; }
+    private UUID apiId;
+    public UUID getApiId() { return apiId; }
+    public void setApiId(UUID apiId) { this.apiId = apiId; }
 
     @NotNull
     @NotEmpty(message = "Incluya el número de teléfono de origen, por favor")
@@ -45,12 +43,7 @@ public class CallRecord {
     public LocalDateTime getDate() { return date; }
     public void setDate(LocalDateTime date) {
         this.date = date;
-    }
-
-    @NotNull
-    private UUID apiId;
-    public UUID getApiId() { return apiId; }
-    public void setApiId(UUID apiId) { this.apiId = apiId; }
+    }    
 
     @NotNull
     @ManyToOne

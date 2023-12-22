@@ -64,11 +64,13 @@ public class ImageGalleryViewCard extends ListItem {
         if (hireVisible) {
             Button badge = new Button("Contratarlo");
             badge.addClickListener(event -> {
-                if (this.contractService.hireProduct(productName)) {
+                try {
+                    contractService.hireProduct(productName);
                     badge.getUI().ifPresent(ui -> ui.navigate("MisProductos"));
-                    Notification.show("Producto contratado correctamente");
-                } else
-                    Notification.show("No se ha podido contratar el producto");
+                    badge.getUI().ifPresent(ui -> ui.navigate("MisProductos"));
+                } catch (Exception e) {
+                    Notification.show("No se ha podido contratar el producto. " + e.getMessage());
+                }
             });
             add(badge);
         } else {

@@ -1,6 +1,8 @@
 package es.uca.iw.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.Calendar;
 
@@ -8,11 +10,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -42,17 +45,6 @@ public class Contract {
         this.endDate = endDate;
     }
 
-    // private String phoneNumber;
-    // public String getPhoneNumber() { return phoneNumber; }
-    // public void setPhoneNumber(String phoneNumber) {
-    //     if (phoneNumber.length() != 9)
-    //         throw new IllegalArgumentException("Formato del número de teléfono incorrecto");
-    //     this.phoneNumber = phoneNumber;
-    // }
-
-    private String carrier = "PhoneNet";
-    public String getCarrier() { return carrier; }
-
     private UUID apiId;
     public UUID getApiId() { return apiId; }
     public void setApiId(UUID apiId) { this.apiId = apiId; }
@@ -78,11 +70,25 @@ public class Contract {
     }
 
     @NotNull
-    @OneToOne
-    private PhoneNumber phoneNumber;
-    public PhoneNumber getPhoneNumber() { return phoneNumber; }
-    public void setPhoneNumber(PhoneNumber phoneNumber) {
+    @NotEmpty(message = "Incluya el nombre de la línea, por favor")
+    private String phoneNumber;
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @OneToMany(mappedBy = "contract")
+    private Set<DataUsageRecord> dataUsageRecord = new HashSet<>();
+    public Set<DataUsageRecord> getCustomer() { return dataUsageRecord; }
+    public void setCustomer(Set<DataUsageRecord> dataUsageRecord) {
+        this.dataUsageRecord = dataUsageRecord;
+    }
+
+    @OneToMany(mappedBy = "contract")
+    private Set<CallRecord> callRecord;
+    public Set<CallRecord> getCallRecord() { return callRecord; }
+    public void setCallRecord(Set<CallRecord> callRecord) {
+        this.callRecord = callRecord;
     }
 
     @PrePersist

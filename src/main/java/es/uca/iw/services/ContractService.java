@@ -3,12 +3,16 @@ package es.uca.iw.services;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import es.uca.iw.model.Product;
 import es.uca.iw.model.User;
 import es.uca.iw.model.Contract;
+import es.uca.iw.model.CustomerLine;
 import es.uca.iw.model.PhoneNumber;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import es.uca.iw.data.ContractRepository;
@@ -21,8 +25,6 @@ public class ContractService {
     private UserDetailsServiceImpl userDetailsServiceImpl;
     private ContractRepository contractRepository;
     private PhoneNumberRepository phoneNumberRepository;
-
-    // private final String API_URL = "http://omr-simulator.us-east-1.elasticbeanstalk.com/";
     private RestTemplate restTemplate;
 
     public ContractService(ProductRepository productRepository, UserDetailsServiceImpl userDetailsServiceImpl, 
@@ -52,34 +54,45 @@ public class ContractService {
         return contracts;
     }
 
-    public boolean hireProduct(String productName) {
+    public void hireProduct(String productName) throws Exception {
         Product product = productRepository.findByname(productName).orElse(null);
         if (product == null)
-            return false;
+            throw new IllegalArgumentException("El producto no existe");
         
         User actualUser = userDetailsServiceImpl.getAuthenticatedUser().orElse(null);
         if (actualUser == null)
-            return false;
+            throw new IllegalArgumentException("No ha iniciado sesión");
 
         Contract contract = contractRepository.findByUserAndProduct(actualUser, product).orElse(null);
         if (contract != null)
-            return false;
-
-        PhoneNumber phoneNumber = phoneNumberRepository.findFirstAvailableNumber().orElse(null);
-        if(phoneNumber == null) return false;
+            throw new IllegalArgumentException("Ya tiene contratado este producto");
 
         Contract newContract = new Contract();
         newContract.setUser(actualUser);
         newContract.setProduct(product);
-        newContract.setPhoneNumber(phoneNumber);
+
+        // Creamos Customer Line
+        CustomerLine customerLine = new CustomerLine();
+        customerLine.setName(actualUser.getName());
+        customerLine.setSurname(actualUser.getSurname());
+        customerLine.setPhoneNumber(createRandomPhoneNumber());
         
         // Anadir linea a la API
+        try {
+            customerLine = restTemplate.postForObject("http://omr-simulator.us-east-1.elasticbeanstalk.com/", 
+                customerLine, CustomerLine.class);
+        } catch (HttpServerErrorException hsee) {
+            throw new Exception("No se ha podido realizar el registro (API caida)");
+        } catch (HttpClientErrorException hcee) {
+            throw new Exception("No se ha podido registrar el número de teléfono");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
-
-        // Anadir apiUrl al contrato
-
+        // Anadir apiId a la linea
+        newContract.setPhoneNumber(customerLine.getPhoneNumber());
+        newContract.setApiId(customerLine.getId());
         contractRepository.save(newContract);
-        return true;
     }
 
     public boolean unhireProduct(String productName) {
@@ -105,5 +118,13 @@ public class ContractService {
 
 
         // Devolvemos el consumo
+    }
+
+    public String createRandomPhoneNumber() {
+        String phoneNumber = "";
+        for (int i = 0; i < 9; i++) {
+            phoneNumber += (int) (Math.random() * 10);
+        }
+        return phoneNumber;
     }
 }

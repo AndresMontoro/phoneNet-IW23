@@ -4,23 +4,17 @@ import java.util.Date;
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class DataUsageRecord {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
-    public Long getId() { return id; }
 
-    @NotNull
-    private UUID apiId;
-    public UUID getApiId() { return apiId; }
-    public void setApiId(UUID apiId) { this.apiId = apiId; }
+    @Id
+    private UUID Id;
+    public UUID getApiId() { return Id; }
+    public void setApiId(UUID Id) { this.Id = Id; }
 
     @NotNull
     Integer megaBytes;
