@@ -2,38 +2,45 @@ package es.uca.iw.services;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
+import java.util.Map;
 
 import es.uca.iw.model.Product;
 import es.uca.iw.model.User;
+import jakarta.transaction.Transactional;
 import es.uca.iw.model.Contract;
 import es.uca.iw.model.CustomerLine;
-import es.uca.iw.model.PhoneNumber;
+import es.uca.iw.model.DataUsageRecord;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import es.uca.iw.data.CallRecordRepository;
 import es.uca.iw.data.ContractRepository;
+import es.uca.iw.data.DataUsageRecordRepository;
 import es.uca.iw.data.ProductRepository;
-import es.uca.iw.data.PhoneNumberRepository;
 
 @Service
 public class ContractService {
     private ProductRepository productRepository;
     private UserDetailsServiceImpl userDetailsServiceImpl;
     private ContractRepository contractRepository;
-    private PhoneNumberRepository phoneNumberRepository;
     private RestTemplate restTemplate;
+    private CallRecordRepository callRecordRepository;
+    private DataUsageRecordRepository dataUsageRecordRepository;
 
     public ContractService(ProductRepository productRepository, UserDetailsServiceImpl userDetailsServiceImpl, 
-        ContractRepository contractRepository, PhoneNumberRepository phoneNumberRepository, RestTemplate restTemplate) {
+        ContractRepository contractRepository, RestTemplate restTemplate, CallRecordRepository callRecordRepository,
+        DataUsageRecordRepository dataUsageRepository) {
         this.productRepository = productRepository;
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.contractRepository = contractRepository;
-        this.phoneNumberRepository = phoneNumberRepository;
         this.restTemplate = restTemplate;
+        this.callRecordRepository = callRecordRepository;
+        this.dataUsageRecordRepository = dataUsageRepository;
     }
 
     public List<Product> getContractProducts() {
@@ -95,21 +102,38 @@ public class ContractService {
         contractRepository.save(newContract);
     }
 
-    public boolean unhireProduct(String productName) {
+    @Transactional
+    public void unhireProduct(String productName) throws Exception {
         Product product = productRepository.findByname(productName).orElse(null);
         if (product == null)
-            return false;
+            throw new IllegalArgumentException("El producto no existe");
         
         User actualUser = userDetailsServiceImpl.getAuthenticatedUser().orElse(null);
         if (actualUser == null)
-            return false;
+            throw new IOException("No ha iniciado sesión");
 
         Contract contract = contractRepository.findByUserAndProduct(actualUser, product).orElse(null);
         if (contract == null)
-            return false;
+            throw new IllegalArgumentException("No tiene contratado este producto");
 
+        Map<String, String> requestParams = new HashMap<String, String>();
+        requestParams.put("id", contract.getApiId().toString());
+        requestParams.put("carrier", "PhoneNet");
+        
+        // Eliminamos la linea de la API
+        try {
+            restTemplate.delete("http://omr-simulator.us-east-1.elasticbeanstalk.com/" + contract.getApiId().toString() + "?carrier=PhoneNet");
+        } catch (HttpServerErrorException hsee) {
+            throw new Exception("No se ha podido realizar el registro (API caida)");
+        } catch (HttpClientErrorException hcee) {
+            throw new Exception("Error al conectar con el sistema");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        callRecordRepository.deleteByContractId(contract);
+        dataUsageRecordRepository.deleteByContractId(contract);
         contractRepository.delete(contract);
-        return true;
     }
 
     // No vamos a actualizar nada cada vez que queramos obtener los datos de consumo

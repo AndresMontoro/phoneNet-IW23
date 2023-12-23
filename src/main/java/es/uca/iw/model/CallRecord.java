@@ -14,9 +14,9 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 public class CallRecord {
     @Id 
-    private UUID apiId;
-    public UUID getApiId() { return apiId; }
-    public void setApiId(UUID apiId) { this.apiId = apiId; }
+    private UUID Id;
+    public UUID getApiId() { return Id; }
+    public void setApiId(UUID Id) { this.Id = Id; }
 
     @NotNull
     @NotEmpty(message = "Incluya el número de teléfono de origen, por favor")

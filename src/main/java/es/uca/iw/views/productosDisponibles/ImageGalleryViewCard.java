@@ -76,12 +76,13 @@ public class ImageGalleryViewCard extends ListItem {
         } else {
             Button badgeUnhire = new Button("Descontratarlo");
             badgeUnhire.addClickListener(event -> {
-                if (this.contractService.unhireProduct(productName)) {
+                try {
+                    contractService.unhireProduct(productName);
                     getElement().executeJs("location.reload()");
                     Notification.show("Producto descontratado correctamente");
+                } catch (Exception e) {
+                    Notification.show("No se ha podido descontratar el producto. " + e.getMessage());
                 }
-                else
-                    Notification.show("No se ha podido descontratar el producto");
             });
             add(badgeUnhire);
         }
