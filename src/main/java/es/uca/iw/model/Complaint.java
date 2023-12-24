@@ -21,23 +21,23 @@ public class Complaint {
     @JoinColumn(name = "user_id")
     private User user;
     
-    //@Column(name = "description", nullable = false)
+    @Column(name = "descripción", nullable = false)
     private String description;
     public String getDescription() { return description; }
 
 
-    //@Column(name = "creation_date", nullable = false)
+    @Column(name = "creation_date", nullable = false)
     private LocalDate creationDate;
     public LocalDate getCreationDate() { return creationDate; }
 
 
     @Enumerated(EnumType.STRING)
-    //@Column(name = "status", nullable = false)
+    @Column(name = "status", nullable = false)
     private ComplaintStatus status;
     public ComplaintStatus getStatus() { return status; }
 
 
-    //@Column(name = "comments", nullable = true)
+    @Column(name = "comments", nullable = true)
     private String comments;
     public String getComments() { return comments; }
 

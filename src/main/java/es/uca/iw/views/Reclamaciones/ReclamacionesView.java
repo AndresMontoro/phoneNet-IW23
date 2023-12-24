@@ -26,19 +26,19 @@ public class ReclamacionesView extends VerticalLayout {
     public ReclamacionesView(ComplaintService complaintService) {
         this.complaintService = complaintService;
     
-        // Crear una tabla para mostrar las reclamaciones
-        grid = new Grid<>(Complaint.class); 
-    
-        // Agregar las columnas
-        //grid.addColumn(Complaint::getId).setHeader("ID");
-        //grid.addColumn(Complaint::getDescription).setHeader("Descripción");
-        //grid.addColumn(Complaint::getCreationDate).setHeader("Fecha de Creación");
-        //grid.addColumn(Complaint::getStatus).setHeader("Estado");
-        //grid.addColumn(Complaint::getComments).setHeader("Comentarios");
-    
-        // Personalizar la visualización de la fecha
+
+        // Creamos la tabla
+        grid = new Grid<>(Complaint.class);
+        grid.setColumns("id", "description", "creationDate", "status", "comments");
+        
+        // Modificamos los nombres de la cabecera
+        grid.getColumnByKey("id").setHeader("ID");
+        grid.getColumnByKey("description").setHeader("Descripción");
         grid.getColumnByKey("creationDate").setHeader("Fecha de Creación");
-    
+        grid.getColumnByKey("status").setHeader("Estado");
+        grid.getColumnByKey("comments").setHeader("Comentarios");
+
+
         // Añadir una columna de botón para acciones
         grid.addComponentColumn(complaint -> {
             Button accionesButton = new Button("Acciones");
