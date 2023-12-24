@@ -7,46 +7,59 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import es.uca.iw.services.ComplaintService;
+import es.uca.iw.model.Complaint;
 import es.uca.iw.views.MainLayout;
 import jakarta.annotation.security.PermitAll;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Route(value = "Reclamaciones", layout = MainLayout.class)
 @PermitAll
 public class ReclamacionesView extends VerticalLayout {
 
-    public ReclamacionesView() {
-        // Simulación de datos de reclamaciones con IDs únicos
-        Reclamacion reclamacion1 = new Reclamacion(1, "Problema con el servicio", LocalDate.now(), "Pendiente", "");
-        Reclamacion reclamacion2 = new Reclamacion(2, "Facturación incorrecta", LocalDate.now().minusDays(2), "En proceso", "");
+    private Grid<Complaint> grid;
+    private ComplaintService complaintService;
 
+    @Autowired
+    public ReclamacionesView(ComplaintService complaintService) {
+        this.complaintService = complaintService;
+    
         // Crear una tabla para mostrar las reclamaciones
-        Grid<Reclamacion> grid = new Grid<>(Reclamacion.class);
-        grid.setItems(reclamacion1, reclamacion2);
-        grid.setColumns("id", "descripcion", "fechaCreacion", "estado", "comentarios");
-
+        grid = new Grid<>(Complaint.class); 
+    
+        // Agregar las columnas
+        //grid.addColumn(Complaint::getId).setHeader("ID");
+        //grid.addColumn(Complaint::getDescription).setHeader("Descripción");
+        //grid.addColumn(Complaint::getCreationDate).setHeader("Fecha de Creación");
+        //grid.addColumn(Complaint::getStatus).setHeader("Estado");
+        //grid.addColumn(Complaint::getComments).setHeader("Comentarios");
+    
         // Personalizar la visualización de la fecha
-        grid.getColumnByKey("fechaCreacion").setHeader("Fecha de Creación");
-
+        grid.getColumnByKey("creationDate").setHeader("Fecha de Creación");
+    
         // Añadir una columna de botón para acciones
-        grid.addComponentColumn(reclamacion -> {
+        grid.addComponentColumn(complaint -> {
             Button accionesButton = new Button("Acciones");
-            accionesButton.addClickListener(e -> mostrarAcciones(reclamacion));
+            accionesButton.addClickListener(e -> mostrarAcciones(complaint));
             return accionesButton;
         }).setHeader("Acciones");
-
-        // Botón para añadir reclamaciones
+    
+        // Botón para añadir reclamaciones (sin funcionalidad por ahora)
         Button añadirReclamacionButton = new Button("Añadir Reclamación");
         añadirReclamacionButton.addClickListener(e -> mostrarFormularioAñadirReclamacion());
-
+    
         add(new Span("Reclamaciones"));
         add(añadirReclamacionButton);
         add(grid);
+    
+        // Actualizar los datos de la tabla de reclamaciones
+        actualizarTablaReclamaciones();
     }
 
     // Método para mostrar las acciones de una reclamación
-    private void mostrarAcciones(Reclamacion reclamacion) {
+    private void mostrarAcciones(Complaint complaint) {
         // Crear un cuadro de diálogo para mostrar las acciones
         Dialog dialog = new Dialog();
         dialog.setCloseOnOutsideClick(false);
@@ -65,49 +78,27 @@ public class ReclamacionesView extends VerticalLayout {
         dialog.open();
     }
 
-    // Método para mostrar el formulario de añadir reclamación
+    // Método para mostrar el formulario de añadir reclamación (sin funcionalidad por ahora)
     private void mostrarFormularioAñadirReclamacion() {
-        // Implementar lógica para mostrar el formulario de añadir reclamación
+        // Crear un cuadro de diálogo para mostrar el formulario de añadir reclamación
+        Dialog dialog = new Dialog();
+        dialog.setCloseOnOutsideClick(false);
+
+        // Crear un formulario para añadir reclamación
+        FormLayout formLayout = new FormLayout();
+
+        // Campos del formulario (sin funcionalidad por ahora)
+        formLayout.add(new Span("Formulario para añadir reclamación"));
+
+        dialog.add(formLayout);
+
+        // Abrir el cuadro de diálogo
+        dialog.open();
     }
 
-    // Clase para representar una reclamación
-    public static class Reclamacion {
-        private int id;
-        private String descripcion;
-        private LocalDate fechaCreacion;
-        private String estado;
-        private String comentarios;
-
-        public Reclamacion(int id, String descripcion, LocalDate fechaCreacion, String estado, String comentarios) {
-            this.id = id;
-            this.descripcion = descripcion;
-            this.fechaCreacion = fechaCreacion;
-            this.estado = estado;
-            this.comentarios = comentarios;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public String getDescripcion() {
-            return descripcion;
-        }
-
-        public LocalDate getFechaCreacion() {
-            return fechaCreacion;
-        }
-
-        public String getEstado() {
-            return estado;
-        }
-
-        public String getComentarios() {
-            return comentarios;
-        }
-
-        public void setComentarios(String comentarios) {
-            this.comentarios = comentarios;
-        }
+    // Método para actualizar los datos de la tabla de reclamaciones
+    private void actualizarTablaReclamaciones() {
+        List<Complaint> reclamaciones = complaintService.findAll();
+        grid.setItems(reclamaciones);
     }
 }
