@@ -35,7 +35,6 @@ import com.vaadin.flow.component.notification.Notification;
 @PermitAll
 public class EditarProductosView extends VerticalLayout {
 
-    private final ProductService productService;
     private final EditarProductosService editarProductosService;
     private List<Product> products;
     private OrderedList imageContainer;
@@ -44,7 +43,6 @@ public class EditarProductosView extends VerticalLayout {
     private Button addButton;
 
     public EditarProductosView(ProductService productService, EditarProductosService editarProductosService) {
-        this.productService = productService;
         this.editarProductosService = editarProductosService;
         products = productService.findAll();
         creartext();
@@ -52,7 +50,7 @@ public class EditarProductosView extends VerticalLayout {
 
         for (Product product : products) {
             if (product.getAvailable()) {
-                imageContainer.add(new ImageGalleryViewCard2(productService,editarProductosService,product.getId(), product.getName(), product.getImage(),
+                imageContainer.add(new ImageGalleryViewCard2(editarProductosService,product.getId(), product.getName(), product.getImage(),
                         product.getDescription(), product.getPrice(), false));
             }
         }
@@ -185,7 +183,7 @@ public class EditarProductosView extends VerticalLayout {
         } else {
             for (Product product : filteredProducts) {
                 if (product.getAvailable()) {
-                    imageContainer.add(new ImageGalleryViewCard2(productService,editarProductosService,product.getId(), product.getName(),
+                    imageContainer.add(new ImageGalleryViewCard2(editarProductosService,product.getId(), product.getName(),
                             product.getImage(), product.getDescription(), product.getPrice(), false));
                 }
             }
@@ -197,7 +195,7 @@ public class EditarProductosView extends VerticalLayout {
         imageContainer.removeAll();
         for (Product product : products) {
             if (product.getAvailable())
-                imageContainer.add(new ImageGalleryViewCard2(productService, editarProductosService,product.getId(), product.getName(), product.getImage(),
+                imageContainer.add(new ImageGalleryViewCard2(editarProductosService,product.getId(), product.getName(), product.getImage(),
                         product.getDescription(), product.getPrice(), false));
         }
     }

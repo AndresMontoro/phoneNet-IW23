@@ -27,18 +27,13 @@ import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
 import com.vaadin.flow.theme.lumo.LumoUtility.Width;
 import es.uca.iw.services.EditarProductosService;
 import es.uca.iw.model.Product;
-import es.uca.iw.services.ProductService;
 
 public class ImageGalleryViewCard2 extends ListItem {
-    private ProductService productService;
     private EditarProductosService editarProductosService;
-    private final long productId;
 
-    public ImageGalleryViewCard2(ProductService productService, EditarProductosService editarProductosService,long productId, String productName, String productUrl, String productDescription, BigDecimal productPrice, boolean hireVisible) {
+    public ImageGalleryViewCard2(EditarProductosService editarProductosService,long productId, String productName, String productUrl, String productDescription, BigDecimal productPrice, boolean hireVisible) {
 
-        this.productService = productService;
         this.editarProductosService = editarProductosService;
-        this.productId = productId;
 
         addClassNames(Background.CONTRAST_5, Display.FLEX, FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 BorderRadius.LARGE);
@@ -73,12 +68,12 @@ public class ImageGalleryViewCard2 extends ListItem {
 
         if (hireVisible) { // hireVisible no sera true en esta parte, solo para pruebas
                     
-///////////////////////////////////////////////////////////////////7
+///////////////////////////////////////////////////////////////////
 
         } else {
         // Boton de editar
         Button editButton = new Button("Editar Producto", event -> {
-            Optional<Product> optionalProduct = editarProductosService.findById(productId);
+            Optional<Product> optionalProduct = this.editarProductosService.findById(productId);
             if (optionalProduct.isPresent()) {
                 Product product = optionalProduct.get();
                 Dialog dialog = new Dialog();
@@ -107,7 +102,7 @@ public class ImageGalleryViewCard2 extends ListItem {
                     product.setPrice(newProductPrice);
         
                     // Actualizar cambios en la BD
-                    editarProductosService.saveProduct(product);
+                    this.editarProductosService.saveProduct(product);
                     dialog.close();
         
                     // Recargar la página
@@ -127,9 +122,9 @@ public class ImageGalleryViewCard2 extends ListItem {
         ///////////////////////////////////////////////////////////////////////////
         //Boton de borrar
         Button deleteButton = new Button("Borrar Producto", event -> {
-            Optional<Product> optionalProduct = editarProductosService.findById(productId);
+            Optional<Product> optionalProduct = this.editarProductosService.findById(productId);
             if (optionalProduct.isPresent()) {
-                editarProductosService.deleteProduct(optionalProduct.get().getId());
+                this.editarProductosService.deleteProduct(optionalProduct.get().getId());
                 Notification.show("Producto borrado correctamente");
 
                 // Recarga la página para que se actualice la lista de productos

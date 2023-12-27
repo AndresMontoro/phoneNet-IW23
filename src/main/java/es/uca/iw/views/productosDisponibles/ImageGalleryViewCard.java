@@ -28,7 +28,8 @@ import es.uca.iw.services.ContractService;
 public class ImageGalleryViewCard extends ListItem {
     private ContractService contractService;
 
-    public ImageGalleryViewCard(ContractService contractService, String productName, String productUrl, String productDescription, BigDecimal productPrice, boolean hireVisible) {
+    public ImageGalleryViewCard(ContractService contractService, String productName, String productUrl, String productDescription, 
+        BigDecimal productPrice, BigDecimal dataPrice, int dataUsageLimit, BigDecimal callPrice, int callLimit, boolean hireVisible) {
 
         this.contractService = contractService;
 
@@ -56,10 +57,16 @@ public class ImageGalleryViewCard extends ListItem {
         subtitle.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
         subtitle.setText(productPrice.toString() + "€/mes");
 
+        Span dataUsage = new Span("Datos: " + dataUsageLimit + "MB" + " - " + dataPrice.toString() + "€/MB");
+        dataUsage.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
+
+        Span callUsage = new Span("Llamadas: " + callLimit + "min" + " - " + callPrice.toString() + "€/min");
+        callUsage.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
+
         Paragraph description = new Paragraph(productDescription);
         description.addClassName(Margin.Vertical.MEDIUM);
 
-        add(div, header, subtitle, description);
+        add(div, header, subtitle, dataUsage, callUsage, description);
 
         if (hireVisible) {
             Button badge = new Button("Contratarlo");
@@ -77,7 +84,7 @@ public class ImageGalleryViewCard extends ListItem {
             Button badgeUnhire = new Button("Descontratarlo");
             badgeUnhire.addClickListener(event -> {
                 try {
-                    contractService.unhireProduct(productName);
+                    this.contractService.unhireProduct(productName);
                     getElement().executeJs("location.reload()");
                     Notification.show("Producto descontratado correctamente");
                 } catch (Exception e) {

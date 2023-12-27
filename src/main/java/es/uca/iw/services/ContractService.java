@@ -2,6 +2,8 @@ package es.uca.iw.services;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,10 +11,12 @@ import java.util.Map;
 import es.uca.iw.model.Product;
 import es.uca.iw.model.User;
 import jakarta.transaction.Transactional;
+import es.uca.iw.model.CallRecord;
 import es.uca.iw.model.Contract;
 import es.uca.iw.model.CustomerLine;
 import es.uca.iw.model.DataUsageRecord;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -43,6 +47,10 @@ public class ContractService {
         this.dataUsageRecordRepository = dataUsageRepository;
     }
 
+    public void save(Contract contract) {
+        contractRepository.save(contract);
+    }
+
     public List<Product> getContractProducts() {
         User actualUser = userDetailsServiceImpl.getAuthenticatedUser().orElse(null);
         List<Contract> contracts = contractRepository.findByUser(actualUser);
@@ -59,6 +67,14 @@ public class ContractService {
         User actualUser = userDetailsServiceImpl.getAuthenticatedUser().orElse(null);
         List<Contract> contracts = contractRepository.findByUser(actualUser);
         return contracts;
+    }
+
+    private String createRandomPhoneNumber() {
+        String phoneNumber = "";
+        for (int i = 0; i < 9; i++) {
+            phoneNumber += (int) (Math.random() * 10);
+        }
+        return phoneNumber;
     }
 
     public void hireProduct(String productName) throws Exception {
@@ -102,6 +118,18 @@ public class ContractService {
         contractRepository.save(newContract);
     }
 
+    void deleteContractFromApi(Contract contract) throws Exception {
+        try {
+            restTemplate.delete("http://omr-simulator.us-east-1.elasticbeanstalk.com/" + contract.getApiId().toString() + "?carrier=PhoneNet");
+        } catch (HttpServerErrorException hsee) {
+            throw new Exception("No se ha podido realizar el registro (API caida)");
+        } catch (HttpClientErrorException hcee) {
+            throw new Exception("Error al conectar con el sistema");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Transactional
     public void unhireProduct(String productName) throws Exception {
         Product product = productRepository.findByname(productName).orElse(null);
@@ -120,35 +148,101 @@ public class ContractService {
         requestParams.put("id", contract.getApiId().toString());
         requestParams.put("carrier", "PhoneNet");
         
-        // Eliminamos la linea de la API
-        try {
-            restTemplate.delete("http://omr-simulator.us-east-1.elasticbeanstalk.com/" + contract.getApiId().toString() + "?carrier=PhoneNet");
-        } catch (HttpServerErrorException hsee) {
-            throw new Exception("No se ha podido realizar el registro (API caida)");
-        } catch (HttpClientErrorException hcee) {
-            throw new Exception("Error al conectar con el sistema");
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-
+        deleteContractFromApi(contract);
         callRecordRepository.deleteByContractId(contract);
         dataUsageRecordRepository.deleteByContractId(contract);
         contractRepository.delete(contract);
     }
 
-    // No vamos a actualizar nada cada vez que queramos obtener los datos de consumo
-    public void getContractDataConsumption(Contract contract) throws IOException {       
-        // Obtenemos el consumo de la linea (consulta a la API)
+    public Date getFirstDayOfMonth() {
+        Date actualDate = new Date();
 
+        // Convertir Date a Calendar para manipularlo más fácilmente
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(actualDate);
 
-        // Devolvemos el consumo
+        // Establecer el día del mes en 1 para obtener el primer día del mes
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+
+        // Obtener la fecha resultante
+        actualDate = calendar.getTime();
+        return actualDate;
     }
 
-    public String createRandomPhoneNumber() {
-        String phoneNumber = "";
-        for (int i = 0; i < 9; i++) {
-            phoneNumber += (int) (Math.random() * 10);
+    private Date addMonthToDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, 1);
+        return calendar.getTime();
+    }
+
+    // No vamos a actualizar nada cada vez que queramos obtener los datos de consumo
+    public Integer getDataConsumption(Contract contract, Date startDate) {
+        Date searchingEndDate = addMonthToDate(startDate);
+        
+        Integer megaBytes = 0;      
+        List<DataUsageRecord> dataUsageRecords = dataUsageRecordRepository.findByContractAndDate(contract, startDate, searchingEndDate);
+        for(DataUsageRecord dataUsageRecord : dataUsageRecords) {
+            megaBytes = megaBytes + dataUsageRecord.getMegaBytes();
         }
-        return phoneNumber;
+        return megaBytes;
+    }
+
+    // public Integer getContractCallConsumption(Contract contract, LocalDateTime localDateTime) {
+    //     Integer seconds = 0;
+    //     List<CallRecord> callRecords = callRecordRepository.findByContractAndDate(contract, localDateTime);
+    //     for(CallRecord callRecord : callRecords) {
+    //         seconds = seconds + callRecord.getSeconds();
+    //     }
+    //     return seconds;
+    // }
+
+    @Scheduled(cron = "0 0 12 * * ?")
+    public void updateAllContractsDataAndCallsUsage() throws Exception {
+        List<Contract> contracts = contractRepository.findAll();
+        for (Contract contract : contracts) {
+            if (contract.getEndDate() != null && contract.getEndDate().before(new Date())) {
+                contractRepository.delete(contract);
+                continue;
+            }   
+            
+            String dataRequestUrl = "http://omr-simulator.us-east-1.elasticbeanstalk.com/" + contract.getApiId().toString() 
+                + "/datausagerecords?carrier=PhoneNet" 
+                + (contract.getLastCallDataUpdate() != null ? "&startDate=" + contract.getLastCallDataUpdate().toString() : "");
+
+            String callRecordRequest = "http://omr-simulator.us-east-1.elasticbeanstalk.com/" + contract.getApiId().toString() 
+                + "/callrecords?carrier=PhoneNet" 
+                + (contract.getLastCallDataUpdate() != null ? "&startDate=" + contract.getLastCallDataUpdate().toString() : "");
+            
+            try {
+                DataUsageRecord[] dataUsageRecords = restTemplate.getForObject(dataRequestUrl, DataUsageRecord[].class);
+                CallRecord[] callRecords = restTemplate.getForObject(callRecordRequest, CallRecord[].class);
+
+                System.out.println("----------DATOS DE DATAUSAGE RECORDS----------\n" );
+                for (CallRecord callRecord : callRecords) {
+                    System.out.println(callRecord.getDetinationPhoneNumber() + " " + callRecord.getSeconds() + " " + callRecord.getDate());
+                }
+                System.out.println("----------FIN DE DATA USAGE RECORDS---------");
+
+                for (DataUsageRecord dataUsageRecord : dataUsageRecords) {
+                    contract.getDataUsageRecords().add(dataUsageRecord);
+                    dataUsageRecord.setContract(contract);
+                    dataUsageRecordRepository.save(dataUsageRecord);
+                }
+
+                for (CallRecord callRecord : callRecords) {
+                    contract.getCallRecord().add(callRecord);
+                    callRecord.setContract(contract);
+                    callRecordRepository.save(callRecord);
+                }
+
+                contract.setLastCallDataUpdate(new Date());
+                contractRepository.save(contract);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

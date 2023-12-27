@@ -1,4 +1,4 @@
-/* Comentado para que no inserte datos cada vez que arranca el server*/
+// /* Comentado para que no inserte datos cada vez que arranca el server*/
 
 // package es.uca.iw;
 
@@ -12,12 +12,11 @@
 // import org.springframework.stereotype.Component;
 // import org.springframework.web.client.RestTemplate;
 
-// import es.uca.iw.data.PhoneNumberRepository;
 // import es.uca.iw.data.UserRepository;
 // import es.uca.iw.data.UserRoleRepository;
-// import es.uca.iw.model.PhoneNumber;
 // import es.uca.iw.model.User;
 // import es.uca.iw.model.UserRole;
+// import es.uca.iw.services.ContractService;
 // import es.uca.iw.model.CallRecord;
 
 // @Component
@@ -30,6 +29,9 @@
 
 //     @Autowired
 //     private RestTemplate restTemplate;
+
+//     @Autowired
+//     private ContractService contractService;
 
 //     @Override
 //     public void run(String... args) throws Exception {
@@ -72,9 +74,11 @@
 //         // phoneNumber.setAvailable(true);
 //         // phoneNumberRepository.save(phoneNumber);
 
-//         List<CallRecord> respuesta = restTemplate.getForObject("http://omr-simulator.us-east-1.elasticbeanstalk.com/10e68f12-b113-42ba-bf9b-f4bee0cb4f74/callrecords?carrier=UCA", 
-//             List.class);
+//         // List<CallRecord> respuesta = restTemplate.getForObject("http://omr-simulator.us-east-1.elasticbeanstalk.com/10e68f12-b113-42ba-bf9b-f4bee0cb4f74/callrecords?carrier=UCA", 
+//         //     List.class);
         
-//         System.out.println(respuesta);
+//         // System.out.println(respuesta);
+
+//         // contractService.updateAllContractsDataAndCallsUsage();
 //     }
 // }

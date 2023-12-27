@@ -40,14 +40,16 @@ public class ProductosDisponiblesView extends VerticalLayout {
         this.productService = productService;
         this.contractService = contractService;
         
-        this.products = productService.findAll();
-        this.contractProducts = contractService.getContractProducts();
+        this.products = this.productService.findAll();
+        this.contractProducts = this.contractService.getContractProducts();
 
         constructUI();
 
         for (Product product : products) {
             if (product.getAvailable() && !contractProducts.contains(product))
-                imageContainer.add(new ImageGalleryViewCard(contractService, product.getName(), product.getImage(), product.getDescription(), product.getPrice(), true));
+                imageContainer.add(new ImageGalleryViewCard(contractService, product.getName(), product.getImage(), 
+                    product.getDescription(), product.getPrice(), product.getDataUsagePrice(), product.getDataUsageLimit(),
+                    product.getCallPrice(), product.getCallLimit(), true));
         }
     }   
 

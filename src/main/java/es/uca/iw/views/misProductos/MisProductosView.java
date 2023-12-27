@@ -43,7 +43,8 @@ public class MisProductosView extends VerticalLayout{
         
         if (actualUserProducts.size() != 0) {
             for (Product product : actualUserProducts) {
-                add(new ImageGalleryViewCard(contractService, product.getName(), product.getImage(), product.getDescription(), product.getPrice(), false));
+                add(new ImageGalleryViewCard(contractService, product.getName(), product.getImage(), product.getDescription(), product.getPrice(), 
+                    product.getDataUsagePrice(), product.getDataUsageLimit(), product.getCallPrice(), product.getCallLimit(), false));
             }
         } else {
             add(new H2("No tienes productos contratados"));

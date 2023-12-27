@@ -60,6 +60,7 @@ public class Product {
         this.price = price;
     }
 
+    @NotNull(message = "Incluya el precio de datos")
     private BigDecimal dataUsagePrice;
     public BigDecimal getDataUsagePrice() { return dataUsagePrice; }
     public void setDataUsagePrice(BigDecimal dataUsagePrice) {
@@ -68,12 +69,47 @@ public class Product {
         this.dataUsagePrice = dataUsagePrice;
     }
 
+    private BigDecimal dataPenaltyPrice;
+    public BigDecimal getDataPenaltyPrice() { return dataPenaltyPrice; }
+    public void setDataPenaltyPrice(BigDecimal dataPenaltyPrice) {
+        if (dataPenaltyPrice == null || dataPenaltyPrice.compareTo(BigDecimal.ZERO) < 0)
+            throw new IllegalArgumentException("El precio no puede ser negativo");
+        this.dataPenaltyPrice = dataPenaltyPrice;
+    }
+
+    @NotNull(message = "Incluya el limite de datos")
+    private int dataUsageLimit;
+    public int getDataUsageLimit() { return dataUsageLimit; }
+    public void setDataUsageLimit(int dataUsageLimit) {
+        if (dataUsageLimit < 0)
+            throw new IllegalArgumentException("El límite no puede ser negativo");
+        this.dataUsageLimit = dataUsageLimit;
+    }
+
+    @NotNull(message = "Incluya el precio de llamadas")
     private BigDecimal callPrice;
     public BigDecimal getCallPrice() { return callPrice; }
     public void setCallPrice(BigDecimal callPrice) {
         if (callPrice == null || callPrice.compareTo(BigDecimal.ZERO) < 0)
             throw new IllegalArgumentException("El precio no puede ser negativo");
         this.callPrice = callPrice;
+    }
+
+    private BigDecimal callPenaltyPrice;
+    public BigDecimal getCallPenaltyPrice() { return callPenaltyPrice; }
+    public void setCallPenaltyPrice(BigDecimal callPenaltyPrice) {
+        if (callPenaltyPrice == null || callPenaltyPrice.compareTo(BigDecimal.ZERO) < 0)
+            throw new IllegalArgumentException("El precio no puede ser negativo");
+        this.callPenaltyPrice = callPenaltyPrice;
+    }
+
+    @NotNull(message = "Incluya el limite de llamadas")
+    private int callLimit;
+    public int getCallLimit() { return callLimit; }
+    public void setCallLimit(int callLimit) {
+        if (callLimit < 0)
+            throw new IllegalArgumentException("El límite no puede ser negativo");
+        this.callLimit = callLimit;
     }
 
     @Column(nullable = false)

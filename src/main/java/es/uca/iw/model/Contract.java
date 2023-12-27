@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.Calendar;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -77,18 +78,33 @@ public class Contract {
         this.phoneNumber = phoneNumber;
     }
 
-    @OneToMany(mappedBy = "contract")
+    private Date lastCallDataUpdate = null;
+    public Date getLastCallDataUpdate() { return lastCallDataUpdate; }
+    public void setLastCallDataUpdate(Date lastCallDataUpdate) {
+        if (lastCallDataUpdate == null)
+            throw new IllegalArgumentException("La fecha de la última actualización de llamadas no puede ser nula");
+        this.lastCallDataUpdate = lastCallDataUpdate;
+    }
+
+    @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)
     private Set<DataUsageRecord> dataUsageRecord = new HashSet<>();
-    public Set<DataUsageRecord> getCustomer() { return dataUsageRecord; }
-    public void setCustomer(Set<DataUsageRecord> dataUsageRecord) {
+    public Set<DataUsageRecord> getDataUsageRecords() { return dataUsageRecord; }
+    public void setDataUsgaeRecords(Set<DataUsageRecord> dataUsageRecord) {
         this.dataUsageRecord = dataUsageRecord;
     }
 
-    @OneToMany(mappedBy = "contract")
+    @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)
     private Set<CallRecord> callRecord;
     public Set<CallRecord> getCallRecord() { return callRecord; }
     public void setCallRecord(Set<CallRecord> callRecord) {
         this.callRecord = callRecord;
+    }
+
+    @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)
+    private Set<Bill> bills;
+    public Set<Bill> getBills() { return bills; }
+    public void setBills(Set<Bill> bills) {
+        this.bills = bills;
     }
 
     @PrePersist
