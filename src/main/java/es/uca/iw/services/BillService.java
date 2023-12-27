@@ -31,9 +31,7 @@ public class BillService {
             bill.setDate(this.contractService.getFirstDayOfMonth());
             
             bill.setdataConsumed(contractService.getDataConsumption(contract, getBillSearchingDate()));
-            bill.setdataPrice(contract.getProduct().getDataUsagePrice());
             // bill.setminutesConsumed(contractService.getMinutesConsumption(contract));
-            // bill.setminutesPrice(contract.getProduct().getMinutesUsagePrice());
             contract.getBills().add(bill);
             this.contractService.save(contract);
             this.billRepository.save(bill);

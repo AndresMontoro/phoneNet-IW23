@@ -1,4 +1,5 @@
 package es.uca.iw.views.editarProductos;
+
 import jakarta.annotation.security.PermitAll;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -23,7 +24,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import es.uca.iw.model.Product;
 import es.uca.iw.services.ProductService;
-import es.uca.iw.views.MainLayout;
+import es.uca.iw.views.MainAdminLayout;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -31,7 +32,7 @@ import es.uca.iw.services.EditarProductosService;
 import java.util.Set;
 import com.vaadin.flow.component.notification.Notification;
 
-@Route(value = "EditarProductos", layout = MainLayout.class)
+@Route(value = "EditarProductos", layout = MainAdminLayout.class)
 @PermitAll
 public class EditarProductosView extends VerticalLayout {
 

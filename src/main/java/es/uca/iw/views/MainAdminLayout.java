@@ -11,16 +11,11 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 
-import es.uca.iw.views.miPerfil.MiPerfilView;
-import es.uca.iw.views.misConsumos.MisConsumosView;
-import es.uca.iw.views.misFacturas.MisFacturasView;
-import es.uca.iw.views.misProductos.MisProductosView;
 import es.uca.iw.views.editarProductos.EditarProductosView;
-import es.uca.iw.views.Reclamaciones.ReclamacionesView;
 // import es.uca.iw.views.editarUsuarios.EditarUsuariosView;
 
-public class MainLayout extends AppLayout{
-    public MainLayout() {
+public class MainAdminLayout extends AppLayout{
+    public MainAdminLayout() {
         DrawerToggle toggle = new DrawerToggle();
 
         H1 title = new H1("PhoneNet");
@@ -35,13 +30,9 @@ public class MainLayout extends AppLayout{
 
     private Tabs getTabs() {
         Tabs tabs = new Tabs();
-        tabs.add(createTab(VaadinIcon.USER_HEART, "Mi perfil", MiPerfilView.class),
-            createTab(VaadinIcon.CART, "Mis productos", MisProductosView.class),
-            createTab(VaadinIcon.CHART, "Mis Consumos", MisConsumosView.class),
-            createTab(VaadinIcon.CLIPBOARD, "Mis facturas", MisFacturasView.class),
-            createTab(VaadinIcon.CLIPBOARD, "Editar Productos", EditarProductosView.class),
-            createTab(VaadinIcon.BOOK, "Reclamaciones", ReclamacionesView.class)
-            /*createTab(VaadinIcon.CLIPBOARD, "Editar Usuarios", EditarUsuariosView.class)*/);
+        tabs.add(createTab(VaadinIcon.CLIPBOARD, "Editar Productos", EditarProductosView.class)
+            // createTab(VaadinIcon.CLIPBOARD, "Editar Usuarios", EditarUsuariosView.class)
+        );
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;

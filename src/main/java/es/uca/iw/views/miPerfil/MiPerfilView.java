@@ -22,10 +22,10 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 
 import es.uca.iw.model.User;
 import es.uca.iw.services.UserDetailsServiceImpl;
-import es.uca.iw.views.MainLayout;
+import es.uca.iw.views.MainUserLayout;
 import jakarta.annotation.security.PermitAll;
 
-@Route(value = "", layout = MainLayout.class)
+@Route(value = "", layout = MainUserLayout.class)
 @PermitAll
 public class MiPerfilView extends VerticalLayout {
     private UserDetailsServiceImpl userService;

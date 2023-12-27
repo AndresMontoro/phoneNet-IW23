@@ -2,6 +2,9 @@
 
 // package es.uca.iw;
 
+// import java.math.BigDecimal;
+// import java.util.Calendar;
+// import java.util.Date;
 // import java.util.HashSet;
 // import java.util.List;
 // import java.util.Set;
@@ -19,6 +22,10 @@
 // import es.uca.iw.services.ContractService;
 // import es.uca.iw.model.CallRecord;
 
+// import es.uca.iw.data.BillRepository;
+// import es.uca.iw.data.ContractRepository;
+// import es.uca.iw.model.Bill;
+
 // @Component
 // public class DataLoader implements CommandLineRunner {
 
@@ -26,12 +33,23 @@
 //     // private final PasswordEncoder bCryptPasswordEncoder;
 //     // private final UserRoleRepository userRoleRepository;
 //     // private final PhoneNumberRepository phoneNumberRepository;
+//     private ContractRepository contractRepository;
+//     private BillRepository billRepository;
 
 //     @Autowired
 //     private RestTemplate restTemplate;
 
 //     @Autowired
 //     private ContractService contractService;
+
+//     DataLoader(ContractRepository contractRepository, BillRepository billRepository) {
+//         // this.userRepository = userRepository;
+//         // this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+//         // this.userRoleRepository = userRoleRepository;
+//         // this.phoneNumberRepository = phoneNumberRepository;
+//         this.contractRepository = contractRepository;
+//         this.billRepository = billRepository;
+//     }
 
 //     @Override
 //     public void run(String... args) throws Exception {
@@ -80,5 +98,19 @@
 //         // System.out.println(respuesta);
 
 //         // contractService.updateAllContractsDataAndCallsUsage();
+
+//         Bill bill = new Bill();
+//         Calendar calendar = Calendar.getInstance();
+//         calendar.setTime(new Date());
+//         calendar.set(Calendar.DAY_OF_MONTH, 1);
+//         calendar.set(Calendar.HOUR_OF_DAY, 0);
+//         calendar.set(Calendar.MINUTE, 0);
+
+//         bill.setDate(calendar.getTime());
+//         bill.setdataConsumed(200);
+//         bill.setminutesConsumed(100);
+//         bill.setContract(contractRepository.findById(9L).orElse(null));
+
+//         billRepository.save(bill);
 //     }
 // }

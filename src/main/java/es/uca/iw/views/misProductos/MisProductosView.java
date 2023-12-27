@@ -19,11 +19,11 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Background;
 
 import es.uca.iw.services.ContractService;
 import es.uca.iw.model.Product;
-import es.uca.iw.views.MainLayout;
+import es.uca.iw.views.MainUserLayout;
 import es.uca.iw.views.productosDisponibles.ImageGalleryViewCard;
 import jakarta.annotation.security.PermitAll;
 
-@Route(value = "MisProductos", layout = MainLayout.class)
+@Route(value = "MisProductos", layout = MainUserLayout.class)
 @PermitAll
 public class MisProductosView extends VerticalLayout{
     private ContractService contractService;
@@ -32,11 +32,10 @@ public class MisProductosView extends VerticalLayout{
         this.contractService = contractService;
 
         addClassNames(Padding.MEDIUM, Display.FLEX, FlexDirection.COLUMN, Gap.LARGE,Horizontal.AUTO, Vertical.AUTO);
-    
+
         H2 header = new H2("PRODUCTOS CONTRATADOS");
         header.addClassNames(Horizontal.AUTO, FontSize.XXLARGE, Background.CONTRAST_5, BorderRadius.MEDIUM, Padding.MEDIUM, Margin.SMALL);
         header.getStyle().set("color", "blue");
-
         add(header);
 
         List<Product> actualUserProducts = this.contractService.getContractProducts();

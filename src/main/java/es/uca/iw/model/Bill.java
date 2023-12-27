@@ -32,25 +32,11 @@ public class Bill {
         this.dataConsumed = dataConsumed;
     }
 
-    @NotNull(message = "El precio de los datos consumidos es obligatorio")
-    private BigDecimal dataPrice;
-    public BigDecimal getdataPrice() { return dataPrice; }
-    public void setdataPrice(BigDecimal dataPrice) {
-        this.dataPrice = dataPrice;
-    }
-
     @NotNull(message = "La cantidad de minutos consumidos es obligatoria")
     private Integer minutesConsumed;
     public Integer getminutesConsumed() { return minutesConsumed; }
     public void setminutesConsumed(Integer minutesConsumed) {
         this.minutesConsumed = minutesConsumed;
-    }
-
-    @NotNull(message = "El precio es obligatorio")
-    private BigDecimal minutesPrice;
-    public BigDecimal getminutesPrice() { return minutesPrice; }
-    public void setminutesPrice(BigDecimal minutesPrice) {
-        this.minutesPrice = minutesPrice;
     }
 
     @NotNull(message = "El precio es obligatorio")
@@ -67,13 +53,14 @@ public class Bill {
 
     @PrePersist
     public void prePersist() {
-        BigDecimal totalDataPrice;
+        BigDecimal totalDataPrice = new BigDecimal(0);
 
         if (dataConsumed - contract.getProduct().getDataUsageLimit() <= 0) {
-           totalDataPrice = dataPrice.multiply(new BigDecimal(dataConsumed));
+           totalDataPrice = contract.getProduct().getPrice();
         } else {
-            totalDataPrice = dataPrice.multiply(new BigDecimal(dataConsumed - contract.getProduct().getDataUsageLimit()));
+            totalDataPrice = contract.getProduct().getDataUsagePrice().multiply(new BigDecimal(dataConsumed - contract.getProduct().getDataUsageLimit()));
             totalDataPrice = totalDataPrice.add(new BigDecimal(contract.getProduct().getDataUsageLimit()).multiply(contract.getProduct().getDataPenaltyPrice()));
+            totalDataPrice = totalDataPrice.add(contract.getProduct().getPrice());
         }
         
         this.totalPrice = totalDataPrice;

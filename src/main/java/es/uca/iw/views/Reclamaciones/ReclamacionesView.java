@@ -4,28 +4,44 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.lumo.LumoUtility.Background;
+import com.vaadin.flow.theme.lumo.LumoUtility.BorderRadius;
+import com.vaadin.flow.theme.lumo.LumoUtility.Display;
+import com.vaadin.flow.theme.lumo.LumoUtility.FlexDirection;
+import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
+import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
+import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Horizontal;
+import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Vertical;
+import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
+
 import es.uca.iw.services.ComplaintService;
 import es.uca.iw.model.Complaint;
-import es.uca.iw.views.MainLayout;
+import es.uca.iw.views.MainUserLayout;
 import jakarta.annotation.security.PermitAll;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-@Route(value = "Reclamaciones", layout = MainLayout.class)
+@Route(value = "Reclamaciones", layout = MainUserLayout.class)
 @PermitAll
 public class ReclamacionesView extends VerticalLayout {
 
     private Grid<Complaint> grid;
     private ComplaintService complaintService;
 
-    @Autowired
     public ReclamacionesView(ComplaintService complaintService) {
         this.complaintService = complaintService;
     
+        addClassNames(Padding.MEDIUM, Display.FLEX, FlexDirection.COLUMN, Gap.LARGE,Horizontal.AUTO, Vertical.AUTO);
+
+        H2 header = new H2("MIS RECLAMACIONES");
+        header.addClassNames(Horizontal.AUTO, FontSize.XXLARGE, Background.CONTRAST_5, BorderRadius.MEDIUM, Padding.MEDIUM, Margin.SMALL);
+        header.getStyle().set("color", "blue");
+        add(header);
 
         // Creamos la tabla
         grid = new Grid<>(Complaint.class);
@@ -50,7 +66,6 @@ public class ReclamacionesView extends VerticalLayout {
         Button añadirReclamacionButton = new Button("Añadir Reclamación");
         añadirReclamacionButton.addClickListener(e -> mostrarFormularioAñadirReclamacion());
     
-        add(new Span("Reclamaciones"));
         add(añadirReclamacionButton);
         add(grid);
     
