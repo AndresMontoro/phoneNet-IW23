@@ -1,14 +1,23 @@
 package es.uca.iw.views.misFacturas;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.web.servlet.tags.form.ButtonTag;
+import org.vaadin.olli.FileDownloadWrapper;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.theme.lumo.LumoUtility.Background;
 import com.vaadin.flow.theme.lumo.LumoUtility.BorderRadius;
 import com.vaadin.flow.theme.lumo.LumoUtility.Display;
@@ -56,21 +65,50 @@ public class MisFacturasView extends VerticalLayout {
 
         Grid<Bill> grid = new Grid<>(Bill.class, false);
         grid.setItems(bills);
-        grid.setColumns("date", "dataConsumed", "minutesConsumed", "totalPrice");
+        grid.setColumns("date", "dataConsumed", "minutesConsumed", "dataTotalPrice", "totalPrice");
         grid.getColumnByKey("date").setHeader("Fecha");
         grid.getColumnByKey("dataConsumed").setHeader("Datos Consumidos");
         grid.getColumnByKey("minutesConsumed").setHeader("Minutos Consumidos");
         grid.getColumnByKey("totalPrice").setHeader("Precio Total");
-        grid.addComponentColumn(bill -> createInfoButton(bill)).setHeader("Más información");
+        grid.getColumnByKey("dataTotalPrice").setHeader("Precio Añadido (Datos)");
+        grid.addComponentColumn(bill -> createDownloadAnchor(bill)).setHeader("Más información");
         add(grid);
     }
 
-    private Button createInfoButton(Bill bill) {
-        Button button = new Button("Descargar");
-        button.addClickListener(event -> {
-            // Lógica para manejar el clic en el botón (editar en este caso)
-            // Puedes abrir un formulario de edición o realizar otras acciones según tus necesidades
-        });
-        return button;
+    private Anchor createDownloadAnchor(Bill bill) {
+        // try {
+        //     ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
+        //     StreamResource streamResource = billService.createPdfStreamResource(bill, pdfOutputStream);
+    
+        //     // Crear un componente Anchor para la descarga
+        //     Anchor downloadAnchor = new Anchor(streamResource, "Descargar");
+        //     downloadAnchor.getElement().getThemeList().add("button");
+        //     downloadAnchor.getElement().setAttribute("download", true);
+    
+        //     // Manejar el clic en el Anchor
+        //     // downloadAnchor.addClickListener(event -> {
+        //     //     // Agregar lógica adicional si es necesario
+        //     //     Notification.show("Descargando factura...");
+        //     // });
+    
+        //     return downloadAnchor;
+        // } catch (Exception e) {
+        //     Notification.show("Debido a un error, no se pueden descargar las facturas");
+        //     return new Anchor(); // Puedes devolver un Anchor vacío o manejarlo de otra manera
+        // }
+
+        try {
+            StreamResource streamResource = billService.createPdfStreamResource(bill);
+            Anchor link = new Anchor(streamResource, "");
+            link.getElement().setAttribute("download", true);
+            link.add(new Button(new Icon(VaadinIcon.DOWNLOAD_ALT)));
+            return link;
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
+    
+    
 }
