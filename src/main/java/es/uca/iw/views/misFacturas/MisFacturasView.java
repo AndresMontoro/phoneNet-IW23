@@ -1,12 +1,7 @@
 package es.uca.iw.views.misFacturas;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Set;
-
-import org.springframework.web.servlet.tags.form.ButtonTag;
-import org.vaadin.olli.FileDownloadWrapper;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -14,7 +9,6 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
@@ -76,27 +70,6 @@ public class MisFacturasView extends VerticalLayout {
     }
 
     private Anchor createDownloadAnchor(Bill bill) {
-        // try {
-        //     ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
-        //     StreamResource streamResource = billService.createPdfStreamResource(bill, pdfOutputStream);
-    
-        //     // Crear un componente Anchor para la descarga
-        //     Anchor downloadAnchor = new Anchor(streamResource, "Descargar");
-        //     downloadAnchor.getElement().getThemeList().add("button");
-        //     downloadAnchor.getElement().setAttribute("download", true);
-    
-        //     // Manejar el clic en el Anchor
-        //     // downloadAnchor.addClickListener(event -> {
-        //     //     // Agregar lógica adicional si es necesario
-        //     //     Notification.show("Descargando factura...");
-        //     // });
-    
-        //     return downloadAnchor;
-        // } catch (Exception e) {
-        //     Notification.show("Debido a un error, no se pueden descargar las facturas");
-        //     return new Anchor(); // Puedes devolver un Anchor vacío o manejarlo de otra manera
-        // }
-
         try {
             StreamResource streamResource = billService.createPdfStreamResource(bill);
             Anchor link = new Anchor(streamResource, "");
@@ -109,6 +82,4 @@ public class MisFacturasView extends VerticalLayout {
 
         return null;
     }
-    
-    
 }

@@ -2,9 +2,6 @@ package es.uca.iw.services;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -79,7 +76,7 @@ public class BillService {
             pdfBill.close();
 
             StreamResource streamResource = new StreamResource(
-                "Bill.pdf",
+                bill.getContract().getProduct().getName() + bill.getDate() + ".pdf",
                 () -> new ByteArrayInputStream(pdfOutputStream.toByteArray())
             );
 
