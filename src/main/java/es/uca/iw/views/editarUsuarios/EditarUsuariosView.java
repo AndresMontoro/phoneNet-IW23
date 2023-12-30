@@ -27,12 +27,12 @@ import com.vaadin.flow.component.button.Button;
 import es.uca.iw.model.User;
 import es.uca.iw.model.UserRole;
 import es.uca.iw.services.UserDetailsServiceImpl;
-import es.uca.iw.views.MainLayout;
+import es.uca.iw.views.MainAdminLayout;
 import com.vaadin.flow.component.notification.Notification;
 import java.util.Set;
 
 
-@Route(value = "EditarUsuarios", layout = MainLayout.class)
+@Route(value = "EditarUsuarios", layout = MainAdminLayout.class)
 @PermitAll
 public class EditarUsuariosView extends VerticalLayout {
 
