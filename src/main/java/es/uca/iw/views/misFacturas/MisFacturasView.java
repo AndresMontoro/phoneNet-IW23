@@ -59,10 +59,10 @@ public class MisFacturasView extends VerticalLayout {
 
         Grid<Bill> grid = new Grid<>(Bill.class, false);
         grid.setItems(bills);
-        grid.setColumns("date", "dataConsumed", "minutesConsumed", "dataTotalPrice", "totalPrice");
+        grid.setColumns("date", "dataConsumed", "dataTotalPrice", "totalPrice");
         grid.getColumnByKey("date").setHeader("Fecha");
         grid.getColumnByKey("dataConsumed").setHeader("Datos Consumidos");
-        grid.getColumnByKey("minutesConsumed").setHeader("Minutos Consumidos");
+        // grid.getColumnByKey("minutesConsumed").setHeader("Minutos Consumidos");
         grid.getColumnByKey("totalPrice").setHeader("Precio Total");
         grid.getColumnByKey("dataTotalPrice").setHeader("Precio Añadido (Datos)");
         grid.addComponentColumn(bill -> createDownloadAnchor(bill)).setHeader("Más información");

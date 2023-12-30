@@ -1,7 +1,7 @@
 package es.uca.iw.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,9 +19,9 @@ public class Bill {
     public Long getId() { return id; }
     
     @NotNull(message = "La fecha es obligatoria")
-    private Date date;
-    public Date getDate() { return date; }
-    public void setDate(Date date) {
+    private LocalDate date;
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -32,7 +32,7 @@ public class Bill {
         this.dataConsumed = dataConsumed;
     }
 
-    @NotNull(message = "La cantidad de minutos consumidos es obligatoria")
+    // @NotNull(message = "La cantidad de minutos consumidos es obligatoria")
     private Integer minutesConsumed;
     public Integer getminutesConsumed() { return minutesConsumed; }
     public void setminutesConsumed(Integer minutesConsumed) {

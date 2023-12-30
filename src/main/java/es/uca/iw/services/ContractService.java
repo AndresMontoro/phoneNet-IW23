@@ -69,6 +69,10 @@ public class ContractService {
         return contracts;
     }
 
+    public List<Contract> getAllContracts() {
+        return contractRepository.findAll();
+    }
+
     private String createRandomPhoneNumber() {
         String phoneNumber = "";
         for (int i = 0; i < 9; i++) {
@@ -115,6 +119,7 @@ public class ContractService {
         // Anadir apiId a la linea
         newContract.setPhoneNumber(customerLine.getPhoneNumber());
         newContract.setApiId(customerLine.getId());
+        newContract.setLastBillUpdate(getFirstDayOfMonth());
         contractRepository.save(newContract);
     }
 
@@ -220,11 +225,11 @@ public class ContractService {
                 DataUsageRecord[] dataUsageRecords = restTemplate.getForObject(dataRequestUrl, DataUsageRecord[].class);
                 CallRecord[] callRecords = restTemplate.getForObject(callRecordRequest, CallRecord[].class);
 
-                System.out.println("----------DATOS DE DATAUSAGE RECORDS----------\n" );
+                System.out.println("----------DATOS DE CALL RECORDS----------\n" );
                 for (CallRecord callRecord : callRecords) {
                     System.out.println(callRecord.getDetinationPhoneNumber() + " " + callRecord.getSeconds() + " " + callRecord.getDate());
                 }
-                System.out.println("----------FIN DE DATA USAGE RECORDS---------");
+                System.out.println("----------FIN DE CALL RECORDS---------");
 
                 for (DataUsageRecord dataUsageRecord : dataUsageRecords) {
                     contract.getDataUsageRecords().add(dataUsageRecord);

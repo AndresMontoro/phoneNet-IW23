@@ -1,4 +1,5 @@
 package es.uca.iw.views.editarProductos;
+
 import java.math.BigDecimal;
 import java.util.Optional;
 import com.vaadin.flow.component.UI;
@@ -25,20 +26,18 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
 import com.vaadin.flow.theme.lumo.LumoUtility.Width;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import es.uca.iw.services.EditarProductosService;
 import es.uca.iw.model.Product;
 import es.uca.iw.services.ProductService;
 
 
 public class ImageGalleryViewCard2 extends ListItem {
     private ProductService productService;
-    private EditarProductosService editarProductosService;
     private final long productId;
 
-    public ImageGalleryViewCard2(ProductService productService, EditarProductosService editarProductosService,long productId, String productName, String productUrl, String productDescription, BigDecimal productPrice, boolean hireVisible) {
+    public ImageGalleryViewCard2(ProductService productService, long productId, String productName, String productUrl, 
+        String productDescription, BigDecimal productPrice, boolean hireVisible) {
 
         this.productService = productService;
-        this.editarProductosService = editarProductosService;
         this.productId = productId;
 
         addClassNames(Background.CONTRAST_5, Display.FLEX, FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
@@ -79,7 +78,7 @@ public class ImageGalleryViewCard2 extends ListItem {
         } else {
         // Boton de editar
         Button editButton = new Button("Editar Producto", event -> {
-            Optional<Product> optionalProduct = editarProductosService.findById(productId);
+            Optional<Product> optionalProduct = this.productService.findById(this.productId);
             if (optionalProduct.isPresent()) {
                 Product product = optionalProduct.get();
                 Dialog dialog = new Dialog();
@@ -124,7 +123,7 @@ public class ImageGalleryViewCard2 extends ListItem {
                     boolean newProductAvailable = newAvailable.getValue();
         
                     // Actualizar cambios
-                    editarProductosService.editProductWithDetails(productId, newProductName, newProductDescription,
+                    this.productService.editProductWithDetails(productId, newProductName, newProductDescription,
                             newProductImageUrl, newProductPrice, newProductCallPrice,
                             newProductDataUsagePrice, newProductCallLimit, newProductDataLimit, newProductCallPenalty,
                             newProductDataPenalty, newProductAvailable);
@@ -149,7 +148,7 @@ public class ImageGalleryViewCard2 extends ListItem {
         ///////////////////////////////////////////////////////////////////////////
         //Boton de borrar
         Button deleteButton = new Button("Borrar Producto", event -> {
-            editarProductosService.deleteProduct(productId);
+            this.productService.deleteProduct(productId);
             UI.getCurrent().getPage().executeJs("location.reload();");
         });
 

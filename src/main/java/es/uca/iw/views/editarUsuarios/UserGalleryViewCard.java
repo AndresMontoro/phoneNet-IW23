@@ -124,7 +124,7 @@ public class UserGalleryViewCard extends ListItem {
         });
 
         Button deleteButton = new Button("Borrar Usuario", event -> {
-            userService.deleteUser(userId);
+            userService.deleteUser(this.userId);
             UI.getCurrent().getPage().executeJs("location.reload();");
         });
 
