@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Set;
-import java.util.stream.Collectors;
 import es.uca.iw.data.UserRepository;
 import es.uca.iw.data.UserRoleRepository;
 import es.uca.iw.model.User;
@@ -84,7 +83,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         
         User actualUser = getAuthenticatedUser().orElse(null);
         newPassword = bCryptPasswordEncoder.encode(newPassword);
-        // oldPassword = bCryptPasswordEncoder.encode(oldPassword);
 
         if (actualUser == null) 
             throw new IOException("El usuario no existe");           
@@ -94,12 +92,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new IllegalArgumentException("La contraseña antigua no es correcta");
         }
            
-
         actualUser.setPassword(newPassword);
         userRepository.save(actualUser);
     }
 
-    public void saveUserWithDetails(String name, String surname, String username, String password, String dni, String email, Set<UserRole.Role> roles) {
+    public void saveUserWithDetails(String name, String surname, String username, String password, String dni, String email, Set<UserRole> roles) {
         User newUser = new User();
         newUser.setName(name);
         newUser.setSurname(surname);
@@ -107,11 +104,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         newUser.setPassword(password);
         newUser.setDni(dni);
         newUser.setEmail(email);
+        newUser.setRoles(roles);
         userRepository.save(newUser);
-        Set<UserRole> userRoles = roles.stream().map(role -> new UserRole(role, newUser)).collect(Collectors.toSet());
-        userRoleRepository.saveAll(userRoles);
-        newUser.setRoles(userRoles);
-        userRepository.save(newUser);
+        // Set<UserRole> userRoles = roles.stream().map(role -> new UserRole(role, newUser)).collect(Collectors.toSet());
+        // userRoleRepository.saveAll(userRoles);
+        // newUser.setRoles(userRoles);
+        // userRepository.save(newUser);
     }
 
     public void editUserWithDetails(Long id, String newName, String newSurname, String newUsername, String newPassword, String newDni, String newEmail, Set<UserRole.Role> roles) {
@@ -125,16 +123,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             user.setDni(newDni);
             user.setEmail(newEmail);
             //userRoleRepository.deleteAll(user.getRoles());
-            userRepository.save(user);
+            // userRepository.save(user);
 
-            Set<UserRole> userRoles = roles.stream().map(role -> new UserRole(role, user)).collect(Collectors.toSet());
-            userRoleRepository.saveAll(userRoles);
-            user.setRoles(userRoles);
+            // Set<UserRole> userRoles = roles.stream().map(role -> new UserRole(role)).collect(Collectors.toSet());
+            // userRoleRepository.saveAll(userRoles);
+            // user.setRoles(userRoles);
+
+            user.getRoles().clear();
+            for (UserRole.Role role : roles) {
+                UserRole userRole = userRoleRepository.findByRole(role).orElse(null);
+                if (userRole != null) {
+                    user.getRoles().add(userRole);
+                }
+            }
             userRepository.save(user);
         }
     }
-
-
 
     //borrar usuario con el id
     public void deleteUser(Long id) {

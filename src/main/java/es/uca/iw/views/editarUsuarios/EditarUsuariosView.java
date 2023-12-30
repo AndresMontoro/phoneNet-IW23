@@ -109,7 +109,9 @@ public class EditarUsuariosView extends VerticalLayout {
                     selectedRoles.add(roleComboBox.getValue());
                 }
 
-               userDetailsServiceImpl.saveUserWithDetails(newName, newSurname, newUsername, newPassword, newDni, newEmail, selectedRoles);
+                Set<UserRole> userRoles = selectedRoles.stream().map(role -> new UserRole(role)).collect(Collectors.toSet());
+                
+                userDetailsServiceImpl.saveUserWithDetails(newName, newSurname, newUsername, newPassword, newDni, newEmail, userRoles);
                 Notification.show("Usuario añadido con éxito.");
                 dialog.close();
                 UI.getCurrent().getPage().reload();

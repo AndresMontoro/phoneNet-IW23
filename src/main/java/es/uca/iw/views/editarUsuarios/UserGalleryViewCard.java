@@ -66,7 +66,7 @@ public class UserGalleryViewCard extends ListItem {
         add(header, subtitle, dniSpan, emailSpan);
 
         Button editButton = new Button("Editar Usuario", event -> {
-            Optional<User> optionalUser = userService.findByUsername(username);
+            Optional<User> optionalUser = this.userService.findByUsername(username);
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
                 Dialog dialog = new Dialog();
@@ -90,9 +90,6 @@ public class UserGalleryViewCard extends ListItem {
                 newPasswordField.setValue(user.getPassword());
                 newDniField.setValue(user.getDni());
                 newEmailField.setValue(user.getEmail());
-
-
-
 
                 Button saveButton = new Button("Guardar", saveEvent -> {
                     String newUserName = newNameField.getValue();
