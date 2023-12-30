@@ -6,6 +6,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class UserRole {
@@ -20,4 +21,18 @@ public class UserRole {
     private Role role;
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+
+
+    @ManyToOne
+    private User user;
+
+    public UserRole() {
+        // Constructor
+    }
+
+    public UserRole(Role role, User user) {
+        this.role = role;
+        this.user = user;
+    }
+
 }
