@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-12-2023 a las 19:48:52
+-- Tiempo de generación: 30-12-2023 a las 20:18:30
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -32,8 +32,9 @@ USE `phonenet`;
 CREATE TABLE `bill` (
   `id` bigint(20) NOT NULL,
   `data_consumed` int(11) NOT NULL,
-  `date` datetime(6) NOT NULL,
-  `minutes_consumed` int(11) NOT NULL,
+  `data_total_price` decimal(38,2) NOT NULL,
+  `date` date NOT NULL,
+  `minutes_consumed` int(11) DEFAULT NULL,
   `total_price` decimal(38,2) NOT NULL,
   `contract_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -42,8 +43,8 @@ CREATE TABLE `bill` (
 -- Volcado de datos para la tabla `bill`
 --
 
-INSERT INTO `bill` (`id`, `data_consumed`, `date`, `minutes_consumed`, `total_price`, `contract_id`) VALUES
-(2, 200, '2023-12-01 00:00:32.000000', 100, 30.45, 9);
+INSERT INTO `bill` (`id`, `data_consumed`, `data_total_price`, `date`, `minutes_consumed`, `total_price`, `contract_id`) VALUES
+(1, 0, 30.45, '2023-12-01', NULL, 30.45, 9);
 
 -- --------------------------------------------------------
 
@@ -89,15 +90,17 @@ CREATE TABLE `contract` (
   `start_date` datetime(6) NOT NULL,
   `product_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
-  `last_call_data_update` datetime(6) DEFAULT NULL
+  `last_call_data_update` datetime(6) DEFAULT NULL,
+  `last_bill_update` datetime(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `contract`
 --
 
-INSERT INTO `contract` (`id`, `api_id`, `end_date`, `phone_number`, `start_date`, `product_id`, `user_id`, `last_call_data_update`) VALUES
-(9, 0x8bb7e83d12e94a29b3026a4cdb597f34, '2024-12-24 12:12:33.000000', '528790116', '2023-12-24 12:12:33.000000', 1, 3, NULL);
+INSERT INTO `contract` (`id`, `api_id`, `end_date`, `phone_number`, `start_date`, `product_id`, `user_id`, `last_call_data_update`, `last_bill_update`) VALUES
+(9, 0x8bb7e83d12e94a29b3026a4cdb597f34, '2024-12-24 12:12:33.000000', '528790116', '2023-12-24 12:12:33.000000', 1, 3, NULL, NULL),
+(11, 0x88b28a2d07544b7a907a9b0949c41a93, '2024-12-29 13:14:11.000000', '898535785', '2023-12-29 13:14:11.000000', 3, 3, NULL, '2023-12-01 00:00:11.000000');
 
 -- --------------------------------------------------------
 
@@ -120,7 +123,13 @@ INSERT INTO `data_usage_record` (`id`, `date`, `mega_bytes`, `contract_id`) VALU
 (49, '2023-12-23 01:00:00.000000', 1, 9),
 (50, '2023-12-24 01:00:00.000000', 3703, 9),
 (53, '2023-12-25 01:00:00.000000', 991, 9),
-(55, '2023-12-26 01:00:00.000000', 217, 9);
+(55, '2023-12-26 01:00:00.000000', 217, 9),
+(57, '2023-12-25 01:00:00.000000', 991, 9),
+(58, '2023-12-27 01:00:00.000000', 1586, 9),
+(59, '2023-12-28 01:00:00.000000', 3160, 9),
+(60, '2023-12-23 01:00:00.000000', 1, 9),
+(61, '2023-12-26 01:00:00.000000', 217, 9),
+(62, '2023-12-24 01:00:00.000000', 3703, 9);
 
 -- --------------------------------------------------------
 
@@ -194,7 +203,6 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `dni`, `email`, `name`, `password`, `phone_number`, `surname`, `username`) VALUES
-(2, '32094459Y', 'andresmontoro@gmail.com', 'Andrés', '$2a$10$DP2DCySRiFaTZEdAiEe4IOrpAiSEpUU0.ACutg.8jdsjS0480qsRm', NULL, 'Montoro Venegas', 'andres'),
 (3, '32094459Y', 'admin@gmail.com', 'Admin', '$2a$10$5cwNdFjywr6vOV.wK5t2nOIkUILpymQnuhHtcSv3F6lDPoQ8EgLny', '679109619', 'Admin', 'Admin');
 
 -- --------------------------------------------------------
@@ -213,8 +221,8 @@ CREATE TABLE `user_role` (
 --
 
 INSERT INTO `user_role` (`id`, `role`) VALUES
-(1, 'USER'),
-(2, 'ADMIN');
+(1, 'ADMIN'),
+(2, 'USER');
 
 -- --------------------------------------------------------
 
@@ -232,9 +240,7 @@ CREATE TABLE `user_roles` (
 --
 
 INSERT INTO `user_roles` (`user_id`, `roles_id`) VALUES
-(2, 1),
-(2, 2),
-(3, 2);
+(3, 1);
 
 --
 -- Índices para tablas volcadas
@@ -320,7 +326,7 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT de la tabla `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `call_record`
@@ -338,13 +344,13 @@ ALTER TABLE `complaint`
 -- AUTO_INCREMENT de la tabla `contract`
 --
 ALTER TABLE `contract`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `data_usage_record`
 --
 ALTER TABLE `data_usage_record`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT de la tabla `product`
