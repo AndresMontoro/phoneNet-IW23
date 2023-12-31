@@ -1,6 +1,7 @@
 package es.uca.iw.services;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.security.core.Authentication;
@@ -96,7 +97,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userRepository.save(actualUser);
     }
 
-    public void saveUserWithDetails(String name, String surname, String username, String password, String dni, String email, Set<UserRole> roles) {
+    public void saveUserWithDetails(String name, String surname, String username, String password, String dni, String email, String phoneNumber, Set<UserRole> roles) {
+        //bajo pruebas, asi funciona perfectamente
+        Set<UserRole> persistedRoles = new HashSet<>();
+        for (UserRole role : roles) {
+            UserRole persistedRole = userRoleRepository.findByRole(role.getRole()).orElse(null);
+
+            if (persistedRole == null) {
+                userRoleRepository.save(role);
+                persistedRoles.add(role);
+            } else {
+                persistedRoles.add(persistedRole);
+            }
+        } 
+        
         User newUser = new User();
         newUser.setName(name);
         newUser.setSurname(surname);
@@ -104,7 +118,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         newUser.setPassword(password);
         newUser.setDni(dni);
         newUser.setEmail(email);
-        newUser.setRoles(roles);
+        newUser.setPhoneNumber(phoneNumber);
+        newUser.setRoles(persistedRoles);
         userRepository.save(newUser);
         // Set<UserRole> userRoles = roles.stream().map(role -> new UserRole(role, newUser)).collect(Collectors.toSet());
         // userRoleRepository.saveAll(userRoles);
@@ -112,7 +127,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // userRepository.save(newUser);
     }
 
-    public void editUserWithDetails(Long id, String newName, String newSurname, String newUsername, String newPassword, String newDni, String newEmail, Set<UserRole.Role> roles) {
+    public void editUserWithDetails(Long id, String newName, String newSurname, String newUsername, String newPassword, String newDni, String newEmail, String phoneNumber, Set<UserRole.Role> roles) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -122,6 +137,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             user.setPassword(newPassword);
             user.setDni(newDni);
             user.setEmail(newEmail);
+            user.setPhoneNumber(phoneNumber);
             //userRoleRepository.deleteAll(user.getRoles());
             // userRepository.save(user);
 
