@@ -227,7 +227,7 @@ public class ContractService {
 
                 System.out.println("----------DATOS DE CALL RECORDS----------\n" );
                 for (CallRecord callRecord : callRecords) {
-                    System.out.println(callRecord.getDetinationPhoneNumber() + " " + callRecord.getSeconds() + " " + callRecord.getDate());
+                    System.out.println(callRecord.getDestinationPhoneNumber() + " " + callRecord.getSeconds() + " " + callRecord.getDateTime());
                 }
                 System.out.println("----------FIN DE CALL RECORDS---------");
 

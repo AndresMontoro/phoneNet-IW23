@@ -116,7 +116,8 @@
 //         // bill.setContract(contractRepository.findById(9L).orElse(null));
 
 //         // billRepository.save(bill);
-//         billService.generateBills();
+//         // billService.generateBills();
+//         contractService.updateAllContractsDataAndCallsUsage();
 
 //     }
 // }
