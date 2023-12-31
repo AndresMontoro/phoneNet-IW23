@@ -34,7 +34,7 @@ public class UserGalleryViewCard extends ListItem {
     private final long userId;
 
     public UserGalleryViewCard(UserDetailsServiceImpl userService, long userId, String userName, String userSurname,
-                               String username, String password, Set<UserRole> roles, String dni, String email) {
+                               String username, String password, Set<UserRole> roles, String dni, String email, String phoneNumber) {
         this.userService = userService;
         this.userId = userId;
 
@@ -63,7 +63,11 @@ public class UserGalleryViewCard extends ListItem {
         emailSpan.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
         emailSpan.setText("Email: " + email);
 
-        add(header, subtitle, dniSpan, emailSpan);
+        Span phoneNumberSpan = new Span();
+        phoneNumberSpan.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
+        phoneNumberSpan.setText("Teléfono: " + phoneNumber);
+
+        add(header, subtitle, dniSpan, emailSpan, phoneNumberSpan);
 
         Button editButton = new Button("Editar Usuario", event -> {
             Optional<User> optionalUser = this.userService.findByUsername(username);
@@ -83,6 +87,7 @@ public class UserGalleryViewCard extends ListItem {
                 TextField newPasswordField = new TextField("Nueva Contraseña");
                 TextField newDniField = new TextField("Nuevo DNI");
                 TextField newEmailField = new TextField("Nuevo Email");
+                TextField newPhoneNumberField = new TextField("Nuevo Número de teléfono");
 
                 newNameField.setValue(user.getName());
                 newSurnameField.setValue(user.getSurname());
@@ -90,6 +95,7 @@ public class UserGalleryViewCard extends ListItem {
                 newPasswordField.setValue(user.getPassword());
                 newDniField.setValue(user.getDni());
                 newEmailField.setValue(user.getEmail());
+                newPhoneNumberField.setValue(user.getPhoneNumber());
 
                 Button saveButton = new Button("Guardar", saveEvent -> {
                     String newUserName = newNameField.getValue();
@@ -98,6 +104,7 @@ public class UserGalleryViewCard extends ListItem {
                     String newPassword = newPasswordField.getValue();
                     String newDni = newDniField.getValue();
                     String newEmail = newEmailField.getValue();
+                    String newPhoneNumber = newPhoneNumberField.getValue();
 
                     Set<UserRole.Role> newRoles = new HashSet<>();
                     if (adminCheckbox.getValue())
@@ -107,13 +114,13 @@ public class UserGalleryViewCard extends ListItem {
 
 // el primer argumento se corresponde con el id del usuario
 
-                    userService.editUserWithDetails(user.getId() ,newUserName, newUserSurname, newUsername, newPassword, newDni, newEmail, newRoles);
+                    userService.editUserWithDetails(user.getId() ,newUserName, newUserSurname, newUsername, newPassword, newDni, newEmail, newPhoneNumber, newRoles);
                     dialog.close();
                     UI.getCurrent().getPage().executeJs("location.reload();");
                 });
 
                 Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
-                dialog.add(newNameField, newSurnameField, newUsernameField, newPasswordField, newDniField,newEmailField, adminCheckbox, userCheckbox, saveButton, cancelButton);
+                dialog.add(newNameField, newSurnameField, newUsernameField, newPasswordField, newDniField,newEmailField, newPhoneNumberField, adminCheckbox, userCheckbox, saveButton, cancelButton);
                 dialog.open();
             } else {
                 Notification.show("Usuario no encontrado");
