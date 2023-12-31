@@ -1,7 +1,6 @@
 package es.uca.iw.views.editarUsuarios;
 
 import jakarta.annotation.security.PermitAll;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +29,7 @@ import es.uca.iw.services.UserDetailsServiceImpl;
 import es.uca.iw.views.MainAdminLayout;
 import com.vaadin.flow.component.notification.Notification;
 import java.util.Set;
-
+import com.vaadin.flow.component.checkbox.Checkbox;
 
 @Route(value = "EditarUsuarios", layout = MainAdminLayout.class)
 @PermitAll
@@ -43,6 +42,7 @@ public class EditarUsuariosView extends VerticalLayout {
     private Button clearFilterButton;
     private Button addButtonUser;
 
+
     public EditarUsuariosView(UserDetailsServiceImpl userDetailsServiceImpl) {
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         users = userDetailsServiceImpl.findAll();
@@ -51,7 +51,7 @@ public class EditarUsuariosView extends VerticalLayout {
 
         for (User user : users) {
             userContainer.add(new UserGalleryViewCard(userDetailsServiceImpl, user.getId(), user.getName(), user.getSurname(), user.getUsername(), 
-            user.getPassword(),user.getRoles(), user.getDni(), user.getEmail()));
+            user.getPassword(),user.getRoles(), user.getDni(), user.getEmail(), user.getPhoneNumber()));
         }
     }
 
@@ -89,12 +89,11 @@ public class EditarUsuariosView extends VerticalLayout {
             TextField newSurnameField = new TextField("Apellidos");
             TextField newUsernameField = new TextField("Nombre de Usuario");
             TextField newPasswordField = new TextField("Contraseña");
-            ComboBox<UserRole.Role> roleComboBox = new ComboBox<>("Roles");
-            roleComboBox.setItems(UserRole.Role.values());
-            roleComboBox.setAllowCustomValue(false);
-            dialog.add(roleComboBox);
+            Checkbox adminCheckbox = new Checkbox("Admin");
+            Checkbox userCheckbox = new Checkbox("User");
             TextField newDniField = new TextField("DNI");
             TextField newEmailField = new TextField("Email");
+            TextField newPhoneNumberField = new TextField("Número de teléfono");
 
             Button saveButton = new Button("Guardar", saveEvent -> {
                 String newName = newNameField.getValue();
@@ -103,15 +102,18 @@ public class EditarUsuariosView extends VerticalLayout {
                 String newPassword = newPasswordField.getValue();
                 String newDni = newDniField.getValue();
                 String newEmail = newEmailField.getValue();
+                String newPhoneNumber = newPhoneNumberField.getValue();
                 // Añadir roles al usuario
                 Set<UserRole.Role> selectedRoles = new HashSet<>();
-                if (roleComboBox.getValue() != null) {
-                    selectedRoles.add(roleComboBox.getValue());
-                }
+                if (adminCheckbox.getValue())
+                    selectedRoles.add(UserRole.Role.ADMIN);
+                if (userCheckbox.getValue())
+                    selectedRoles.add(UserRole.Role.USER);
+
 
                 Set<UserRole> userRoles = selectedRoles.stream().map(role -> new UserRole(role)).collect(Collectors.toSet());
                 
-                userDetailsServiceImpl.saveUserWithDetails(newName, newSurname, newUsername, newPassword, newDni, newEmail, userRoles);
+                userDetailsServiceImpl.saveUserWithDetails(newName, newSurname, newUsername, newPassword, newDni, newEmail, newPhoneNumber, userRoles);
                 Notification.show("Usuario añadido con éxito.");
                 dialog.close();
                 UI.getCurrent().getPage().reload();
@@ -120,7 +122,7 @@ public class EditarUsuariosView extends VerticalLayout {
 
             Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
 
-            dialog.add(newNameField, newSurnameField, newUsernameField, newPasswordField, newDniField, newEmailField,
+            dialog.add(adminCheckbox, userCheckbox, newNameField, newSurnameField, newUsernameField, newPasswordField, newDniField, newEmailField, newPhoneNumberField,
                     saveButton, cancelButton);
 
             dialog.open();
@@ -171,7 +173,7 @@ public class EditarUsuariosView extends VerticalLayout {
                 if (user.getDni() != null) {
                     userContainer.add(new UserGalleryViewCard(userDetailsServiceImpl, user.getId(), user.getName(),
                             user.getSurname(), user.getUsername(), user.getPassword(),user.getRoles(), user.getDni(),
-                            user.getEmail()));
+                            user.getEmail(), user.getPhoneNumber()));
                 }
             }
         }
@@ -182,7 +184,7 @@ public class EditarUsuariosView extends VerticalLayout {
         for (User user : users) {
             if (user.getDni() != null)
                 userContainer.add(new UserGalleryViewCard(userDetailsServiceImpl, user.getId(), user.getName(), user.getSurname(), user.getUsername(), 
-                user.getPassword(),user.getRoles(), user.getDni(), user.getEmail()));
+                user.getPassword(),user.getRoles(), user.getDni(), user.getEmail(), user.getPhoneNumber()));
         }
     }
 }
