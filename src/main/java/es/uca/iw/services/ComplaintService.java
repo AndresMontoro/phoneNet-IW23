@@ -5,6 +5,8 @@ import es.uca.iw.model.Complaint;
 import es.uca.iw.model.User;
 import org.springframework.stereotype.Service;
 
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -16,7 +18,20 @@ public class ComplaintService {
         this.complaintRepository = complaintRepository;
     }
 
+    public Complaint addComplaint(Complaint complaint) {
+
+        
+        complaint.setStatus(Complaint.ComplaintStatus.EN_ESPERA);
+        complaint.setCreationDate(LocalDate.now());
+
+        Complaint savedComplaint = complaintRepository.save(complaint);
+
+        return savedComplaint;
+    }
+
+
     public List<Complaint> getComplaints() {
+        
         return complaintRepository.findAll();
     }
 

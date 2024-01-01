@@ -18,6 +18,8 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Horizontal;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Vertical;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
+import com.vaadin.flow.component.textfield.TextArea;
+
 
 import es.uca.iw.services.ComplaintService;
 import es.uca.iw.model.Complaint;
@@ -54,7 +56,6 @@ public class ReclamacionesView extends VerticalLayout {
         grid.getColumnByKey("status").setHeader("Estado");
         grid.getColumnByKey("comments").setHeader("Comentarios");
 
-
         // Añadir una columna de botón para acciones
         grid.addComponentColumn(complaint -> {
             Button accionesButton = new Button("Acciones");
@@ -62,7 +63,7 @@ public class ReclamacionesView extends VerticalLayout {
             return accionesButton;
         }).setHeader("Acciones");
     
-        // Botón para añadir reclamaciones (sin funcionalidad por ahora)
+        // Botón para añadir reclamaciones (con funcionalidad)
         Button añadirReclamacionButton = new Button("Añadir Reclamación");
         añadirReclamacionButton.addClickListener(e -> mostrarFormularioAñadirReclamacion());
     
@@ -93,8 +94,9 @@ public class ReclamacionesView extends VerticalLayout {
         dialog.open();
     }
 
-    // Método para mostrar el formulario de añadir reclamación (sin funcionalidad por ahora)
+    // Método para mostrar el formulario de añadir reclamación (con funcionalidad)
     private void mostrarFormularioAñadirReclamacion() {
+        
         // Crear un cuadro de diálogo para mostrar el formulario de añadir reclamación
         Dialog dialog = new Dialog();
         dialog.setCloseOnOutsideClick(false);
@@ -102,9 +104,35 @@ public class ReclamacionesView extends VerticalLayout {
         // Crear un formulario para añadir reclamación
         FormLayout formLayout = new FormLayout();
 
-        // Campos del formulario (sin funcionalidad por ahora)
-        formLayout.add(new Span("Formulario para añadir reclamación"));
+        // Campos del formulario
+        Span descripcionLabel = new Span("Descripción");
+        TextArea descripcionField = new TextArea();
+        descripcionField.setWidthFull();
 
+        Span comentariosLabel = new Span("Comentarios");
+        TextArea comentariosField = new TextArea();
+        comentariosField.setWidthFull();
+
+        // Botón para confirmar la adición
+        Button confirmarButton = new Button("Confirmar");
+        confirmarButton.addClickListener(e -> {
+      
+            Complaint nuevaReclamacion = new Complaint();
+
+            nuevaReclamacion.setDescription(descripcionField.getValue());
+            nuevaReclamacion.setComments(comentariosField.getValue());
+
+            // Llamada al servicio para añadir la reclamación
+            complaintService.addComplaint(nuevaReclamacion);
+
+            // Actualizar la tabla
+            actualizarTablaReclamaciones();
+
+            // Cerrar el diálogo
+            dialog.close();
+        });
+
+        formLayout.add(descripcionLabel, descripcionField, comentariosLabel, comentariosField, confirmarButton);
         dialog.add(formLayout);
 
         // Abrir el cuadro de diálogo
