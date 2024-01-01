@@ -60,7 +60,6 @@
             <artifactId>line-awesome</artifactId>
             <version>2.0.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
@@ -104,11 +103,21 @@
             <version>0.15.0</version>
         </dependency>
 
-        <!-- CHARTS -->
+        <!-- Pdf -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.0</version>
+        </dependency>
         <!-- <dependency>
-            <groupId>org.vaadin.addons</groupId>
-            <artifactId>dcharts-widget</artifactId>
-            <version>1.7.0</version>
+            <groupId>org.vaadin.olli</groupId>
+            <artifactId>file-download-wrapper</artifactId>
+            <version>7.0.0</version>
         </dependency> -->
 
         <!-- Database -->

@@ -1,7 +1,7 @@
 package es.uca.iw.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,9 +19,9 @@ public class Bill {
     public Long getId() { return id; }
     
     @NotNull(message = "La fecha es obligatoria")
-    private Date date;
-    public Date getDate() { return date; }
-    public void setDate(Date date) {
+    private LocalDate date;
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -32,12 +32,20 @@ public class Bill {
         this.dataConsumed = dataConsumed;
     }
 
-    @NotNull(message = "La cantidad de minutos consumidos es obligatoria")
+    // @NotNull(message = "La cantidad de minutos consumidos es obligatoria")
     private Integer minutesConsumed;
     public Integer getminutesConsumed() { return minutesConsumed; }
     public void setminutesConsumed(Integer minutesConsumed) {
         this.minutesConsumed = minutesConsumed;
     }
+
+    @NotNull(message = "El precio de los datos es obligatorio")
+    private BigDecimal dataTotalPrice;
+    public BigDecimal getDataTotalPrice() { return dataTotalPrice; }
+
+    // @NotNull(message = "El precio es obligatorio")
+    // private BigDecimal callTotalPrice;
+    // public BigDecimal getCallTotalPrice() { return callTotalPrice; }
 
     @NotNull(message = "El precio es obligatorio")
     private BigDecimal totalPrice;
@@ -53,16 +61,16 @@ public class Bill {
 
     @PrePersist
     public void prePersist() {
-        BigDecimal totalDataPrice = new BigDecimal(0);
+        dataTotalPrice = new BigDecimal(0);
 
         if (dataConsumed - contract.getProduct().getDataUsageLimit() <= 0) {
-           totalDataPrice = contract.getProduct().getPrice();
+           dataTotalPrice = contract.getProduct().getPrice();
         } else {
-            totalDataPrice = contract.getProduct().getDataUsagePrice().multiply(new BigDecimal(dataConsumed - contract.getProduct().getDataUsageLimit()));
-            totalDataPrice = totalDataPrice.add(new BigDecimal(contract.getProduct().getDataUsageLimit()).multiply(contract.getProduct().getDataPenaltyPrice()));
-            totalDataPrice = totalDataPrice.add(contract.getProduct().getPrice());
+            dataTotalPrice = contract.getProduct().getDataUsagePrice().multiply(new BigDecimal(dataConsumed - contract.getProduct().getDataUsageLimit()));
+            dataTotalPrice = dataTotalPrice.add(new BigDecimal(contract.getProduct().getDataUsageLimit()).multiply(contract.getProduct().getDataPenaltyPrice()));
+            dataTotalPrice = dataTotalPrice.add(contract.getProduct().getPrice());
         }
         
-        this.totalPrice = totalDataPrice;
+        this.totalPrice = dataTotalPrice;
     }
 }

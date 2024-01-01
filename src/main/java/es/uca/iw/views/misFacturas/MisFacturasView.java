@@ -5,10 +5,13 @@ import java.util.Set;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.theme.lumo.LumoUtility.Background;
 import com.vaadin.flow.theme.lumo.LumoUtility.BorderRadius;
 import com.vaadin.flow.theme.lumo.LumoUtility.Display;
@@ -56,21 +59,27 @@ public class MisFacturasView extends VerticalLayout {
 
         Grid<Bill> grid = new Grid<>(Bill.class, false);
         grid.setItems(bills);
-        grid.setColumns("date", "dataConsumed", "minutesConsumed", "totalPrice");
+        grid.setColumns("date", "dataConsumed", "dataTotalPrice", "totalPrice");
         grid.getColumnByKey("date").setHeader("Fecha");
         grid.getColumnByKey("dataConsumed").setHeader("Datos Consumidos");
-        grid.getColumnByKey("minutesConsumed").setHeader("Minutos Consumidos");
+        // grid.getColumnByKey("minutesConsumed").setHeader("Minutos Consumidos");
         grid.getColumnByKey("totalPrice").setHeader("Precio Total");
-        grid.addComponentColumn(bill -> createInfoButton(bill)).setHeader("Más información");
+        grid.getColumnByKey("dataTotalPrice").setHeader("Precio Añadido (Datos)");
+        grid.addComponentColumn(bill -> createDownloadAnchor(bill)).setHeader("Más información");
         add(grid);
     }
 
-    private Button createInfoButton(Bill bill) {
-        Button button = new Button("Descargar");
-        button.addClickListener(event -> {
-            // Lógica para manejar el clic en el botón (editar en este caso)
-            // Puedes abrir un formulario de edición o realizar otras acciones según tus necesidades
-        });
-        return button;
+    private Anchor createDownloadAnchor(Bill bill) {
+        try {
+            StreamResource streamResource = billService.createPdfStreamResource(bill);
+            Anchor link = new Anchor(streamResource, "");
+            link.getElement().setAttribute("download", true);
+            link.add(new Button(new Icon(VaadinIcon.DOWNLOAD_ALT)));
+            return link;
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
