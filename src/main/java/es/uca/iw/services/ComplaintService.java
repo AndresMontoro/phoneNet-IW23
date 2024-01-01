@@ -22,15 +22,11 @@ public class ComplaintService {
 
     public Complaint addComplaint(Complaint complaint) {
         
-        // Obtener la información del usuario autenticado desde el contexto de seguridad
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Obtener el usuario autenticado
         User user = (User) authentication.getPrincipal();
 
-        // Asignar el usuario a la reclamación
-        complaint.setUser(user);
-        
+        complaint.setUser(user);        
         complaint.setStatus(Complaint.ComplaintStatus.EN_ESPERA);
         complaint.setCreationDate(LocalDate.now());
 
@@ -39,6 +35,9 @@ public class ComplaintService {
         return savedComplaint;
     }
 
+    public void eliminarReclamacion(Long reclamacionId) {
+        complaintRepository.deleteById(reclamacionId);
+    }
 
     public List<Complaint> getComplaints() {
         

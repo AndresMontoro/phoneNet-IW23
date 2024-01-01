@@ -34,6 +34,7 @@ public class ReclamacionesView extends VerticalLayout {
 
     private Grid<Complaint> grid;
     private ComplaintService complaintService;
+    private Dialog dialog;
 
     public ReclamacionesView(ComplaintService complaintService) {
         this.complaintService = complaintService;
@@ -83,16 +84,30 @@ public class ReclamacionesView extends VerticalLayout {
         // Crear un formulario para añadir o eliminar comentarios
         FormLayout formLayout = new FormLayout();
 
-        // Añadir dos botones vacíos
+
         Button opcion1Button = new Button("Eliminar Reclamación");
+        opcion1Button.addClickListener(e -> eliminarReclamacion(complaint));
+
+
         Button opcion2Button = new Button("Añadir Comentarios");
 
         formLayout.add(opcion1Button, opcion2Button);
         dialog.add(formLayout);
 
-        // Abrir el cuadro de diálogo
         dialog.open();
     }
+
+    // Método para eliminar una reclamación
+    private void eliminarReclamacion(Complaint complaint) {
+        // Llamar al servicio para eliminar la reclamación
+        complaintService.eliminarReclamacion(complaint.getId());
+
+        // Actualizar la tabla de reclamaciones
+        actualizarTablaReclamaciones();
+        
+        dialog.close();
+    }
+
 
     // Método para mostrar el formulario de añadir reclamación (con funcionalidad)
     private void mostrarFormularioAñadirReclamacion() {
