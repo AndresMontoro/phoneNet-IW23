@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import es.uca.iw.model.Product;
 import es.uca.iw.model.User;
@@ -189,54 +188,6 @@ public class ContractService {
             megaBytes = megaBytes + dataUsageRecord.getMegaBytes();
         }
         return megaBytes;
-    }
-////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-
-    public Optional<Contract> findById(long id) {
-        return contractRepository.findById(id);
-    }
-
-    public void saveContractWithDetails(String phoneNumber, String productName, String userName) {
-        Optional<Product> optionalProduct = productRepository.findByname(productName);
-        if (optionalProduct.isPresent()) {
-            Product product = optionalProduct.get();
-            Optional<User> optionalUser = userDetailsServiceImpl.findByUsername(userName);
-            if (optionalUser.isPresent()) {
-                User user = optionalUser.get();
-                Contract contract = new Contract();
-                contract.setPhoneNumber(phoneNumber);
-                contract.setProduct(product);
-                contract.setUser(user);
-                contractRepository.save(contract);
-            }
-        }
-    }
-
-    public void editContractWithDetails(long contractId, String productName, String userName) {
-        Optional<Contract> optionalContract = contractRepository.findById(contractId);
-        if (optionalContract.isPresent()) {
-            Contract contract = optionalContract.get();
-            Optional<Product> optionalProduct = productRepository.findByname(productName);
-            if (optionalProduct.isPresent()) {
-                Product product = optionalProduct.get();
-                Optional<User> optionalUser = userDetailsServiceImpl.findByUsername(userName);
-                if (optionalUser.isPresent()) {
-                    User user = optionalUser.get();
-                    contract.setProduct(product);
-                    contract.setUser(user);
-                    contractRepository.save(contract);
-                }
-            }
-        }
-    }
-
-    public void deleteContract(long id) {
-        contractRepository.deleteById(id);
-    }
-
-    public List<Contract> getAllContracts() {
-        return contractRepository.findAll();
     }
 
     // public Integer getContractCallConsumption(Contract contract, LocalDateTime localDateTime) {

@@ -20,17 +20,4 @@ public class UserRole {
     private Role role;
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
-
-
-    // @ManyToOne
-    // private User user;
-
-    public UserRole() {
-        // Constructor
-    }
-
-    public UserRole(Role role) {
-        this.role = role;
-    }
-
 }

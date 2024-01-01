@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
 import java.util.Calendar;
 
 import jakarta.persistence.Entity;
@@ -85,14 +84,6 @@ public class Contract {
         if (lastCallDataUpdate == null)
             throw new IllegalArgumentException("La fecha de la última actualización de llamadas no puede ser nula");
         this.lastCallDataUpdate = lastCallDataUpdate;
-    }
-
-    private Date lastBillUpdate = null;
-    public Date getLastBillUpdate() { return lastBillUpdate; }
-    public void setLastBillUpdate(Date lastBillUpdate) {
-        if (lastBillUpdate == null)
-            throw new IllegalArgumentException("La fecha de la última actualización de facturas no puede ser nula");
-        this.lastBillUpdate = lastBillUpdate;
     }
 
     @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER)

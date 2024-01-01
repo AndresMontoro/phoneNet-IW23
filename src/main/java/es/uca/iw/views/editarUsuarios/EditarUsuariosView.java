@@ -1,190 +1,186 @@
-package es.uca.iw.views.editarUsuarios;
-
-import jakarta.annotation.security.PermitAll;
-import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.OrderedList;
-import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
-import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
-import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
-import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
-import es.uca.iw.model.User;
-import es.uca.iw.model.UserRole;
-import es.uca.iw.services.UserDetailsServiceImpl;
-import es.uca.iw.views.MainAdminLayout;
-import com.vaadin.flow.component.notification.Notification;
-import java.util.Set;
-import com.vaadin.flow.component.checkbox.Checkbox;
-
-@Route(value = "EditarUsuarios", layout = MainAdminLayout.class)
-@PermitAll
-public class EditarUsuariosView extends VerticalLayout {
-
-    private final UserDetailsServiceImpl userDetailsServiceImpl;
-    private List<User> users;
-    private OrderedList userContainer;
-    private ComboBox<String> nameComboBox;
-    private Button clearFilterButton;
-    private Button addButtonUser;
+// package es.uca.iw.views.editarUsuarios;
+// import jakarta.annotation.security.PermitAll;
+// import java.util.List;
+// import java.util.stream.Collectors;
+// import com.vaadin.flow.component.combobox.ComboBox;
+// import com.vaadin.flow.component.dialog.Dialog;
+// import com.vaadin.flow.component.html.H2;
+// import com.vaadin.flow.component.html.OrderedList;
+// import com.vaadin.flow.component.html.Paragraph;
+// import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+// import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+// import com.vaadin.flow.component.textfield.TextField;
+// import com.vaadin.flow.router.Route;
+// import com.vaadin.flow.theme.lumo.LumoUtility;
+// import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
+// import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
+// import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
+// import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
+// import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
+// import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
+// import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
+// import com.vaadin.flow.component.UI;
+// import com.vaadin.flow.component.button.Button;
+// import es.uca.iw.model.User;
+// import es.uca.iw.services.UserDetailsServiceImpl;
+// import es.uca.iw.views.MainLayout;
+// import com.vaadin.flow.component.notification.Notification;
 
 
-    public EditarUsuariosView(UserDetailsServiceImpl userDetailsServiceImpl) {
-        this.userDetailsServiceImpl = userDetailsServiceImpl;
-        users = userDetailsServiceImpl.findAll();
-        creartext();
-        loadComboBoxItems();
+// @Route(value = "EditarUsuarios", layout = MainLayout.class)
+// @PermitAll
+// public class EditarUsuariosView extends VerticalLayout {
 
-        for (User user : users) {
-            userContainer.add(new UserGalleryViewCard(userDetailsServiceImpl, user.getId(), user.getName(), user.getSurname(), user.getUsername(), 
-            user.getPassword(),user.getRoles(), user.getDni(), user.getEmail(), user.getPhoneNumber()));
-        }
-    }
+//     private final UserDetailsServiceImpl userDetailsServiceImpl;
+//     private List<User> users;
+//     private OrderedList userContainer;
+//     private ComboBox<String> nameComboBox;
+//     private Button clearFilterButton;
+//     private Button addButtonUser;
 
-    private void creartext() {
-        addClassNames("user-gallery-view");
-        addClassNames(MaxWidth.SCREEN_LARGE, Margin.Horizontal.AUTO, Padding.Bottom.LARGE, Padding.Horizontal.LARGE);
+//     public EditarUsuariosView(UserDetailsServiceImpl userDetailsServiceImpl) {
+//         this.userDetailsServiceImpl = userDetailsServiceImpl;
+//         users = userDetailsServiceImpl.findAll();
+//         creartext();
+//         loadComboBoxItems();
 
-        HorizontalLayout container = new HorizontalLayout();
-        container.addClassNames(AlignItems.CENTER, JustifyContent.BETWEEN);
+//         for (User user : users) {
+//             userContainer.add(new UserGalleryViewCard(userDetailsServiceImpl, user.getId(), user.getName(), user.getSurname(), user.getUsername(), 
+//             user.getPassword(), user.getRole(), user.getDni(), user.getEmail()));
+//         }
+//     }
 
-        VerticalLayout headerContainer = new VerticalLayout();
-        H2 header = new H2("Lista de usuarios del sistema"); // texto 1
-        header.addClassNames(Margin.Bottom.NONE, Margin.Top.XLARGE, FontSize.XXXLARGE);
-        headerContainer.add(header);
+//     private void creartext() {
+//         addClassNames("user-gallery-view");
+//         addClassNames(MaxWidth.SCREEN_LARGE, Margin.Horizontal.AUTO, Padding.Bottom.LARGE, Padding.Horizontal.LARGE);
 
-        Paragraph subheader = new Paragraph("Recuerde que los campos contraseña y username deben tener más de 5 dígitos");
-        subheader.addClassNames(FontSize.MEDIUM, TextColor.SECONDARY);
-        headerContainer.add(subheader);
+//         HorizontalLayout container = new HorizontalLayout();
+//         container.addClassNames(AlignItems.CENTER, JustifyContent.BETWEEN);
 
-        // Filtro de usuarios
-        nameComboBox = new ComboBox<>("Seleccione un Usuario");
-        nameComboBox.setAllowCustomValue(true);
-        nameComboBox.addValueChangeListener(event -> filterUsersByName(event.getValue()));
+//         VerticalLayout headerContainer = new VerticalLayout();
+//         H2 header = new H2("Lista de usuarios del sistema"); // texto 1
+//         header.addClassNames(Margin.Bottom.NONE, Margin.Top.XLARGE, FontSize.XXXLARGE);
+//         headerContainer.add(header);
 
-        // Botón para limpiar el filtro
-        clearFilterButton = new Button("Limpiar filtro", event -> {
-            nameComboBox.setValue(null);
-            showAllUsers();
-        });
+//         Paragraph subheader = new Paragraph("Recuerde que los campos contraseña y username deben tener más de 5 dígitos");
+//         subheader.addClassNames(FontSize.MEDIUM, TextColor.SECONDARY);
+//         headerContainer.add(subheader);
 
-        addButtonUser = new Button("Añadir Nuevo Usuario", event -> {
-            Dialog dialog = new Dialog();
+//         // Filtro de usuarios
+//         nameComboBox = new ComboBox<>("Seleccione un Usuario");
+//         nameComboBox.setAllowCustomValue(true);
+//         nameComboBox.addValueChangeListener(event -> filterUsersByName(event.getValue()));
 
-            TextField newNameField = new TextField("Nombre");
-            TextField newSurnameField = new TextField("Apellidos");
-            TextField newUsernameField = new TextField("Nombre de Usuario");
-            TextField newPasswordField = new TextField("Contraseña");
-            Checkbox adminCheckbox = new Checkbox("Admin");
-            Checkbox userCheckbox = new Checkbox("User");
-            TextField newDniField = new TextField("DNI");
-            TextField newEmailField = new TextField("Email");
-            TextField newPhoneNumberField = new TextField("Número de teléfono");
+//         // Botón para limpiar el filtro
+//         clearFilterButton = new Button("Limpiar filtro", event -> {
+//             nameComboBox.setValue(null);
+//             showAllUsers();
+//         });
 
-            Button saveButton = new Button("Guardar", saveEvent -> {
-                String newName = newNameField.getValue();
-                String newSurname = newSurnameField.getValue();
-                String newUsername = newUsernameField.getValue();
-                String newPassword = newPasswordField.getValue();
-                String newDni = newDniField.getValue();
-                String newEmail = newEmailField.getValue();
-                String newPhoneNumber = newPhoneNumberField.getValue();
-                // Añadir roles al usuario
-                Set<UserRole.Role> selectedRoles = new HashSet<>();
-                if (adminCheckbox.getValue())
-                    selectedRoles.add(UserRole.Role.ADMIN);
-                if (userCheckbox.getValue())
-                    selectedRoles.add(UserRole.Role.USER);
+//         addButtonUser = new Button("Añadir Nuevo Usuario", event -> {
+//             Dialog dialog = new Dialog();
 
+//             TextField newNameField = new TextField("Nombre");
+//             TextField newSurnameField = new TextField("Apellidos");
+//             TextField newUsernameField = new TextField("Nombre de Usuario");
+//             TextField newPasswordField = new TextField("Contraseña");
+//             TextField newRoleField = new TextField("Rol");
+//             TextField newDniField = new TextField("DNI");
+//             TextField newEmailField = new TextField("Email");
 
-                Set<UserRole> userRoles = selectedRoles.stream().map(role -> new UserRole(role)).collect(Collectors.toSet());
+//             Button saveButton = new Button("Guardar", saveEvent -> {
+//                 String newName = newNameField.getValue();
+//                 String newSurname = newSurnameField.getValue();
+//                 String newUsername = newUsernameField.getValue();
+//                 String newPassword = newPasswordField.getValue();
+//                 String newRoleString = newRoleField.getValue();
+//                 String newDni = newDniField.getValue();
+//                 String newEmail = newEmailField.getValue();
+
+//                 User user = new User();
+//                 user.setName(newName);
+//                 user.setSurname(newSurname);
+//                 user.setUsername(newUsername);
+//                 user.setPassword(newPassword);
                 
-                userDetailsServiceImpl.saveUserWithDetails(newName, newSurname, newUsername, newPassword, newDni, newEmail, newPhoneNumber, userRoles);
-                Notification.show("Usuario añadido con éxito.");
-                dialog.close();
-                UI.getCurrent().getPage().reload();
-            });
+//                 try {
+//                     user.setRole(User.Role.valueOf(newRoleString.toUpperCase()));
+//                 } catch (IllegalArgumentException e) {
+//                     Notification.show("Rol inválido. Use ADMIN o USER.");
+//                     return;
+//                 }
 
+//                 user.setDni(newDni);
+//                 user.setEmail(newEmail);
 
-            Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
+//                 //Guardar user
+//                 userDetailsServiceImpl.saveUser(user);
+//                 Notification.show("Usuario añadido con éxito.");
+//                 dialog.close();
+//                 UI.getCurrent().getPage().reload();
+//             });
 
-            dialog.add(adminCheckbox, userCheckbox, newNameField, newSurnameField, newUsernameField, newPasswordField, newDniField, newEmailField, newPhoneNumberField,
-                    saveButton, cancelButton);
+//             Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
 
-            dialog.open();
-        });
+//             dialog.add(newNameField, newSurnameField, newUsernameField, newPasswordField, newRoleField, newDniField, newEmailField,
+//                     saveButton, cancelButton);
 
+//             dialog.open();
+//         });
 
-        // Configuración de estilos
-        nameComboBox.getStyle().set("align-self", "center");
-        nameComboBox.getStyle().set("margin-bottom", "2em");
-        clearFilterButton.getStyle().set("align-self", "center");
-        addButtonUser.getStyle().set("margin-top", "2.25em");
+//         // Configuración de estilos
+//         nameComboBox.getStyle().set("align-self", "center");
+//         nameComboBox.getStyle().set("margin-bottom", "2em");
+//         clearFilterButton.getStyle().set("align-self", "center");
+//         addButtonUser.getStyle().set("margin-top", "2.25em");
 
-        add(headerContainer);
-        add(new HorizontalLayout(nameComboBox, clearFilterButton, addButtonUser));
+//         add(headerContainer);
+//         add(new HorizontalLayout(nameComboBox, clearFilterButton, addButtonUser));
 
-        userContainer = new OrderedList();
-        userContainer.addClassNames(LumoUtility.Gap.MEDIUM, LumoUtility.Display.GRID, LumoUtility.ListStyleType.NONE,
-                LumoUtility.Margin.NONE, LumoUtility.Padding.NONE);
-        add(userContainer);
-    }
+//         userContainer = new OrderedList();
+//         userContainer.addClassNames(LumoUtility.Gap.MEDIUM, LumoUtility.Display.GRID, LumoUtility.ListStyleType.NONE,
+//                 LumoUtility.Margin.NONE, LumoUtility.Padding.NONE);
+//         add(userContainer);
+//     }
 
+//     private void loadComboBoxItems() {
+//         nameComboBox.setItems(users.stream().map(User::getName).collect(Collectors.toList()));
+//     }
 
+//     private void filterUsersByName(String selectedName) {
+//         if (selectedName == null || selectedName.isEmpty()) {
+//             showAllUsers();
+//             return;
+//         }
 
+//         List<User> filteredUsers = users.stream().filter(user -> user.getName().equals(selectedName))
+//                 .collect(Collectors.toList());
 
-    private void loadComboBoxItems() {
-        nameComboBox.setItems(users.stream().map(User::getName).collect(Collectors.toList()));
-    }
+//         updateUsersContainer(filteredUsers);
+//     }
 
-    private void filterUsersByName(String selectedName) {
-        if (selectedName == null || selectedName.isEmpty()) {
-            showAllUsers();
-            return;
-        }
+//     private void updateUsersContainer(List<User> filteredUsers) {
+//         userContainer.removeAll();
 
-        List<User> filteredUsers = users.stream().filter(user -> user.getName().equals(selectedName))
-                .collect(Collectors.toList());
+//         if (filteredUsers.isEmpty()) {
+//             showAllUsers();
+//         } else {
+//             for (User user : filteredUsers) {
+//                 if (user.getDni() != null) {
+//                     userContainer.add(new UserGalleryViewCard(userDetailsServiceImpl, user.getId(), user.getName(),
+//                             user.getSurname(), user.getUsername(), user.getPassword(), user.getRole(), user.getDni(),
+//                             user.getEmail()));
+//                 }
+//             }
+//         }
+//     }
 
-        updateUsersContainer(filteredUsers);
-    }
-
-    private void updateUsersContainer(List<User> filteredUsers) {
-        userContainer.removeAll();
-
-        if (filteredUsers.isEmpty()) {
-            showAllUsers();
-        } else {
-            for (User user : filteredUsers) {
-                if (user.getDni() != null) {
-                    userContainer.add(new UserGalleryViewCard(userDetailsServiceImpl, user.getId(), user.getName(),
-                            user.getSurname(), user.getUsername(), user.getPassword(),user.getRoles(), user.getDni(),
-                            user.getEmail(), user.getPhoneNumber()));
-                }
-            }
-        }
-    }
-
-    public void showAllUsers() {
-        userContainer.removeAll();
-        for (User user : users) {
-            if (user.getDni() != null)
-                userContainer.add(new UserGalleryViewCard(userDetailsServiceImpl, user.getId(), user.getName(), user.getSurname(), user.getUsername(), 
-                user.getPassword(),user.getRoles(), user.getDni(), user.getEmail(), user.getPhoneNumber()));
-        }
-    }
-}
+//     public void showAllUsers() {
+//         userContainer.removeAll();
+//         for (User user : users) {
+//             if (user.getDni() != null)
+//                 userContainer.add(new UserGalleryViewCard(userDetailsServiceImpl, user.getId(), user.getName(), user.getSurname(), user.getUsername(), 
+//                 user.getPassword(), user.getRole(), user.getDni(), user.getEmail()));
+//         }
+//     }
+// }
