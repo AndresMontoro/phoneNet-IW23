@@ -70,7 +70,7 @@ CREATE TABLE `complaint` (
   `id` bigint(20) NOT NULL,
   `comments` varchar(255) DEFAULT NULL,
   `creation_date` date NOT NULL,
-  `descripción` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
   `status` enum('EN_ESPERA','EN_PROCESO','RESUELTA') NOT NULL,
   `user_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
