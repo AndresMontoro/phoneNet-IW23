@@ -19,9 +19,13 @@ public class Complaint {
 
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(nullable = false)
     private User user;
-    
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
     @Column(nullable = false)
     private String description;
     public String getDescription() { return description; }
