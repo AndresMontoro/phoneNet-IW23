@@ -23,12 +23,12 @@ import com.vaadin.flow.component.textfield.TextArea;
 
 import es.uca.iw.services.ComplaintService;
 import es.uca.iw.model.Complaint;
-import es.uca.iw.views.MainUserLayout;
+import es.uca.iw.views.MainLayout;
 import jakarta.annotation.security.PermitAll;
 
 import java.util.List;
 
-@Route(value = "Reclamaciones", layout = MainUserLayout.class)
+@Route(value = "Reclamaciones", layout = MainLayout.class)
 @PermitAll
 public class ReclamacionesView extends VerticalLayout {
 
