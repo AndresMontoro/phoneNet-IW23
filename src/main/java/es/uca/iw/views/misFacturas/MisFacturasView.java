@@ -24,10 +24,10 @@ import es.uca.iw.model.Bill;
 import es.uca.iw.model.Contract;
 import es.uca.iw.services.BillService;
 import es.uca.iw.services.ContractService;
-import es.uca.iw.views.MainUserLayout;
+import es.uca.iw.views.MainLayout;
 import jakarta.annotation.security.PermitAll;
 
-@Route(value = "MisFacturas", layout = MainUserLayout.class)
+@Route(value = "MisFacturas", layout = MainLayout.class)
 @PermitAll
 public class MisFacturasView extends VerticalLayout {
     private ContractService contractService;
