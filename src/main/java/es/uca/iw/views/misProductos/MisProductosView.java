@@ -19,11 +19,11 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Background;
 
 import es.uca.iw.services.ContractService;
 import es.uca.iw.model.Product;
-import es.uca.iw.views.MainUserLayout;
+import es.uca.iw.views.MainLayout;
 import es.uca.iw.views.productosDisponibles.ImageGalleryViewCard;
 import jakarta.annotation.security.PermitAll;
 
-@Route(value = "MisProductos", layout = MainUserLayout.class)
+@Route(value = "MisProductos", layout = MainLayout.class)
 @PermitAll
 public class MisProductosView extends VerticalLayout{
     private ContractService contractService;
