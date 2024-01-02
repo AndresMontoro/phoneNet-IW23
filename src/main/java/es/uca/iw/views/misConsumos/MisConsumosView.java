@@ -19,10 +19,10 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 
 import es.uca.iw.model.Contract;
 import es.uca.iw.services.ContractService;
-import es.uca.iw.views.MainUserLayout;
+import es.uca.iw.views.MainLayout;
 import jakarta.annotation.security.PermitAll;
 
-@Route(value = "MisConsumos", layout = MainUserLayout.class)
+@Route(value = "MisConsumos", layout = MainLayout.class)
 @PermitAll
 public class MisConsumosView extends VerticalLayout {
 
