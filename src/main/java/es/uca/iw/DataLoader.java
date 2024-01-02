@@ -117,7 +117,7 @@
 
 //         // billRepository.save(bill);
 //         // billService.generateBills();
-//         contractService.updateAllContractsDataAndCallsUsage();
-
+//         // contractService.updateAllContractsDataAndCallsUsage();
+//         billService.generateBills();
 //     }
 // }

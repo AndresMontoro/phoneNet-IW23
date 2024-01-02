@@ -32,7 +32,7 @@ public class Bill {
         this.dataConsumed = dataConsumed;
     }
 
-    // @NotNull(message = "La cantidad de minutos consumidos es obligatoria")
+    @NotNull(message = "La cantidad de minutos consumidos es obligatoria")
     private Integer minutesConsumed;
     public Integer getminutesConsumed() { return minutesConsumed; }
     public void setminutesConsumed(Integer minutesConsumed) {
@@ -43,9 +43,9 @@ public class Bill {
     private BigDecimal dataTotalPrice;
     public BigDecimal getDataTotalPrice() { return dataTotalPrice; }
 
-    // @NotNull(message = "El precio es obligatorio")
-    // private BigDecimal callTotalPrice;
-    // public BigDecimal getCallTotalPrice() { return callTotalPrice; }
+    @NotNull(message = "El precio es obligatorio")
+    private BigDecimal callTotalPrice;
+    public BigDecimal getCallTotalPrice() { return callTotalPrice; }
 
     @NotNull(message = "El precio es obligatorio")
     private BigDecimal totalPrice;
@@ -61,16 +61,38 @@ public class Bill {
 
     @PrePersist
     public void prePersist() {
-        dataTotalPrice = new BigDecimal(0);
+        // dataTotalPrice = new BigDecimal(0);
 
-        if (dataConsumed - contract.getProduct().getDataUsageLimit() <= 0) {
-           dataTotalPrice = contract.getProduct().getPrice();
-        } else {
-            dataTotalPrice = contract.getProduct().getDataUsagePrice().multiply(new BigDecimal(dataConsumed - contract.getProduct().getDataUsageLimit()));
-            dataTotalPrice = dataTotalPrice.add(new BigDecimal(contract.getProduct().getDataUsageLimit()).multiply(contract.getProduct().getDataPenaltyPrice()));
-            dataTotalPrice = dataTotalPrice.add(contract.getProduct().getPrice());
+        // if (dataConsumed - contract.getProduct().getDataUsageLimit() <= 0) {
+        //    dataTotalPrice = contract.getProduct().getPrice();
+        // } else {
+        //     dataTotalPrice = contract.getProduct().getDataUsagePrice().multiply(new BigDecimal(dataConsumed - contract.getProduct().getDataUsageLimit()));
+        //     dataTotalPrice = dataTotalPrice.add(new BigDecimal(contract.getProduct().getDataUsageLimit()).multiply(contract.getProduct().getDataPenaltyPrice()));
+        //     dataTotalPrice = dataTotalPrice.add(contract.getProduct().getPrice());
+        // }
+
+        // callTotalPrice = new BigDecimal(0);
+
+        // if(minutesConsumed - contract.getProduct().getCallLimit() <= 0) {
+        //     callTotalPrice = contract.getProduct().getPrice();
+        // } else {
+        //     callTotalPrice = contract.getProduct().getCallPrice().multiply(new BigDecimal(minutesConsumed - contract.getProduct().getCallLimit()));
+        //     callTotalPrice = callTotalPrice.add(new BigDecimal(contract.getProduct().getCallLimit()).multiply(contract.getProduct().getCallPenaltyPrice()));
+        //     callTotalPrice = callTotalPrice.add(contract.getProduct().getPrice());
+        // }
+
+        totalPrice = contract.getProduct().getPrice();
+
+        dataTotalPrice = new BigDecimal(0);
+        if (dataConsumed - contract.getProduct().getDataUsageLimit() > 0) {
+            dataTotalPrice = new BigDecimal(contract.getProduct().getDataUsageLimit()).multiply(contract.getProduct().getDataPenaltyPrice());
+            totalPrice = totalPrice.add(dataTotalPrice);
         }
-        
-        this.totalPrice = dataTotalPrice;
+
+        callTotalPrice = new BigDecimal(0);
+        if (minutesConsumed - contract.getProduct().getCallLimit() > 0) {
+            callTotalPrice = new BigDecimal(contract.getProduct().getCallLimit()).multiply(contract.getProduct().getCallPenaltyPrice());
+            totalPrice = totalPrice.add(callTotalPrice);
+        }
     }
 }

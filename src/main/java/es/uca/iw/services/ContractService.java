@@ -1,6 +1,7 @@
 package es.uca.iw.services;
 
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -195,14 +196,19 @@ public class ContractService {
         return megaBytes;
     }
 
-    // public Integer getContractCallConsumption(Contract contract, LocalDateTime localDateTime) {
-    //     Integer seconds = 0;
-    //     List<CallRecord> callRecords = callRecordRepository.findByContractAndDate(contract, localDateTime);
-    //     for(CallRecord callRecord : callRecords) {
-    //         seconds = seconds + callRecord.getSeconds();
-    //     }
-    //     return seconds;
-    // }
+    public Integer getContractCallConsumption(Contract contract, Date startDate) {
+        Date searchingEndDate = addMonthToDate(startDate);
+
+        Integer seconds = 0;
+        List<CallRecord> callRecords = callRecordRepository.findByContractAndDate(contract, startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(), 
+            searchingEndDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+
+        for (CallRecord callRecord : callRecords) {
+            seconds += callRecord.getSeconds();
+        }
+
+        return seconds / 60;
+    }
 
     @Scheduled(cron = "0 0 12 * * ?")
     public void updateAllContractsDataAndCallsUsage() throws Exception {

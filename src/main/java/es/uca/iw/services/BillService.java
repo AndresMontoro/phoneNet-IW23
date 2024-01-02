@@ -52,7 +52,7 @@ public class BillService {
                 bill.setDate(getNextBillSearchingDate(contract.getLastBillUpdate()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                 
                 bill.setdataConsumed(contractService.getDataConsumption(contract, getBillSearchingDate()));
-                // bill.setminutesConsumed(contractService.getMinutesConsumption(contract));
+                bill.setminutesConsumed(contractService.getContractCallConsumption(contract, getBillSearchingDate()));
                 contract.getBills().add(bill);
                 this.contractService.save(contract);
                 this.billRepository.save(bill);
@@ -128,10 +128,11 @@ public class BillService {
         table.addCell(createCell("Datos Consumidos", font));
         table.addCell(createCell(bill.getdataConsumed().toString() + "MB", font));
         table.addCell(createCell("Minutos Consumidos", font));
-        // table.addCell(createCell(bill.getminutesConsumed().toString() + "mins", font));
-        table.addCell(createCell("X minutos consumidos", font));
+        table.addCell(createCell(bill.getminutesConsumed().toString() + "mins", font));
         table.addCell(createCell("Precio añadido por datos", font));
         table.addCell(createCell(bill.getDataTotalPrice().toString() + "€", font));
+        table.addCell(createCell("Precio añadido por llamadas", font));
+        table.addCell(createCell(bill.getCallTotalPrice().toString() + "€", font));
 
         return table;
     }
