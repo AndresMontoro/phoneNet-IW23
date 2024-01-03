@@ -20,7 +20,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Vertical;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import com.vaadin.flow.component.textfield.TextArea;
 
-
 import es.uca.iw.services.ComplaintService;
 import es.uca.iw.model.Complaint;
 import es.uca.iw.views.MainUserLayout;
@@ -59,9 +58,11 @@ public class ReclamacionesView extends VerticalLayout {
 
         // Añadir una columna de botón para acciones
         grid.addComponentColumn(complaint -> {
+
             Button accionesButton = new Button("Acciones");
             accionesButton.addClickListener(e -> mostrarAcciones(complaint));
             return accionesButton;
+
         }).setHeader("Acciones");
     
         // Botón para añadir reclamaciones (con funcionalidad)
@@ -78,7 +79,7 @@ public class ReclamacionesView extends VerticalLayout {
     // Método para mostrar las acciones de una reclamación
     private void mostrarAcciones(Complaint complaint) {
         // Crear un cuadro de diálogo para mostrar las acciones
-        Dialog dialog = new Dialog();
+        dialog = new Dialog();
         dialog.setCloseOnOutsideClick(false);
 
         // Crear un formulario para añadir o eliminar comentarios
@@ -90,6 +91,12 @@ public class ReclamacionesView extends VerticalLayout {
 
 
         Button opcion2Button = new Button("Añadir Comentarios");
+        opcion2Button.addClickListener(e -> {
+            // Llamada al servicio para añadir comentarios a la reclamación
+            mostrarFormularioAñadirComentarios(complaint);
+            // Cerrar el cuadro de diálogo principal
+            dialog.close();
+        });
 
         formLayout.add(opcion1Button, opcion2Button);
         dialog.add(formLayout);
@@ -108,8 +115,45 @@ public class ReclamacionesView extends VerticalLayout {
         dialog.close();
     }
 
+    // Método para mostrar el formulario de añadir comentarios
+    private void mostrarFormularioAñadirComentarios(Complaint complaint) {
+        // Crear un cuadro de diálogo para mostrar el formulario de añadir comentarios
+        Dialog comentariosDialog = new Dialog();
+        comentariosDialog.setCloseOnOutsideClick(false);
 
-    // Método para mostrar el formulario de añadir reclamación (con funcionalidad)
+        // Crear un formulario para añadir comentarios
+        FormLayout comentariosFormLayout = new FormLayout();
+
+        // Campos del formulario
+        Span comentariosLabel = new Span("Comentarios");
+        TextArea comentariosField = new TextArea();
+        comentariosField.setWidthFull();
+
+        // Botón para confirmar la adición de comentarios
+        Button confirmarComentariosButton = new Button("Confirmar");
+        confirmarComentariosButton.addClickListener(e -> {
+            // Llamada al servicio para añadir comentarios a la reclamación
+            añadirComentariosAReclamacion(complaint, comentariosField.getValue());
+            // Actualizar la tabla
+            actualizarTablaReclamaciones();
+            // Cerrar el diálogo de comentarios
+            comentariosDialog.close();
+        });
+
+        comentariosFormLayout.add(comentariosLabel, comentariosField, confirmarComentariosButton);
+        comentariosDialog.add(comentariosFormLayout);
+
+        // Abrir el cuadro de diálogo de comentarios
+        comentariosDialog.open();
+    }
+
+    // Método para añadir comentarios a una reclamación
+    private void añadirComentariosAReclamacion(Complaint complaint, String comentarios) {
+        // Llamada al servicio para añadir comentarios a la reclamación
+        complaintService.addComentariosAReclamacion(complaint, comentarios);
+    }
+
+    // Método para mostrar el formulario de añadir reclamación
     private void mostrarFormularioAñadirReclamacion() {
         
         // Crear un cuadro de diálogo para mostrar el formulario de añadir reclamación

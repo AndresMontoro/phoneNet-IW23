@@ -35,12 +35,13 @@ public class ComplaintService {
         return savedComplaint;
     }
 
-    public void eliminarReclamacion(Long reclamacionId) {
-        complaintRepository.deleteById(reclamacionId);
+    public void addComentariosAReclamacion(Complaint complaint, String comentarios) {
+        // Añadir comentarios a la reclamación existente
+        complaint.setComments(complaint.getComments() + "\n" + comentarios);
+        complaintRepository.save(complaint);
     }
 
     public List<Complaint> getComplaints() {
-        
         return complaintRepository.findAll();
     }
 
@@ -52,10 +53,8 @@ public class ComplaintService {
         complaintRepository.save(complaint);
     }
 
-    public int getNextComplaintId() {
-        // Implementa lógica para obtener el siguiente ID, por ejemplo, consulta al repositorio
-        // Aquí solo devuelvo 0 como ejemplo
-        return 0;
+    public void eliminarReclamacion(Long id) {
+        complaintRepository.deleteById(id);
     }
 
     // Agregado para cumplir con la sugerencia anterior
