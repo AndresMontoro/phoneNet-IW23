@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ import com.vaadin.flow.server.StreamResource;
 import es.uca.iw.data.BillRepository;
 import es.uca.iw.model.Bill;
 import es.uca.iw.model.Contract;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 @Service
 public class BillService {
@@ -75,6 +78,7 @@ public class BillService {
         return calendar.getTime();
     }
 
+
     private Date getNextBillSearchingDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -86,6 +90,68 @@ public class BillService {
 
         return calendar.getTime();
     }
+
+    ////////////////////////////////////////////////
+    public List<Bill> getAllBills() {
+        return billRepository.findAll();
+    }
+
+    public Optional<Bill> getBillById(Long id) {
+        return billRepository.findById(id);
+    }
+
+    public void deleteBill(Long id) {
+        billRepository.deleteById(id);
+    }
+
+
+    public void saveBillWithDetails(String dataConsumedString, String minutesConsumedString,
+    String dateString, String contractString) {
+            Bill bill = new Bill();
+            int dataConsumed = Integer.parseInt(dataConsumedString);
+            bill.setdataConsumed(dataConsumed);
+            int minutesConsumed = Integer.parseInt(minutesConsumedString);
+            bill.setminutesConsumed(minutesConsumed);
+
+
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-DD HH:mm:ss");
+                Date date = formatter.parse(dateString);
+                bill.setDate(date);
+            } catch (ParseException e) {
+                // Manejar la excepción, por ejemplo, imprimir un mensaje de error
+                e.printStackTrace();
+            }
+
+            bill.setContract(contractService.findById(Long.parseLong(contractString)).get());
+            billRepository.save(bill);
+        
+    }
+
+
+    public void editBillWithDetails(Long id, String newDataConsumed, String newMinutesConsumed, String newDate, String newContract) {
+        Optional<Bill> optionalBill = billRepository.findById(id);
+        if (optionalBill.isPresent()) {
+            Bill bill = optionalBill.get();
+            int dataConsumed = Integer.parseInt(newDataConsumed);
+            bill.setdataConsumed(dataConsumed);
+            int minutesConsumed = Integer.parseInt(newMinutesConsumed);
+            bill.setminutesConsumed(minutesConsumed);
+
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-DD HH:mm:ss");
+                Date date = formatter.parse(newDate);
+                bill.setDate(date);
+            } catch (ParseException e) {
+                // Manejar la excepción, por ejemplo, imprimir un mensaje de error
+                e.printStackTrace();
+            }
+
+            bill.setContract(contractService.findById(Long.parseLong(newContract)).get());
+            billRepository.save(bill);
+        }
+    }
+
 
     public StreamResource createPdfStreamResource(Bill bill) throws DocumentException {
         Document pdfBill = new Document();
@@ -145,4 +211,3 @@ public class BillService {
         return cell;
     }
 }
-
