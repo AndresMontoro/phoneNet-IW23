@@ -2,7 +2,10 @@ package es.uca.iw.services;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +26,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.vaadin.flow.server.StreamResource;
+
 
 import es.uca.iw.data.BillRepository;
 import es.uca.iw.model.Bill;
@@ -113,15 +117,10 @@ public class BillService {
             int minutesConsumed = Integer.parseInt(minutesConsumedString);
             bill.setminutesConsumed(minutesConsumed);
 
-
-            try {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-DD HH:mm:ss");
-                Date date = formatter.parse(dateString);
-                bill.setDate(date);
-            } catch (ParseException e) {
-                // Manejar la excepción, por ejemplo, imprimir un mensaje de error
-                e.printStackTrace();
-            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(dateString, formatter);
+            bill.setDate(date);
+            
 
             bill.setContract(contractService.findById(Long.parseLong(contractString)).get());
             billRepository.save(bill);
@@ -138,18 +137,15 @@ public class BillService {
             int minutesConsumed = Integer.parseInt(newMinutesConsumed);
             bill.setminutesConsumed(minutesConsumed);
 
-            try {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-DD HH:mm:ss");
-                Date date = formatter.parse(newDate);
-                bill.setDate(date);
-            } catch (ParseException e) {
-                // Manejar la excepción, por ejemplo, imprimir un mensaje de error
-                e.printStackTrace();
-            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(newDate, formatter);
+            bill.setDate(date);
+ 
 
             bill.setContract(contractService.findById(Long.parseLong(newContract)).get());
             billRepository.save(bill);
         }
+        
     }
 
 
