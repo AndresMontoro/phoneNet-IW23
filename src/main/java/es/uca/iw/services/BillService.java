@@ -3,17 +3,14 @@ package es.uca.iw.services;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -26,13 +23,10 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.vaadin.flow.server.StreamResource;
-
-
 import es.uca.iw.data.BillRepository;
 import es.uca.iw.model.Bill;
 import es.uca.iw.model.Contract;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
+
 
 @Service
 public class BillService {
