@@ -1,7 +1,7 @@
 package es.uca.iw.views;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 
+//import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
