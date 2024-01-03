@@ -38,7 +38,7 @@ public class ReclamacionesView extends VerticalLayout {
     public ReclamacionesView(ComplaintService complaintService) {
         this.complaintService = complaintService;
     
-        addClassNames(Padding.MEDIUM, Display.FLEX, FlexDirection.COLUMN, Gap.LARGE,Horizontal.AUTO, Vertical.AUTO);
+        addClassNames(Padding.MEDIUM, Display.FLEX, FlexDirection.COLUMN, Gap.LARGE, Horizontal.AUTO, Vertical.AUTO);
 
         H2 header = new H2("MIS RECLAMACIONES");
         header.addClassNames(Horizontal.AUTO, FontSize.XXLARGE, Background.CONTRAST_5, BorderRadius.MEDIUM, Padding.MEDIUM, Margin.SMALL);
@@ -48,7 +48,7 @@ public class ReclamacionesView extends VerticalLayout {
         // Creamos la tabla
         grid = new Grid<>(Complaint.class);
         grid.setColumns("id", "description", "creationDate", "status", "comments");
-        
+
         // Modificamos los nombres de la cabecera
         grid.getColumnByKey("id").setHeader("ID");
         grid.getColumnByKey("description").setHeader("Descripción");
@@ -64,14 +64,14 @@ public class ReclamacionesView extends VerticalLayout {
             return accionesButton;
 
         }).setHeader("Acciones");
-    
+
         // Botón para añadir reclamaciones (con funcionalidad)
         Button añadirReclamacionButton = new Button("Añadir Reclamación");
         añadirReclamacionButton.addClickListener(e -> mostrarFormularioAñadirReclamacion());
-    
+
         add(añadirReclamacionButton);
         add(grid);
-    
+
         // Actualizar los datos de la tabla de reclamaciones
         actualizarTablaReclamaciones();
     }
@@ -85,20 +85,16 @@ public class ReclamacionesView extends VerticalLayout {
         // Crear un formulario para añadir o eliminar comentarios
         FormLayout formLayout = new FormLayout();
 
-
         Button opcion1Button = new Button("Eliminar Reclamación");
         opcion1Button.addClickListener(e -> eliminarReclamacion(complaint));
 
-
         Button opcion2Button = new Button("Añadir Comentarios");
-        opcion2Button.addClickListener(e -> {
-            // Llamada al servicio para añadir comentarios a la reclamación
-            mostrarFormularioAñadirComentarios(complaint);
-            // Cerrar el cuadro de diálogo principal
-            dialog.close();
-        });
+        opcion2Button.addClickListener(e -> mostrarFormularioAñadirComentarios(complaint));
 
-        formLayout.add(opcion1Button, opcion2Button);
+        Button verComentariosButton = new Button("Ver Comentarios");
+        verComentariosButton.addClickListener(e -> mostrarComentarios(complaint));
+
+        formLayout.add(opcion1Button, opcion2Button, verComentariosButton);
         dialog.add(formLayout);
 
         dialog.open();
@@ -111,7 +107,7 @@ public class ReclamacionesView extends VerticalLayout {
 
         // Actualizar la tabla de reclamaciones
         actualizarTablaReclamaciones();
-        
+
         dialog.close();
     }
 
@@ -133,7 +129,7 @@ public class ReclamacionesView extends VerticalLayout {
         Button confirmarComentariosButton = new Button("Confirmar");
         confirmarComentariosButton.addClickListener(e -> {
             // Llamada al servicio para añadir comentarios a la reclamación
-            añadirComentariosAReclamacion(complaint, comentariosField.getValue());
+            addComentariosAReclamacion(complaint, comentariosField.getValue());
             // Actualizar la tabla
             actualizarTablaReclamaciones();
             // Cerrar el diálogo de comentarios
@@ -148,14 +144,13 @@ public class ReclamacionesView extends VerticalLayout {
     }
 
     // Método para añadir comentarios a una reclamación
-    private void añadirComentariosAReclamacion(Complaint complaint, String comentarios) {
+    private void addComentariosAReclamacion(Complaint complaint, String comentarios) {
         // Llamada al servicio para añadir comentarios a la reclamación
         complaintService.addComentariosAReclamacion(complaint, comentarios);
     }
 
     // Método para mostrar el formulario de añadir reclamación
     private void mostrarFormularioAñadirReclamacion() {
-        
         // Crear un cuadro de diálogo para mostrar el formulario de añadir reclamación
         Dialog dialog = new Dialog();
         dialog.setCloseOnOutsideClick(false);
@@ -175,11 +170,11 @@ public class ReclamacionesView extends VerticalLayout {
         // Botón para confirmar la adición
         Button confirmarButton = new Button("Confirmar");
         confirmarButton.addClickListener(e -> {
-      
             Complaint nuevaReclamacion = new Complaint();
-
             nuevaReclamacion.setDescription(descripcionField.getValue());
-            nuevaReclamacion.setComments(comentariosField.getValue());
+
+            List<String> nuevosComentarios = List.of(comentariosField.getValue());
+            nuevaReclamacion.setComments(nuevosComentarios);
 
             // Llamada al servicio para añadir la reclamación
             complaintService.addComplaint(nuevaReclamacion);
@@ -196,6 +191,27 @@ public class ReclamacionesView extends VerticalLayout {
 
         // Abrir el cuadro de diálogo
         dialog.open();
+    }
+
+    // Método para mostrar los comentarios en un cuadro de diálogo
+    private void mostrarComentarios(Complaint complaint) {
+        // Crear un cuadro de diálogo para mostrar los comentarios
+        Dialog comentariosDialog = new Dialog();
+        comentariosDialog.setCloseOnOutsideClick(true);
+
+        // Obtener la lista de comentarios y concatenarlos en un solo String con saltos de línea
+        String comentarios = String.join("\n", complaint.getComments());
+
+        // Mostrar los comentarios en un TextArea
+        TextArea comentariosTextArea = new TextArea();
+        comentariosTextArea.setValue(comentarios);
+        comentariosTextArea.setReadOnly(true);
+        comentariosTextArea.getStyle().set("width", "800px"); // Ajustar la anchura
+
+        comentariosDialog.add(comentariosTextArea);
+
+        // Abrir el cuadro de diálogo de comentarios
+        comentariosDialog.open();
     }
 
     // Método para actualizar los datos de la tabla de reclamaciones

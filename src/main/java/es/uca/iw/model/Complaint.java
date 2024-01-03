@@ -2,6 +2,7 @@ package es.uca.iw.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -50,11 +51,13 @@ public class Complaint {
     }
     
 
-
+    
     @Column(nullable = true)
-    private String comments;
-    public String getComments() { return comments; }
-    public void setComments(String comments) { this.comments = comments; }
+    private List<String> comments;
+    public List<String> getComments() { return comments; }
+    public void setComments(List<String> comments) { 
+        this.comments = comments; 
+    }
 
 
     // Otros métodos y getters/setters

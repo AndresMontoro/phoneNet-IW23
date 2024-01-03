@@ -132,7 +132,7 @@ INSERT INTO `call_record` (`id`, `date_time`, `destination_phone_number`, `secon
 
 CREATE TABLE `complaint` (
   `id` bigint(20) NOT NULL,
-  `comments` varchar(255) DEFAULT NULL,
+  `comments` TEXT DEFAULT NULL,
   `creation_date` date NOT NULL,
   `status` enum('EN_ESPERA','EN_PROCESO','RESUELTA') NOT NULL,
   `user_id` bigint(20) DEFAULT NULL,

@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,11 +36,19 @@ public class ComplaintService {
         return savedComplaint;
     }
 
-    public void addComentariosAReclamacion(Complaint complaint, String comentarios) {
-        // Añadir comentarios a la reclamación existente
-        complaint.setComments(complaint.getComments() + "\n" + comentarios);
+    public void addComentariosAReclamacion(Complaint complaint, String nuevoComentario) {
+        // Obtener la lista actual de comentarios
+        List<String> comentariosActuales = complaint.getComments();
+    
+        // Agregar el nuevo comentario a la lista
+        comentariosActuales.add(nuevoComentario);
+    
+        // Establecer la lista actualizada en la reclamación
+        complaint.setComments(comentariosActuales);
+    
+        // Guardar la reclamación actualizada en la base de datos
         complaintRepository.save(complaint);
-    }
+    }  
 
     public List<Complaint> getComplaints() {
         return complaintRepository.findAll();
