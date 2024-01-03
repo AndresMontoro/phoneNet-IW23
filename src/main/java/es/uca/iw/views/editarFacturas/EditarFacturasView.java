@@ -77,7 +77,7 @@ public class EditarFacturasView extends VerticalLayout {
            
             TextField dataConsumed = new TextField("Datos consumidos");
             TextField minutesConsumed = new TextField("Minutos consumidos");
-            TextField date = new TextField("Fecha (yyyy-mm-DD HH:mm:ss)");
+            TextField date = new TextField("Fecha (yyyy-mm-DD)");
             TextField contract = new TextField("Contrato ID");
 
 
