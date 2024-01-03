@@ -9,6 +9,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
+import java.time.LocalDate;
 import es.uca.iw.services.BillService;
 import es.uca.iw.model.Bill;
 import java.util.*;
@@ -19,7 +20,7 @@ public class BillGalleryViewCard extends ListItem {
     private BillService billService;
     private final long billId;
 
-    public BillGalleryViewCard(BillService billService, long billId, Date date, int dataConsumed, BigDecimal dataTotalPrice, int minutesConsumed, BigDecimal totalPrice, long contractId) {
+    public BillGalleryViewCard(BillService billService, long billId, LocalDate date, int dataConsumed, BigDecimal dataTotalPrice, int minutesConsumed, BigDecimal totalPrice, long contractId) {
         this.billService = billService;
         this.billId = billId;
 
@@ -82,7 +83,7 @@ public class BillGalleryViewCard extends ListItem {
 
                 TextField dataConsumedField = new TextField("Datos consumidos");
                 TextField minutesConsumedField = new TextField("Minutos consumidos");
-                TextField dateField = new TextField("Fecha (dd-MM-yyyy HH:mm:ss)");
+                TextField dateField = new TextField("Fecha (yyyy-mm-DD)");
                 TextField contractField = new TextField("Contrato ID");
                 
                 dataConsumedField.setValue(String.valueOf(bill.getdataConsumed()));
