@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import es.uca.iw.model.Product;
 import es.uca.iw.model.User;
@@ -70,10 +71,6 @@ public class ContractService {
         return contracts;
     }
 
-    public List<Contract> getAllContracts() {
-        return contractRepository.findAll();
-    }
-
     private String createRandomPhoneNumber() {
         String phoneNumber = "";
         for (int i = 0; i < 9; i++) {
@@ -120,7 +117,6 @@ public class ContractService {
         // Anadir apiId a la linea
         newContract.setPhoneNumber(customerLine.getPhoneNumber());
         newContract.setApiId(customerLine.getId());
-        newContract.setLastBillUpdate(getFirstDayOfMonth());
         contractRepository.save(newContract);
     }
 
@@ -195,6 +191,54 @@ public class ContractService {
         }
         return megaBytes;
     }
+////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+    public Optional<Contract> findById(long id) {
+        return contractRepository.findById(id);
+    }
+
+    public void saveContractWithDetails(String phoneNumber, String productName, String userName) {
+        Optional<Product> optionalProduct = productRepository.findByname(productName);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+            Optional<User> optionalUser = userDetailsServiceImpl.findByUsername(userName);
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                Contract contract = new Contract();
+                contract.setPhoneNumber(phoneNumber);
+                contract.setProduct(product);
+                contract.setUser(user);
+                contractRepository.save(contract);
+            }
+        }
+    }
+
+    public void editContractWithDetails(long contractId, String productName, String userName) {
+        Optional<Contract> optionalContract = contractRepository.findById(contractId);
+        if (optionalContract.isPresent()) {
+            Contract contract = optionalContract.get();
+            Optional<Product> optionalProduct = productRepository.findByname(productName);
+            if (optionalProduct.isPresent()) {
+                Product product = optionalProduct.get();
+                Optional<User> optionalUser = userDetailsServiceImpl.findByUsername(userName);
+                if (optionalUser.isPresent()) {
+                    User user = optionalUser.get();
+                    contract.setProduct(product);
+                    contract.setUser(user);
+                    contractRepository.save(contract);
+                }
+            }
+        }
+    }
+
+    public void deleteContract(long id) {
+        contractRepository.deleteById(id);
+    }
+
+    public List<Contract> getAllContracts() {
+        return contractRepository.findAll();
+    }
 
     public Integer getContractCallConsumption(Contract contract, Date startDate) {
         Date searchingEndDate = addMonthToDate(startDate);
@@ -231,11 +275,11 @@ public class ContractService {
                 DataUsageRecord[] dataUsageRecords = restTemplate.getForObject(dataRequestUrl, DataUsageRecord[].class);
                 CallRecord[] callRecords = restTemplate.getForObject(callRecordRequest, CallRecord[].class);
 
-                System.out.println("----------DATOS DE CALL RECORDS----------\n" );
+                System.out.println("----------DATOS DE DATAUSAGE RECORDS----------\n" );
                 for (CallRecord callRecord : callRecords) {
-                    System.out.println(callRecord.getDestinationPhoneNumber() + " " + callRecord.getSeconds() + " " + callRecord.getDateTime());
+                    System.out.println(callRecord.getDetinationPhoneNumber() + " " + callRecord.getSeconds() + " " + callRecord.getDate());
                 }
-                System.out.println("----------FIN DE CALL RECORDS---------");
+                System.out.println("----------FIN DE DATA USAGE RECORDS---------");
 
                 for (DataUsageRecord dataUsageRecord : dataUsageRecords) {
                     contract.getDataUsageRecords().add(dataUsageRecord);

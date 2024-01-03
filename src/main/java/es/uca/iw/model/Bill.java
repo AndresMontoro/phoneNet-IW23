@@ -49,7 +49,12 @@ public class Bill {
 
     @NotNull(message = "El precio es obligatorio")
     private BigDecimal totalPrice;
-    public BigDecimal gettotalPrice() { return totalPrice; }
+    public BigDecimal getTotalPrice() { return totalPrice; }
+    public void setTotalPrice(BigDecimal totalPrice) {
+        if(totalPrice.compareTo(new BigDecimal(0)) < 0)
+            throw new IllegalArgumentException("El precio no puede ser negativo");
+        this.totalPrice = totalPrice;
+    }
 
     @ManyToOne
     @NotNull(message = "El contrato es obligatorio")

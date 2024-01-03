@@ -17,29 +17,45 @@ public class Complaint {
     private Long id;
     public Long getId() { return id; }
 
+
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(nullable = false)
     private User user;
-    
-    @Column(name = "descripción", nullable = false)
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
+    @Column(nullable = false)
     private String description;
     public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
 
-    @Column(name = "creation_date", nullable = false)
+
+    @Column(nullable = false)
     private LocalDate creationDate;
     public LocalDate getCreationDate() { return creationDate; }
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
 
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(nullable = false)
     private ComplaintStatus status;
     public ComplaintStatus getStatus() { return status; }
+    public void setStatus(ComplaintStatus status) {
+        this.status = status;
+    }
+    
 
 
-    @Column(name = "comments", nullable = true)
+    @Column(nullable = true)
     private String comments;
     public String getComments() { return comments; }
+    public void setComments(String comments) { this.comments = comments; }
+
 
     // Otros métodos y getters/setters
 

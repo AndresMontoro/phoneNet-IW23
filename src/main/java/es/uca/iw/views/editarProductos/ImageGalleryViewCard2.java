@@ -1,5 +1,4 @@
 package es.uca.iw.views.editarProductos;
-
 import java.math.BigDecimal;
 import java.util.Optional;
 import com.vaadin.flow.component.UI;
@@ -32,10 +31,9 @@ import es.uca.iw.services.ProductService;
 
 public class ImageGalleryViewCard2 extends ListItem {
     private ProductService productService;
-    private final long productId;
+    private long productId;
 
-    public ImageGalleryViewCard2(ProductService productService, long productId, String productName, String productUrl, 
-        String productDescription, BigDecimal productPrice, boolean hireVisible) {
+    public ImageGalleryViewCard2(ProductService productService, long productId, String productName, String productUrl, String productDescription, BigDecimal productPrice, boolean hireVisible) {
 
         this.productService = productService;
         this.productId = productId;

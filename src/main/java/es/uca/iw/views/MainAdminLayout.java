@@ -11,8 +11,9 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 
+import es.uca.iw.views.editarContratos.EditarContratosView;
 import es.uca.iw.views.editarProductos.EditarProductosView;
-// import es.uca.iw.views.editarUsuarios.EditarUsuariosView;
+import es.uca.iw.views.editarUsuarios.EditarUsuariosView;
 
 public class MainAdminLayout extends AppLayout{
     public MainAdminLayout() {
@@ -30,8 +31,9 @@ public class MainAdminLayout extends AppLayout{
 
     private Tabs getTabs() {
         Tabs tabs = new Tabs();
-        tabs.add(createTab(VaadinIcon.CLIPBOARD, "Editar Productos", EditarProductosView.class)
-            // createTab(VaadinIcon.CLIPBOARD, "Editar Usuarios", EditarUsuariosView.class)
+        tabs.add(createTab(VaadinIcon.CLIPBOARD, "Editar Productos", EditarProductosView.class),
+            createTab(VaadinIcon.CLIPBOARD, "Editar Usuarios", EditarUsuariosView.class),
+            createTab(VaadinIcon.CLIPBOARD, "Editar Contratos", EditarContratosView.class) 
         );
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);

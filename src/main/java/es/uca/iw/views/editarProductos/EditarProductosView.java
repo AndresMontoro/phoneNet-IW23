@@ -24,11 +24,11 @@ import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import es.uca.iw.model.Product;
 import es.uca.iw.services.ProductService;
-import es.uca.iw.views.MainAdminLayout;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.notification.Notification;
+import es.uca.iw.views.MainAdminLayout;
 
 @Route(value = "EditarProductos", layout = MainAdminLayout.class)
 @PermitAll
@@ -48,8 +48,9 @@ public class EditarProductosView extends VerticalLayout {
         loadComboBoxItems();
 
         for (Product product : products) {
-            imageContainer.add(new ImageGalleryViewCard2(productService, product.getId(), product.getName(), product.getImage(),
-                product.getDescription(), product.getPrice(), false));
+                imageContainer.add(new ImageGalleryViewCard2(productService,product.getId(), product.getName(), product.getImage(),
+                        product.getDescription(), product.getPrice(), false));
+            
         }
     }
 
@@ -113,7 +114,7 @@ public class EditarProductosView extends VerticalLayout {
                 if (mobileTypeCheckbox.getValue()) productTypes.add(Product.ProductType.MOVIL);
                 if (fixedTypeCheckbox.getValue()) productTypes.add(Product.ProductType.FIJO);
         
-                this.productService.saveProductWithDetails(newProductName, newProductDescription, newProductImageUrl,
+                productService.saveProductWithDetails(newProductName, newProductDescription, newProductImageUrl,
                         newProductPrice, newProductCallPrice, newProductDataUsagePrice, newProductCallLimit,
                         newProductDataUsageLimit, newProductCallPenalty, newProductDataPenalty, available, productTypes);
 
@@ -166,8 +167,9 @@ public class EditarProductosView extends VerticalLayout {
             showAllProducts();
         } else {
             for (Product product : filteredProducts) {
-                imageContainer.add(new ImageGalleryViewCard2(productService, product.getId(), product.getName(),
-                        product.getImage(), product.getDescription(), product.getPrice(), false));
+                    imageContainer.add(new ImageGalleryViewCard2(productService,product.getId(), product.getName(),
+                            product.getImage(), product.getDescription(), product.getPrice(), false));
+                
             }
         }
     }
@@ -176,8 +178,9 @@ public class EditarProductosView extends VerticalLayout {
         // Mostrar todos los productos
         imageContainer.removeAll();
         for (Product product : products) {
-            imageContainer.add(new ImageGalleryViewCard2(productService, product.getId(), product.getName(), product.getImage(),
-                    product.getDescription(), product.getPrice(), false));
+                imageContainer.add(new ImageGalleryViewCard2(productService,product.getId(), product.getName(), product.getImage(),
+                        product.getDescription(), product.getPrice(), false));
         }
     }
+
 }

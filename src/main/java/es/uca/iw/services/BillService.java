@@ -133,6 +133,8 @@ public class BillService {
         table.addCell(createCell(bill.getDataTotalPrice().toString() + "€", font));
         table.addCell(createCell("Precio añadido por llamadas", font));
         table.addCell(createCell(bill.getCallTotalPrice().toString() + "€", font));
+        table.addCell(createCell("Precio total", font));
+        table.addCell(createCell(bill.getTotalPrice().toString() + "€", font));
 
         return table;
     }

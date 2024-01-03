@@ -94,8 +94,8 @@ public class MiPerfilView extends VerticalLayout {
                 newPasswordConfirmationField.setRequired(true);
                 newPasswordConfirmationField.setRequiredIndicatorVisible(true);
                 
-                Button cancelBtn = new Button("Cancelar", e -> changePasswordDialog.close());
-                Button saveBtn = new Button("Guardar", e -> {
+                Button cancelBtn = new Button("Cancel", e -> changePasswordDialog.close());
+                Button saveBtn = new Button("Save", e -> {
                     try {
                         userService.changePassword(oldPasswordField.getValue(), newPasswordField.getValue(), newPasswordConfirmationField.getValue());
                         getElement().executeJs("location.reload()");

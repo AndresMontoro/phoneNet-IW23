@@ -3,8 +3,12 @@ package es.uca.iw.services;
 import es.uca.iw.data.ComplaintRepository;
 import es.uca.iw.model.Complaint;
 import es.uca.iw.model.User;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -16,7 +20,27 @@ public class ComplaintService {
         this.complaintRepository = complaintRepository;
     }
 
+    public Complaint addComplaint(Complaint complaint) {
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User user = (User) authentication.getPrincipal();
+
+        complaint.setUser(user);        
+        complaint.setStatus(Complaint.ComplaintStatus.EN_ESPERA);
+        complaint.setCreationDate(LocalDate.now());
+
+        Complaint savedComplaint = complaintRepository.save(complaint);
+
+        return savedComplaint;
+    }
+
+    public void eliminarReclamacion(Long reclamacionId) {
+        complaintRepository.deleteById(reclamacionId);
+    }
+
     public List<Complaint> getComplaints() {
+        
         return complaintRepository.findAll();
     }
 

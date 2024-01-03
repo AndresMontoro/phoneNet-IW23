@@ -115,6 +115,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         newUser.setName(name);
         newUser.setSurname(surname);
         newUser.setUsername(username);
+        password = bCryptPasswordEncoder.encode(password);
         newUser.setPassword(password);
         newUser.setDni(dni);
         newUser.setEmail(email);
@@ -134,7 +135,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             user.setName(newName);
             user.setSurname(newSurname);
             user.setUsername(newUsername);
-            user.setPassword(newPassword);
+            user.setPassword(bCryptPasswordEncoder.encode(newPassword));
             user.setDni(newDni);
             user.setEmail(newEmail);
             user.setPhoneNumber(phoneNumber);

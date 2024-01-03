@@ -44,7 +44,9 @@ public class MisConsumosView extends VerticalLayout {
             add(new H2("Tarifa: " + contract.getProduct().getName()));
             add(new H3("Consumo de datos: " + this.contractService.getDataConsumption(contract, this.contractService.getFirstDayOfMonth()) + " MB de " 
                 + contract.getProduct().getDataUsageLimit() + " MB"));
-            add(new H3("Consumo de llamadas: "));
+            add(new H3("Consumo de llamadas: " + this.contractService.getContractCallConsumption(contract, this.contractService.getFirstDayOfMonth()) 
+                + " minutos de " + contract.getProduct().getCallLimit() + " minutos"));
+            
         }
     }
 }
