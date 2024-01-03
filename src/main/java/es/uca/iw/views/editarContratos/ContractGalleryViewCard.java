@@ -1,5 +1,6 @@
 package es.uca.iw.views.editarContratos;
 
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -45,17 +46,27 @@ public class ContractGalleryViewCard extends ListItem {
         subtitle.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
         subtitle.setText("Usuario: " + userName);
 
-        Paragraph description = new Paragraph("Producto: " + productName + "\n" +
-                                             "Teléfono: " + phoneNumber + "\n" +
-                                             "Fecha de Inicio: " + startDate.toString() + "\n" +
-                                             "Fecha de Fin: " + endDate.toString());
-        description.addClassName(Margin.Vertical.MEDIUM);
+        Span subtitle2 = new Span();
+        subtitle2.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
+        subtitle2.setText("Producto: " + productName);
 
-        add(div, header, subtitle, description);
+        Span subtitle3 = new Span();
+        subtitle3.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
+        subtitle3.setText("Teléfono: " + phoneNumber);
+
+        Span subtitle4 = new Span();
+        subtitle4.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
+        subtitle4.setText("Fecha de Inicio: " + startDate.toString());
+
+        Span subtitle5 = new Span();
+        subtitle5.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
+        subtitle5.setText("Fecha final: " + endDate.toString());
+
+        add(div, header, subtitle, subtitle2, subtitle3, subtitle4, subtitle5);
 
         // Botones de editar y borrar
         Button editButton = new Button("Editar Contrato", event -> {
-            Optional<Contract> optionalContract = this.contractService.findById(this.contractId);
+            Optional<Contract> optionalContract = contractService.findById(contractId);
             if (optionalContract.isPresent()) {
                 Contract contract = optionalContract.get();
                 Dialog dialog = new Dialog();
