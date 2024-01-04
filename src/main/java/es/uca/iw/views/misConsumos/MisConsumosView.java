@@ -22,7 +22,7 @@ import es.uca.iw.services.ContractService;
 import es.uca.iw.views.MainUserLayout;
 import jakarta.annotation.security.PermitAll;
 
-@Route(value = "MisConsumos", layout = MainUserLayout.class)
+@Route(value = "user/MisConsumos", layout = MainUserLayout.class)
 @PermitAll
 public class MisConsumosView extends VerticalLayout {
 

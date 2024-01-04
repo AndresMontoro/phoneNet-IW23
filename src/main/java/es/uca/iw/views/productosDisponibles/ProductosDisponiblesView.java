@@ -25,7 +25,7 @@ import es.uca.iw.services.ContractService;
 import es.uca.iw.services.ProductService;
 import es.uca.iw.model.Product;
 
-@Route(value = "productosDisponibles")
+@Route(value = "user/productosDisponibles")
 @PermitAll
 public class ProductosDisponiblesView extends VerticalLayout {
     

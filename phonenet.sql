@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-01-2024 a las 10:53:58
+-- Tiempo de generación: 04-01-2024 a las 14:01:48
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -132,7 +132,7 @@ INSERT INTO `call_record` (`id`, `date_time`, `destination_phone_number`, `secon
 
 CREATE TABLE `complaint` (
   `id` bigint(20) NOT NULL,
-  `comments` TEXT DEFAULT NULL,
+  `comments` varbinary(255) DEFAULT NULL,
   `creation_date` date NOT NULL,
   `status` enum('EN_ESPERA','EN_PROCESO','RESUELTA') NOT NULL,
   `user_id` bigint(20) DEFAULT NULL,
@@ -214,8 +214,6 @@ CREATE TABLE `product` (
   `image` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `price` decimal(38,2) NOT NULL,
-  `call_price` decimal(38,2) DEFAULT NULL,
-  `data_usage_price` decimal(38,2) DEFAULT NULL,
   `call_limit` int(11) NOT NULL,
   `data_usage_limit` int(11) NOT NULL,
   `call_penalty_price` decimal(38,2) DEFAULT NULL,
@@ -226,9 +224,9 @@ CREATE TABLE `product` (
 -- Volcado de datos para la tabla `product`
 --
 
-INSERT INTO `product` (`id`, `available`, `description`, `image`, `name`, `price`, `call_price`, `data_usage_price`, `call_limit`, `data_usage_limit`, `call_penalty_price`, `data_penalty_price`) VALUES
-(1, b'1', 'Tarifa especial para programadores', 'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw', 'Hola mundo', 30.45, 0.50, 0.01, 300, 300, 1.00, 0.05),
-(3, b'1', 'Tarifa de verano para el uso de la piscina', 'https://fotografias.antena3.com/clipping/cmsimages01/2023/05/31/F2862410-C9ED-4F82-B784-E07D81FEA58D/playa-verano_97.jpg?crop=910,512,x114,y0&width=1600&height=900&optimize=low&format=webply', 'Tarifa de verano', 50.00, 0.50, 0.02, 1000, 500, 1.00, 0.05);
+INSERT INTO `product` (`id`, `available`, `description`, `image`, `name`, `price`, `call_limit`, `data_usage_limit`, `call_penalty_price`, `data_penalty_price`) VALUES
+(1, b'1', 'Tarifa especial para programadores', 'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw', 'Hola mundo', 30.45, 300, 300, 1.00, 0.05),
+(3, b'1', 'Tarifa de verano para el uso de la piscina', 'https://fotografias.antena3.com/clipping/cmsimages01/2023/05/31/F2862410-C9ED-4F82-B784-E07D81FEA58D/playa-verano_97.jpg?crop=910,512,x114,y0&width=1600&height=900&optimize=low&format=webply', 'Tarifa de verano', 50.00, 1000, 500, 1.00, 0.05);
 
 -- --------------------------------------------------------
 

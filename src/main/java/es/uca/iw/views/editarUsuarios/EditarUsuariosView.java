@@ -32,7 +32,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 
 import es.uca.iw.views.MainAdminLayout;
 
-@Route(value = "EditarUsuarios", layout = MainAdminLayout.class)
+@Route(value = "admin/EditarUsuarios", layout = MainAdminLayout.class)
 @PermitAll
 public class EditarUsuariosView extends VerticalLayout {
 

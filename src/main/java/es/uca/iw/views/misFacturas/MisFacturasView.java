@@ -30,7 +30,7 @@ import es.uca.iw.services.ContractService;
 import es.uca.iw.views.MainUserLayout;
 import jakarta.annotation.security.PermitAll;
 
-@Route(value = "MisFacturas", layout = MainUserLayout.class)
+@Route(value = "user/MisFacturas", layout = MainUserLayout.class)
 @PermitAll
 public class MisFacturasView extends VerticalLayout {
     private ContractService contractService;

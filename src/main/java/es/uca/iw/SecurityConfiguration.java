@@ -32,6 +32,8 @@ public class SecurityConfiguration extends VaadinWebSecurity {
                 new AntPathRequestMatcher("/swagger-ui.html"),
                 new AntPathRequestMatcher("/swagger-ui/**")) 
             .permitAll()
+            // .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+            // .requestMatchers(new AntPathRequestMatcher("/user/**")).hasRole("USER")
             .requestMatchers(new AntPathRequestMatcher("/api/**"))
             .authenticated()
         );

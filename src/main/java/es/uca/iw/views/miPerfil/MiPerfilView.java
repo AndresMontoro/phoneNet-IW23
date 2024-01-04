@@ -25,7 +25,7 @@ import es.uca.iw.services.UserDetailsServiceImpl;
 import es.uca.iw.views.MainUserLayout;
 import jakarta.annotation.security.PermitAll;
 
-@Route(value = "", layout = MainUserLayout.class)
+@Route(value = "user/MiPerfil", layout = MainUserLayout.class)
 @PermitAll
 public class MiPerfilView extends VerticalLayout {
     private UserDetailsServiceImpl userService;

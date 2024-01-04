@@ -23,7 +23,7 @@ import es.uca.iw.views.MainUserLayout;
 import es.uca.iw.views.productosDisponibles.ImageGalleryViewCard;
 import jakarta.annotation.security.PermitAll;
 
-@Route(value = "MisProductos", layout = MainUserLayout.class)
+@Route(value = "user/MisProductos", layout = MainUserLayout.class)
 @PermitAll
 public class MisProductosView extends VerticalLayout{
     private ContractService contractService;

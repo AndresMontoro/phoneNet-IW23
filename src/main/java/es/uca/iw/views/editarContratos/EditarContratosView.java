@@ -1,7 +1,7 @@
 package es.uca.iw.views.editarContratos;
-import jakarta.annotation.security.PermitAll;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H2;
@@ -23,12 +23,14 @@ import es.uca.iw.model.Contract;
 import es.uca.iw.model.Product;
 import es.uca.iw.services.ContractService;
 import es.uca.iw.views.MainAdminLayout;
+import jakarta.annotation.security.PermitAll;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 
 
-@Route(value = "EditarContratos", layout = MainAdminLayout.class)
+@Route(value = "admin/EditarContratos", layout = MainAdminLayout.class)
+// @RolesAllowed("admin")
 @PermitAll
 public class EditarContratosView extends VerticalLayout {
 

@@ -30,7 +30,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.notification.Notification;
 import es.uca.iw.views.MainAdminLayout;
 
-@Route(value = "EditarProductos", layout = MainAdminLayout.class)
+@Route(value = "admin/EditarProductos", layout = MainAdminLayout.class)
 @PermitAll
 public class EditarProductosView extends VerticalLayout {
 

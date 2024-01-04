@@ -27,7 +27,7 @@ public class LoginView extends Div{
 
         Button registerButton = new Button("¿Aún no tienes cuenta?");
         registerButton.addClickListener(e -> {
-            registerButton.getUI().ifPresent(ui -> ui.navigate("registro"));
+            registerButton.getUI().ifPresent(ui -> ui.navigate("user/Rwegistro"));
         });
         
         VerticalLayout layout = new VerticalLayout();

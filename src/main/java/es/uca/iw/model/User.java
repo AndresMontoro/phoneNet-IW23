@@ -108,6 +108,7 @@ public class User implements UserDetails{
         User other = (User) obj;
         return Objects.equals(id, other.id);
     }
+    
     @Override
     public List<GrantedAuthority> getAuthorities() {
         return this.getRoles().stream()

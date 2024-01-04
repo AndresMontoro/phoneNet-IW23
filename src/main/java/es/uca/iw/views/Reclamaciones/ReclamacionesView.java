@@ -27,7 +27,7 @@ import jakarta.annotation.security.PermitAll;
 
 import java.util.List;
 
-@Route(value = "Reclamaciones", layout = MainUserLayout.class)
+@Route(value = "user/Reclamaciones", layout = MainUserLayout.class)
 @PermitAll
 public class ReclamacionesView extends VerticalLayout {
 

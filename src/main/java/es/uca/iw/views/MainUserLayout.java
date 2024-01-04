@@ -1,8 +1,5 @@
 package es.uca.iw.views;
 
-
-//import org.springframework.security.core.context.SecurityContextHolder;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -22,9 +19,7 @@ import es.uca.iw.views.misConsumos.MisConsumosView;
 import es.uca.iw.views.misFacturas.MisFacturasView;
 import es.uca.iw.views.misProductos.MisProductosView;
 import es.uca.iw.views.Reclamaciones.ReclamacionesView;
-// import es.uca.iw.views.editarUsuarios.EditarUsuariosView;
 import es.uca.iw.views.login.LoginView;
-
 
 public class MainUserLayout extends AppLayout {
     

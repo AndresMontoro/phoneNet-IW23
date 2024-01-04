@@ -27,7 +27,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 
 
-@Route(value = "EditarFacturas", layout = MainLayout.class)
+@Route(value = "admin/EditarFacturas", layout = MainLayout.class)
 @PermitAll
 public class EditarFacturasView extends VerticalLayout {
 

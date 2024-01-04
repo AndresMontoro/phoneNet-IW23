@@ -1,5 +1,7 @@
 package es.uca.iw.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,13 +23,21 @@ public class UserRole {
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
 
-
-    // @ManyToOne
-    // private User user;
-
-    public UserRole() {
-        // Constructor
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
+
+    @Override
+    public boolean equals(Object obj) { 
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if(getClass() != obj.getClass()) return false;
+        UserRole other = (UserRole) obj;
+        return Objects.equals(id, other.id);
+    }
+
+    public UserRole() {}
 
     public UserRole(Role role) {
         this.role = role;

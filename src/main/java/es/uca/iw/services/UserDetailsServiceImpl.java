@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Set;
+
 import es.uca.iw.data.UserRepository;
 import es.uca.iw.data.UserRoleRepository;
 import es.uca.iw.model.User;
@@ -49,6 +50,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userRepository.findByusername(username).orElseThrow(() ->
             new UsernameNotFoundException("No user present with username: " + username));
     }
+
+    // private static List<GrantedAuthority> grantedAuthorities(User user) {
+    //     return user.getRoles().stream()
+    //         .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+    //         .collect(Collectors.toList());
+    // } 
 
     public List<User> findAll() {
         return userRepository.findAll();
