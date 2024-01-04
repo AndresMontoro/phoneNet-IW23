@@ -156,6 +156,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public void editUserWithDetails(Long id, String newName, String newSurname, String newUsername, String newPassword, String newDni, String newEmail, String phoneNumber, Set<UserRole.Role> roles) {
         Optional<User> optionalUser = userRepository.findById(id);
+
+        if (existsByUsername(newUsername) && !optionalUser.get().getUsername().equals(newUsername))
+            throw new IllegalArgumentException("El nombre de usuario ya está en uso");
+        if (existsByDni(newDni) && !optionalUser.get().getDni().equals(newDni))
+            throw new IllegalArgumentException("El DNI ya está en uso");
+        if (existsByEmail(newEmail) && !optionalUser.get().getEmail().equals(newEmail))
+            throw new IllegalArgumentException("El email ya está en uso");
+
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             user.setName(newName);
