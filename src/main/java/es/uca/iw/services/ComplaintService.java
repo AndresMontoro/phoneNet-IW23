@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class ComplaintService {
@@ -40,6 +42,14 @@ public class ComplaintService {
     public List<Complaint> getComplaintsByAuthenticatedUser() {
         User authenticatedUser = getAuthenticatedUser();
         return complaintRepository.findByUser(authenticatedUser);
+    }
+
+    public void cambiarEstadoReclamacion(Long reclamacionId, Complaint.ComplaintStatus nuevoEstado) {
+        Optional<Complaint> optionalReclamacion = complaintRepository.findById(reclamacionId);
+        optionalReclamacion.ifPresent(reclamacion -> {
+            reclamacion.setStatus(nuevoEstado);
+            complaintRepository.save(reclamacion);
+        });
     }
 
     public List<Complaint> getComplaints() {
