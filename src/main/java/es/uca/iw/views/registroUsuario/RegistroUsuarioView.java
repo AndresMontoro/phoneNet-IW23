@@ -28,6 +28,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Horizontal;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Vertical;
 
 import es.uca.iw.services.UserDetailsServiceImpl;
+import es.uca.iw.views.login.LoginView;
 import es.uca.iw.model.UserRole;
 import es.uca.iw.data.UserRoleRepository;
 
@@ -125,6 +126,8 @@ public class RegistroUsuarioView extends Div {
                 this.userService.saveUserWithDetails(nameField.getValue(), surnameField.getValue(), usernameField.getValue(), 
                     passwordField.getValue(), dniField.getValue(), emailField.getValue(), phoneField.getValue(), userRoles);
                 Notification.show("Usuario registrado correctamente");
+
+                getUI().ifPresent(ui -> ui.navigate(LoginView.class));
             } catch (Exception e) {
                 Notification.show("Error al registrar usuario " + e.getMessage());
                 return;
