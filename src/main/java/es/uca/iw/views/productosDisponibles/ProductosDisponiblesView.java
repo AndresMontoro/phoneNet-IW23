@@ -48,8 +48,8 @@ public class ProductosDisponiblesView extends VerticalLayout {
         for (Product product : products) {
             if (product.getAvailable() && !contractProducts.contains(product))
                 imageContainer.add(new ImageGalleryViewCard(contractService, product.getName(), product.getImage(), 
-                    product.getDescription(), product.getPrice(), product.getDataUsagePrice(), product.getDataUsageLimit(),
-                    product.getCallPrice(), product.getCallLimit(), true));
+                    product.getDescription(), product.getPrice(), product.getDataPenaltyPrice(), product.getDataUsageLimit(),
+                    product.getCallPenaltyPrice(), product.getCallLimit(), true));
         }
     }   
 

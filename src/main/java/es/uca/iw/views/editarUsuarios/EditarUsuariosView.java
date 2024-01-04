@@ -113,13 +113,17 @@ public class EditarUsuariosView extends VerticalLayout {
 
 
                 Set<UserRole> userRoles = selectedRoles.stream().map(role -> new UserRole(role)).collect(Collectors.toSet());
-                
-                userDetailsServiceImpl.saveUserWithDetails(newName, newSurname, newUsername, newPassword, newDni, newEmail, newPhoneNumber, userRoles);
-                Notification.show("Usuario añadido con éxito.");
-                dialog.close();
-                UI.getCurrent().getPage().reload();
+                try {
+                    userDetailsServiceImpl.saveUserWithDetails(newName, newSurname, newUsername, newPassword, 
+                        newDni, newEmail, newPhoneNumber, userRoles);
+                    Notification.show("Usuario añadido con éxito.");
+                    dialog.close();
+                    UI.getCurrent().getPage().reload();
+                } catch (Exception e) {
+                    Notification.show("Error al añadir usuario");
+                    return;
+                }                
             });
-
 
             Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
 

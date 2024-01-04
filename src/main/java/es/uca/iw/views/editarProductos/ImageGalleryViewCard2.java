@@ -85,9 +85,6 @@ public class ImageGalleryViewCard2 extends ListItem {
                 TextField newDescriptionField = new TextField("Nueva Descripción");
                 TextField newImageUrlField = new TextField("Nueva URL de Imagen");
                 TextField newPriceField = new TextField("Nuevo Precio");
-                TextField newCallPrice = new TextField("Nuevo Precio por llamada");
-                TextField newDataUsagePrice = new TextField("Nuevo Precio por uso de datos");
-                TextField newDataPrice = new TextField("Nuevo Precio por dato usado");
                 TextField newCallLimit = new TextField("Nuevo Límite de llamadas");
                 TextField newDataLimit = new TextField("Nuevo Límite de datos");
                 TextField newCallPenalty = new TextField("Nueva Penalización por llamada");
@@ -98,9 +95,6 @@ public class ImageGalleryViewCard2 extends ListItem {
                 newDescriptionField.setValue(product.getDescription());
                 newImageUrlField.setValue(product.getImage());
                 newPriceField.setValue(product.getPrice().toString());
-                newCallPrice.setValue(product.getCallPrice().toString());
-                newDataUsagePrice.setValue(product.getDataUsagePrice().toString());
-                newDataPrice.setValue(product.getDataUsagePrice().toString());
                 newCallLimit.setValue(String.valueOf(product.getCallLimit()));
                 newDataLimit.setValue(String.valueOf(product.getDataUsageLimit()));
                 newCallPenalty.setValue(product.getCallPenaltyPrice().toString());
@@ -112,8 +106,6 @@ public class ImageGalleryViewCard2 extends ListItem {
                     String newProductDescription = newDescriptionField.getValue();
                     String newProductImageUrl = newImageUrlField.getValue();
                     BigDecimal newProductPrice = new BigDecimal(newPriceField.getValue());
-                    BigDecimal newProductCallPrice = new BigDecimal(newCallPrice.getValue());
-                    BigDecimal newProductDataUsagePrice = new BigDecimal(newDataUsagePrice.getValue());
                     int newProductCallLimit = Integer.parseInt(newCallLimit.getValue());
                     int newProductDataLimit = Integer.parseInt(newDataLimit.getValue());
                     BigDecimal newProductCallPenalty = new BigDecimal(newCallPenalty.getValue());
@@ -122,8 +114,8 @@ public class ImageGalleryViewCard2 extends ListItem {
         
                     // Actualizar cambios
                     this.productService.editProductWithDetails(productId, newProductName, newProductDescription,
-                            newProductImageUrl, newProductPrice, newProductCallPrice,
-                            newProductDataUsagePrice, newProductCallLimit, newProductDataLimit, newProductCallPenalty,
+                            newProductImageUrl, newProductPrice,
+                            newProductCallLimit, newProductDataLimit, newProductCallPenalty,
                             newProductDataPenalty, newProductAvailable);
                     dialog.close();
         
@@ -134,8 +126,8 @@ public class ImageGalleryViewCard2 extends ListItem {
                 Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
         
                 // Agregar componentes
-                dialog.add(newNameField, newDescriptionField, newImageUrlField, newPriceField, newCallPrice,
-                        newDataUsagePrice, newCallLimit, newDataLimit, newCallPenalty, newDataPenalty,
+                dialog.add(newNameField, newDescriptionField, newImageUrlField, newPriceField,
+                        newCallLimit, newDataLimit, newCallPenalty, newDataPenalty,
                         newAvailable, saveButton, cancelButton);
                 dialog.open();
             } else {

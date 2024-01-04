@@ -66,26 +66,6 @@ public class Bill {
 
     @PrePersist
     public void prePersist() {
-        // dataTotalPrice = new BigDecimal(0);
-
-        // if (dataConsumed - contract.getProduct().getDataUsageLimit() <= 0) {
-        //    dataTotalPrice = contract.getProduct().getPrice();
-        // } else {
-        //     dataTotalPrice = contract.getProduct().getDataUsagePrice().multiply(new BigDecimal(dataConsumed - contract.getProduct().getDataUsageLimit()));
-        //     dataTotalPrice = dataTotalPrice.add(new BigDecimal(contract.getProduct().getDataUsageLimit()).multiply(contract.getProduct().getDataPenaltyPrice()));
-        //     dataTotalPrice = dataTotalPrice.add(contract.getProduct().getPrice());
-        // }
-
-        // callTotalPrice = new BigDecimal(0);
-
-        // if(minutesConsumed - contract.getProduct().getCallLimit() <= 0) {
-        //     callTotalPrice = contract.getProduct().getPrice();
-        // } else {
-        //     callTotalPrice = contract.getProduct().getCallPrice().multiply(new BigDecimal(minutesConsumed - contract.getProduct().getCallLimit()));
-        //     callTotalPrice = callTotalPrice.add(new BigDecimal(contract.getProduct().getCallLimit()).multiply(contract.getProduct().getCallPenaltyPrice()));
-        //     callTotalPrice = callTotalPrice.add(contract.getProduct().getPrice());
-        // }
-
         totalPrice = contract.getProduct().getPrice();
 
         dataTotalPrice = new BigDecimal(0);

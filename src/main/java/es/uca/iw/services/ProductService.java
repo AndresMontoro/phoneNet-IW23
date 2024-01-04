@@ -34,15 +34,13 @@ public class ProductService {
         return productRepository.findById(id);
     }
  
-    public void saveProductWithDetails(String name, String description, String imageUrl, BigDecimal price, BigDecimal callPrice,
-           BigDecimal dataUsagePrice, Integer CallLimit , Integer DataUsageLimit, BigDecimal callPenaltyPrice, BigDecimal dataPenaltyPrice, boolean available, Set<Product.ProductType> productTypes) {
+    public void saveProductWithDetails(String name, String description, String imageUrl, BigDecimal price,
+           Integer CallLimit , Integer DataUsageLimit, BigDecimal callPenaltyPrice, BigDecimal dataPenaltyPrice, boolean available, Set<Product.ProductType> productTypes) {
         Product newProduct = new Product();
         newProduct.setName(name);
         newProduct.setDescription(description);
         newProduct.setImage(imageUrl);
         newProduct.setPrice(price);
-        newProduct.setCallPrice(callPrice);
-        newProduct.setDataUsagePrice(dataUsagePrice);
         newProduct.setCallLimit(CallLimit);
         newProduct.setDataUsageLimit(DataUsageLimit);
         newProduct.setCallPenaltyPrice(callPenaltyPrice);
@@ -54,7 +52,7 @@ public class ProductService {
     }
 
     public void editProductWithDetails(Long id, String newName, String newDescription, String newImageUrl, BigDecimal newPrice,
-                                       BigDecimal newCallPrice, BigDecimal newDataUsagePrice ,int newCallLimit, int newDataUsageLimit,
+                                       int newCallLimit, int newDataUsageLimit,
                                        BigDecimal newCallPenaltyPrice, BigDecimal newDataPenaltyPrice, boolean newAvailable) {
         Optional<Product> optionalProduct = findById(id);
         if (optionalProduct.isPresent()) {
@@ -63,8 +61,6 @@ public class ProductService {
             product.setDescription(newDescription);
             product.setImage(newImageUrl);
             product.setPrice(newPrice);
-            product.setCallPrice(newCallPrice);
-            product.setDataUsagePrice(newDataUsagePrice);
             product.setCallLimit(newCallLimit);
             product.setDataUsageLimit(newDataUsageLimit);
             product.setCallPenaltyPrice(newCallPenaltyPrice);

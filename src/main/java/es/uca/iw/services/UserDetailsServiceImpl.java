@@ -32,6 +32,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userRepository.findByusername(username);
     }
 
+    public boolean existsByUsername(String username) {
+        return userRepository.findByusername(username).isPresent();
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
+    public boolean existsByDni(String dni) {
+        return userRepository.findByDni(dni).isPresent();
+    }
+
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByusername(username).orElseThrow(() ->
@@ -97,8 +109,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userRepository.save(actualUser);
     }
 
-    public void saveUserWithDetails(String name, String surname, String username, String password, String dni, String email, String phoneNumber, Set<UserRole> roles) {
-        //bajo pruebas, asi funciona perfectamente
+    public void saveUserWithDetails(String name, String surname, String username, String password, String dni, 
+        String email, String phoneNumber, Set<UserRole> roles) {
+        if (existsByUsername(username))
+            throw new IllegalArgumentException("El nombre de usuario ya está en uso");
+        if (existsByDni(dni))
+            throw new IllegalArgumentException("El DNI ya está en uso");
+        if (existsByEmail(email))
+            throw new IllegalArgumentException("El email ya está en uso");
+
         Set<UserRole> persistedRoles = new HashSet<>();
         for (UserRole role : roles) {
             UserRole persistedRole = userRoleRepository.findByRole(role.getRole()).orElse(null);

@@ -69,6 +69,7 @@ public class User implements UserDetails{
         this.roles = roles;
     }
 
+    @Column(unique = true)
     private String dni;
     public String getDni() { return dni; }
     public void setDni(String dni) {

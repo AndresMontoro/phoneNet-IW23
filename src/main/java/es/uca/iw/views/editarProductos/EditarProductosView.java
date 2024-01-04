@@ -83,8 +83,6 @@ public class EditarProductosView extends VerticalLayout {
             TextField newDescriptionField = new TextField("Descripción");
             TextField newImageUrlField = new TextField("URL de Imagen");
             TextField newPriceField = new TextField("Precio");
-            TextField newCallPrice = new TextField("Precio por llamada");
-            TextField newDataUsagePrice = new TextField("Precio por dato usado");
             TextField newCallLimit = new TextField("Límite de llamadas");
             TextField newDataUsageLimit = new TextField("Límite de datos");
             TextField newCallPenalty = new TextField("Penalización por llamada");
@@ -101,8 +99,7 @@ public class EditarProductosView extends VerticalLayout {
                 String newProductDescription = newDescriptionField.getValue();
                 String newProductImageUrl = newImageUrlField.getValue();
                 BigDecimal newProductPrice = new BigDecimal(newPriceField.getValue());
-                BigDecimal newProductCallPrice = new BigDecimal(newCallPrice.getValue());
-                BigDecimal newProductDataUsagePrice = new BigDecimal(newDataUsagePrice.getValue());
+                
                 Integer newProductCallLimit = Integer.parseInt(newCallLimit.getValue());
                 Integer newProductDataUsageLimit = Integer.parseInt(newDataUsageLimit.getValue());
                 BigDecimal newProductCallPenalty = new BigDecimal(newCallPenalty.getValue());
@@ -115,7 +112,7 @@ public class EditarProductosView extends VerticalLayout {
                 if (fixedTypeCheckbox.getValue()) productTypes.add(Product.ProductType.FIJO);
         
                 productService.saveProductWithDetails(newProductName, newProductDescription, newProductImageUrl,
-                        newProductPrice, newProductCallPrice, newProductDataUsagePrice, newProductCallLimit,
+                        newProductPrice, newProductCallLimit,
                         newProductDataUsageLimit, newProductCallPenalty, newProductDataPenalty, available, productTypes);
 
                 Notification.show("Producto añadido con éxito.");
@@ -125,7 +122,7 @@ public class EditarProductosView extends VerticalLayout {
 
             Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
 
-            dialog.add(newNameField, newDescriptionField, newImageUrlField, newPriceField,newCallPrice, newDataUsagePrice, newCallLimit, newDataUsageLimit, newCallPenalty, newDataPenalty, availableCheckbox, fiberTypeCheckbox, mobileTypeCheckbox, fixedTypeCheckbox, saveButton, cancelButton);
+            dialog.add(newNameField, newDescriptionField, newImageUrlField, newPriceField, newCallLimit, newDataUsageLimit, newCallPenalty, newDataPenalty, availableCheckbox, fiberTypeCheckbox, mobileTypeCheckbox, fixedTypeCheckbox, saveButton, cancelButton);
 
             dialog.open();
         });

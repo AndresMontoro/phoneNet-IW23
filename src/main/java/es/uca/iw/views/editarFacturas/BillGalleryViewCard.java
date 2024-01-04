@@ -76,7 +76,7 @@ public class BillGalleryViewCard extends ListItem {
 
         // Botones de editar y borrar
         Button editButton = new Button("Editar Contrato", event -> {
-            Optional<Bill> optionalBill = billService.getBillById(billId);
+            Optional<Bill> optionalBill = this.billService.getBillById(billId);
             if (optionalBill.isPresent()) {
                 Bill bill = optionalBill.get();
                 Dialog dialog = new Dialog();
@@ -99,7 +99,7 @@ public class BillGalleryViewCard extends ListItem {
                     String dateString = dateField.getValue();
                     String contractString = contractField.getValue();
 
-                    billService.editBillWithDetails(billId, dataConsumedString, minutesConsumedString, dateString, contractString);
+                    this.billService.editBillWithDetails(this.billId, dataConsumedString, minutesConsumedString, dateString, contractString);
                     dialog.close();
                     UI.getCurrent().getPage().reload();
                     

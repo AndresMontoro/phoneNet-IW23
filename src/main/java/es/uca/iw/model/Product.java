@@ -60,15 +60,6 @@ public class Product {
         this.price = price;
     }
 
-    @NotNull(message = "Incluya el precio de datos")
-    private BigDecimal dataUsagePrice;
-    public BigDecimal getDataUsagePrice() { return dataUsagePrice; }
-    public void setDataUsagePrice(BigDecimal dataUsagePrice) {
-        if (dataUsagePrice == null || dataUsagePrice.compareTo(BigDecimal.ZERO) < 0)
-            throw new IllegalArgumentException("El precio no puede ser negativo");
-        this.dataUsagePrice = dataUsagePrice;
-    }
-
     private BigDecimal dataPenaltyPrice;
     public BigDecimal getDataPenaltyPrice() { return dataPenaltyPrice; }
     public void setDataPenaltyPrice(BigDecimal dataPenaltyPrice) {
@@ -86,14 +77,14 @@ public class Product {
         this.dataUsageLimit = dataUsageLimit;
     }
 
-    @NotNull(message = "Incluya el precio de llamadas")
-    private BigDecimal callPrice;
-    public BigDecimal getCallPrice() { return callPrice; }
-    public void setCallPrice(BigDecimal callPrice) {
-        if (callPrice == null || callPrice.compareTo(BigDecimal.ZERO) < 0)
-            throw new IllegalArgumentException("El precio no puede ser negativo");
-        this.callPrice = callPrice;
-    }
+    // @NotNull(message = "Incluya el precio de llamadas")
+    // private BigDecimal callPrice;
+    // public BigDecimal getCallPrice() { return callPrice; }
+    // public void setCallPrice(BigDecimal callPrice) {
+    //     if (callPrice == null || callPrice.compareTo(BigDecimal.ZERO) < 0)
+    //         throw new IllegalArgumentException("El precio no puede ser negativo");
+    //     this.callPrice = callPrice;
+    // }
 
     private BigDecimal callPenaltyPrice;
     public BigDecimal getCallPenaltyPrice() { return callPenaltyPrice; }

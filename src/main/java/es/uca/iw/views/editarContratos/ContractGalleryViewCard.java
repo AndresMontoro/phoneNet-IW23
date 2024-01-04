@@ -1,13 +1,11 @@
 package es.uca.iw.views.editarContratos;
 
-import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.ListItem;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.TextField;
@@ -66,7 +64,7 @@ public class ContractGalleryViewCard extends ListItem {
 
         // Botones de editar y borrar
         Button editButton = new Button("Editar Contrato", event -> {
-            Optional<Contract> optionalContract = contractService.findById(contractId);
+            Optional<Contract> optionalContract = this.contractService.findById(contractId);
             if (optionalContract.isPresent()) {
                 Contract contract = optionalContract.get();
                 Dialog dialog = new Dialog();
@@ -98,7 +96,7 @@ public class ContractGalleryViewCard extends ListItem {
         });
 
         Button deleteButton = new Button("Borrar Contrato", event -> {
-            contractService.deleteContract(contractId);
+            contractService.deleteContract(this.contractId);
             UI.getCurrent().getPage().reload();
         });
 
