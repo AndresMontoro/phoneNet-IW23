@@ -17,6 +17,7 @@ import com.vaadin.flow.server.VaadinSession;
 import es.uca.iw.views.editarContratos.EditarContratosView;
 import es.uca.iw.views.editarProductos.EditarProductosView;
 import es.uca.iw.views.editarUsuarios.EditarUsuariosView;
+import es.uca.iw.views.editarReclamaciones.EditarReclamacionesView;
 import es.uca.iw.views.login.LoginView;
 
 public class MainAdminLayout extends AppLayout{
@@ -42,7 +43,8 @@ public class MainAdminLayout extends AppLayout{
         Tabs tabs = new Tabs();
         tabs.add(createTab(VaadinIcon.CLIPBOARD, "Editar Productos", EditarProductosView.class),
             createTab(VaadinIcon.CLIPBOARD, "Editar Usuarios", EditarUsuariosView.class),
-            createTab(VaadinIcon.CLIPBOARD, "Editar Contratos", EditarContratosView.class) 
+            createTab(VaadinIcon.CLIPBOARD, "Editar Contratos", EditarContratosView.class),
+            createTab(VaadinIcon.CLIPBOARD, "Editar Reclamaciones", EditarReclamacionesView.class)
         );
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
