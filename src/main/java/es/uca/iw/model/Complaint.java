@@ -22,6 +22,9 @@ public class Complaint {
     @ManyToOne
     @JoinColumn(nullable = false)
     private User user;
+    public Long getUserId() {
+        return user != null ? user.getId() : null;
+    }
     public void setUser(User user) {
         this.user = user;
     }
@@ -59,8 +62,6 @@ public class Complaint {
         this.comments = comments; 
     }
 
-
-    // Otros métodos y getters/setters
 
     @Override
     public int hashCode() {
