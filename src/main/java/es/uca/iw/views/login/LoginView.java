@@ -9,14 +9,19 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
+import es.uca.iw.components.ContactUsComponent;
+
 @Route("login")
 @AnonymousAllowed
-public class LoginView extends Div{
-    public LoginView(){
-        setHeight("91vh");
+public class LoginView extends VerticalLayout {
 
-        getStyle().set("background-color", "var(--lumo-contrast-5pct)")
-                .set("display", "flex").set("justify-content", "center")
+    public LoginView() {
+        setHeight("100vh");  // Establece la altura del contenedor principal al 100% de la vista
+
+        getStyle()
+                .set("background-color", "var(--lumo-contrast-5pct)")
+                .set("display", "flex")
+                .set("justify-content", "center")
                 .set("padding", "var(--lumo-space-l)")
                 .set("align-items", "center");
 
@@ -29,19 +34,27 @@ public class LoginView extends Div{
         registerButton.addClickListener(e -> {
             registerButton.getUI().ifPresent(ui -> ui.navigate("user/Registro"));
         });
-        
-        VerticalLayout layout = new VerticalLayout();
-        layout.add(loginForm);
-        layout.add(registerButton);
-        layout.setAlignItems(Alignment.CENTER);
-        layout.setJustifyContentMode(JustifyContentMode.CENTER);
-        layout.setSpacing(false);
-        layout.setPadding(false);
-        layout.setMargin(false);
-        layout.getStyle().set("width", "auto"); 
-        layout.getStyle().set("background-color", "white");
-        layout.getStyle().set("padding-bottom", "1rem");
-                
-        add(layout);
+
+        VerticalLayout formLayout = new VerticalLayout();
+        formLayout.add(loginForm);
+        formLayout.add(registerButton);
+        formLayout.setAlignItems(Alignment.CENTER);
+        formLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        formLayout.setSpacing(false);
+        formLayout.setPadding(false);
+        formLayout.setMargin(false);
+        formLayout.getStyle().set("width", "auto");
+        formLayout.getStyle().set("background-color", "white");
+        formLayout.getStyle().set("padding-bottom", "1rem");
+        formLayout.setHeight("100%");  // Establece la altura del VerticalLayout al 100%
+
+        // Contenedor principal para organizar verticalmente los componentes
+        VerticalLayout container = new VerticalLayout();
+        container.add(formLayout);
+        container.add(new ContactUsComponent());
+        container.setAlignItems(Alignment.STRETCH);  // Estira los elementos verticalmente
+        container.setHeight("100%");  // Establece la altura del contenedor principal al 100%
+
+        add(container);
     }
 }
