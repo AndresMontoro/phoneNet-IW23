@@ -33,7 +33,7 @@ import es.uca.iw.model.UserRole;
 import es.uca.iw.data.UserRoleRepository;
 
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
-
+import es.uca.iw.components.ContactUsComponent;
 
 @Route("user/Registro")
 @AnonymousAllowed
@@ -48,8 +48,8 @@ public class RegistroUsuarioView extends Div {
 
         setMinHeight("100vh");
 
-        addClassNames(Padding.MEDIUM, Display.FLEX, FlexDirection.COLUMN, Gap.LARGE,Horizontal.AUTO, Vertical.AUTO);
-    
+        addClassNames(Padding.MEDIUM, Display.FLEX, FlexDirection.COLUMN, Gap.LARGE, Horizontal.AUTO, Vertical.AUTO);
+
         H2 header = new H2("CREE SU CUENTA");
         header.addClassNames(Horizontal.AUTO, FontSize.XXLARGE, Background.CONTRAST_5, BorderRadius.MEDIUM, Padding.MEDIUM, Margin.SMALL);
         header.getStyle().set("color", "blue");
@@ -80,7 +80,7 @@ public class RegistroUsuarioView extends Div {
         usernameField.setValueChangeMode(ValueChangeMode.ON_BLUR);
         usernameField.addBlurListener(evcl -> {
             String enteredUsername = usernameField.getValue();
-            
+
             if (this.userService.existsByUsername(enteredUsername)) {
                 usernameField.setInvalid(true);
                 usernameField.setErrorMessage("El usuario ya existe");
@@ -123,8 +123,8 @@ public class RegistroUsuarioView extends Div {
             UserRole userRole = this.userRoleRepository.findByRole(UserRole.Role.USER).orElse(null);
             userRoles.add(userRole);
             try {
-                this.userService.saveUserWithDetails(nameField.getValue(), surnameField.getValue(), usernameField.getValue(), 
-                    passwordField.getValue(), dniField.getValue(), emailField.getValue(), phoneField.getValue(), userRoles);
+                this.userService.saveUserWithDetails(nameField.getValue(), surnameField.getValue(), usernameField.getValue(),
+                        passwordField.getValue(), dniField.getValue(), emailField.getValue(), phoneField.getValue(), userRoles);
                 Notification.show("Usuario registrado correctamente");
 
                 getUI().ifPresent(ui -> ui.navigate(LoginView.class));
@@ -132,7 +132,7 @@ public class RegistroUsuarioView extends Div {
                 Notification.show("Error al registrar usuario " + e.getMessage());
                 return;
             }
-            
+
         });
         layout.add(registerButton);
 
@@ -141,5 +141,6 @@ public class RegistroUsuarioView extends Div {
         layout.setJustifyContentMode(JustifyContentMode.CENTER);
 
         add(layout);
+        add(new ContactUsComponent());
     }
 }

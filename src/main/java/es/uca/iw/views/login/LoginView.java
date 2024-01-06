@@ -46,14 +46,13 @@ public class LoginView extends VerticalLayout {
         formLayout.getStyle().set("width", "auto");
         formLayout.getStyle().set("background-color", "white");
         formLayout.getStyle().set("padding-bottom", "1rem");
-        formLayout.setHeight("100%");  // Establece la altura del VerticalLayout al 100%
+        formLayout.setHeight("100%");
 
-        // Contenedor principal para organizar verticalmente los componentes
         VerticalLayout container = new VerticalLayout();
         container.add(formLayout);
         container.add(new ContactUsComponent());
-        container.setAlignItems(Alignment.STRETCH);  // Estira los elementos verticalmente
-        container.setHeight("100%");  // Establece la altura del contenedor principal al 100%
+        container.setAlignItems(Alignment.STRETCH);  
+        container.setHeight("100%");  
 
         add(container);
     }

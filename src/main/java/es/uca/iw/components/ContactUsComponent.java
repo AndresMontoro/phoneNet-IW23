@@ -17,8 +17,8 @@ public class ContactUsComponent extends Div {
 
         // Enlaces a las redes sociales con iconos de Vaadin y FontAwesome
         Anchor facebookLink = createSocialMediaLink("https://www.facebook.com/tuempresa", VaadinIcon.FACEBOOK.create());
-        Anchor twitterLink = createSocialMediaLink("https://twitter.com/tuempresa", VaadinIcon.TWITTER.create());
-        Anchor gmailLink = createSocialMediaLink("mailto:tuemail@gmail.com", VaadinIcon.ENVELOPE.create());
+        Anchor twitterLink = createSocialMediaLink("https://twitter.com/PhoneNet134982", VaadinIcon.TWITTER.create());
+        Anchor gmailLink = createSocialMediaLink("mailto:PhoneNetIW@gmail.com", VaadinIcon.ENVELOPE.create());
 
         // Crea una fila horizontal para los elementos
         HorizontalLayout contactLayout = new HorizontalLayout(contactUsText, facebookLink, twitterLink, gmailLink);
@@ -33,11 +33,5 @@ public class ContactUsComponent extends Div {
         Anchor anchor = new Anchor(url, icon);
         anchor.setTarget("_blank"); // Abre el enlace en una nueva pestaña
         return anchor;
-    }
-
-    private Icon createFontAwesomeIcon(String className) {
-        Icon icon = new Icon("i", className);
-        icon.setSize("24px");
-        return icon;
     }
 }
