@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.*;
@@ -77,15 +80,6 @@ public class Product {
         this.dataUsageLimit = dataUsageLimit;
     }
 
-    // @NotNull(message = "Incluya el precio de llamadas")
-    // private BigDecimal callPrice;
-    // public BigDecimal getCallPrice() { return callPrice; }
-    // public void setCallPrice(BigDecimal callPrice) {
-    //     if (callPrice == null || callPrice.compareTo(BigDecimal.ZERO) < 0)
-    //         throw new IllegalArgumentException("El precio no puede ser negativo");
-    //     this.callPrice = callPrice;
-    // }
-
     private BigDecimal callPenaltyPrice;
     public BigDecimal getCallPenaltyPrice() { return callPenaltyPrice; }
     public void setCallPenaltyPrice(BigDecimal callPenaltyPrice) {
@@ -113,11 +107,19 @@ public class Product {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     @NotEmpty(message = "Incluya el tipo, por favor")
+    @Fetch(FetchMode.SUBSELECT)
     private Set<ProductType> productType = new HashSet<>();
     public Set<ProductType> getProductType() { return productType; }
     public void setProductType(Set<ProductType> productType) { 
         this.productType = productType; 
     }
+
+    // @ManyToMany(fetch = FetchType.EAGER)
+    // private Set<ProductType> productType = new HashSet<>();
+    // public Set<ProductType> getProductType() { return productType; }
+    // public void setProductType(Set<ProductType> productType) { 
+    //     this.productType = productType; 
+    // }
 
     @Override
     public int hashCode() {

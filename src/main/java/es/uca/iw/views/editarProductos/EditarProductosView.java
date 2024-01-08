@@ -1,5 +1,6 @@
 package es.uca.iw.views.editarProductos;
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
+
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +32,7 @@ import com.vaadin.flow.component.notification.Notification;
 import es.uca.iw.views.MainAdminLayout;
 
 @Route(value = "admin/EditarProductos", layout = MainAdminLayout.class)
-@PermitAll
+@RolesAllowed("ADMIN")
 public class EditarProductosView extends VerticalLayout {
 
     private final ProductService productService;

@@ -23,15 +23,15 @@ import es.uca.iw.model.Contract;
 import es.uca.iw.model.Product;
 import es.uca.iw.services.ContractService;
 import es.uca.iw.views.MainAdminLayout;
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
+
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 
 
 @Route(value = "admin/EditarContratos", layout = MainAdminLayout.class)
-// @RolesAllowed("admin")
-@PermitAll
+@RolesAllowed("ADMIN")
 public class EditarContratosView extends VerticalLayout {
 
     private final ContractService contractService;
@@ -40,8 +40,6 @@ public class EditarContratosView extends VerticalLayout {
     private ComboBox<String> nameComboBox;
     private Button clearFilterButton;
     private Button addButton;
-
-    
 
     public EditarContratosView(ContractService contractService) {
         this.contractService = contractService;

@@ -23,8 +23,8 @@ public class CallRecord {
     @NotNull
     @NotEmpty(message = "Incluya el número de teléfono de telefono de destino, por favor")
     private String destinationPhoneNumber;
-    public String getDetinationPhoneNumber() { return destinationPhoneNumber; }
-    public void setDetinationPhoneNumber(String destinationPhoneNumber) {
+    public String getDestinationPhoneNumber() { return destinationPhoneNumber; }
+    public void setDestinationPhoneNumber(String destinationPhoneNumber) {
         this.destinationPhoneNumber = destinationPhoneNumber;
     }
 
@@ -37,8 +37,8 @@ public class CallRecord {
 
     @NotNull
     private LocalDateTime dateTime;
-    public LocalDateTime getDate() { return dateTime; }
-    public void setDate(LocalDateTime dateTime) {
+    public LocalDateTime getDateTime() { return dateTime; }
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }    
 

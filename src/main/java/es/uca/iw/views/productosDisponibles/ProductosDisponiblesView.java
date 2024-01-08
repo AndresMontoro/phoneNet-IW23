@@ -1,6 +1,7 @@
 package es.uca.iw.views.productosDisponibles;
 
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
+
 import com.vaadin.flow.router.Route;
 
 import java.util.List;
@@ -26,7 +27,7 @@ import es.uca.iw.services.ProductService;
 import es.uca.iw.model.Product;
 
 @Route(value = "user/productosDisponibles")
-@PermitAll
+@RolesAllowed({"ADMIN", "USER"})
 public class ProductosDisponiblesView extends VerticalLayout {
     
     private final ProductService productService;

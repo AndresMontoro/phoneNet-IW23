@@ -1,6 +1,7 @@
 package es.uca.iw.views.editarUsuarios;
 
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import es.uca.iw.views.MainAdminLayout;
 
 @Route(value = "admin/EditarUsuarios", layout = MainAdminLayout.class)
-@PermitAll
+@RolesAllowed("ADMIN")
 public class EditarUsuariosView extends VerticalLayout {
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;

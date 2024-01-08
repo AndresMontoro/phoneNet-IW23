@@ -2,10 +2,7 @@ package es.uca.iw.views.login;
 
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
@@ -32,7 +29,7 @@ public class LoginView extends VerticalLayout {
 
         Button registerButton = new Button("¿Aún no tienes cuenta?");
         registerButton.addClickListener(e -> {
-            registerButton.getUI().ifPresent(ui -> ui.navigate("user/Registro"));
+            registerButton.getUI().ifPresent(ui -> ui.navigate("Registro"));
         });
 
         VerticalLayout formLayout = new VerticalLayout();

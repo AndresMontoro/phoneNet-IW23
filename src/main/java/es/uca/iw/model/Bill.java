@@ -68,15 +68,18 @@ public class Bill {
     @PrePersist
     public void prePersist() {
         totalPrice = contract.getProduct().getPrice();
-
         dataTotalPrice = new BigDecimal(0);
-        if (dataConsumed - contract.getProduct().getDataUsageLimit() > 0) {
+        callTotalPrice = new BigDecimal(0);
+            
+        if (dataConsumed - contract.getProduct().getDataUsageLimit() > 0 
+            /*&& contract.getProduct().getProductType().contains(Product.ProductType.MOVIL)*/) {
             dataTotalPrice = new BigDecimal(contract.getProduct().getDataUsageLimit()).multiply(contract.getProduct().getDataPenaltyPrice());
             totalPrice = totalPrice.add(dataTotalPrice);
         }
 
-        callTotalPrice = new BigDecimal(0);
-        if (minutesConsumed - contract.getProduct().getCallLimit() > 0) {
+        if (minutesConsumed - contract.getProduct().getCallLimit() > 0
+            /*&& ((contract.getProduct().getProductType().contains(Product.ProductType.MOVIL)
+            || contract.getProduct().getProductType().contains(Product.ProductType.FIJO)))*/) {
             callTotalPrice = new BigDecimal(contract.getProduct().getCallLimit()).multiply(contract.getProduct().getCallPenaltyPrice());
             totalPrice = totalPrice.add(callTotalPrice);
         }

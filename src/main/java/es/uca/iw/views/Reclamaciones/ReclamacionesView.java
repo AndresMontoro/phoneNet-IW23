@@ -25,12 +25,12 @@ import com.vaadin.flow.component.Text;
 import es.uca.iw.services.ComplaintService;
 import es.uca.iw.model.Complaint;
 import es.uca.iw.views.MainUserLayout;
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 
 import java.util.List;
 
 @Route(value = "user/Reclamaciones", layout = MainUserLayout.class)
-@PermitAll
+@RolesAllowed({"ADMIN", "USER"})
 public class ReclamacionesView extends VerticalLayout {
 
     private Grid<Complaint> grid;

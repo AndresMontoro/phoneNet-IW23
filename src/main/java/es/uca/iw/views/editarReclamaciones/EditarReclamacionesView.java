@@ -25,14 +25,13 @@ import com.vaadin.flow.component.textfield.TextArea;
 import es.uca.iw.services.ComplaintService;
 import es.uca.iw.model.Complaint;
 import es.uca.iw.views.MainAdminLayout;
-import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Route(value = "admin/Reclamaciones", layout = MainAdminLayout.class)
-@PermitAll
+@RolesAllowed("ADMIN")
 public class EditarReclamacionesView extends VerticalLayout {
 
     private Grid<Complaint> grid;

@@ -28,10 +28,10 @@ import es.uca.iw.model.Contract;
 import es.uca.iw.services.BillService;
 import es.uca.iw.services.ContractService;
 import es.uca.iw.views.MainUserLayout;
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 
 @Route(value = "user/MisFacturas", layout = MainUserLayout.class)
-@PermitAll
+@RolesAllowed({"ADMIN", "USER"})
 public class MisFacturasView extends VerticalLayout {
     private ContractService contractService;
     private BillService billService;

@@ -1,5 +1,6 @@
 package es.uca.iw.views.editarFacturas;
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -28,7 +29,7 @@ import com.vaadin.flow.component.notification.Notification;
 
 
 @Route(value = "admin/EditarFacturas", layout = MainLayout.class)
-@PermitAll
+@RolesAllowed("ADMIN")
 public class EditarFacturasView extends VerticalLayout {
 
     private final BillService billService;

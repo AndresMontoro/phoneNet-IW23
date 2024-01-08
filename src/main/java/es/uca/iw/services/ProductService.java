@@ -33,6 +33,10 @@ public class ProductService {
     public Optional<Product> findById(Long id) {
         return productRepository.findById(id);
     }
+
+    public Optional<Product> findByIdAndProductType(Long id, Product.ProductType productType) {
+        return productRepository.findByIdAndProductType(id, productType);
+    }
  
     public void saveProductWithDetails(String name, String description, String imageUrl, BigDecimal price,
            Integer CallLimit , Integer DataUsageLimit, BigDecimal callPenaltyPrice, BigDecimal dataPenaltyPrice, boolean available, Set<Product.ProductType> productTypes) {

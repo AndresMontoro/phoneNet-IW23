@@ -35,7 +35,7 @@ import es.uca.iw.data.UserRoleRepository;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import es.uca.iw.components.ContactUsComponent;
 
-@Route("user/Registro")
+@Route("/Registro")
 @AnonymousAllowed
 public class RegistroUsuarioView extends Div {
 

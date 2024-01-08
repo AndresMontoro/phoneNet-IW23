@@ -26,16 +26,19 @@ import com.vaadin.flow.server.StreamResource;
 import es.uca.iw.data.BillRepository;
 import es.uca.iw.model.Bill;
 import es.uca.iw.model.Contract;
+import es.uca.iw.model.Product;
 
 
 @Service
 public class BillService {
     private BillRepository billRepository;
     private ContractService contractService;
+    private ProductService productService;
     
-    public BillService(BillRepository billRepository, ContractService contractService) {
+    public BillService(BillRepository billRepository, ContractService contractService, ProductService productService) {
         this.billRepository = billRepository;
         this.contractService = contractService;
+        this.productService = productService;
     }
 
     // El 1 de cada mes
@@ -45,33 +48,50 @@ public class BillService {
         for (Contract contract : contracts) {
             // Deberia de crear facturas del contrato mientras la fecha de actualizacion no corresponda con la que deberia ser
             if (contract.getLastBillUpdate() == null)
-                contract.setLastBillUpdate(getBillSearchingDate());
+                contract.setLastBillUpdate(getBillSearchingDate(contract.getStartDate()));
 
-            while (contract.getLastBillUpdate().before(getBillSearchingDate()) || contract.getLastBillUpdate().equals(getBillSearchingDate())) {
+            while (contract.getLastBillUpdate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+            .isBefore(getBillSearchingDate(new Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate())) {
+                System.err.println("SEARCHING DATE: " + getBillSearchingDate(new Date()));
+
                 Bill bill = new Bill();
                 bill.setContract(contract);
                 bill.setDate(getNextBillSearchingDate(contract.getLastBillUpdate()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                bill.setdataConsumed(0);
+                bill.setminutesConsumed(0);
+
+                // if (contract.getProduct().getProductType().contains(Product.ProductType.MOVIL))
+                //     bill.setdataConsumed(contractService.getDataConsumption(contract, getBillSearchingDate()));
                 
-                bill.setdataConsumed(contractService.getDataConsumption(contract, getBillSearchingDate()));
-                bill.setminutesConsumed(contractService.getContractCallConsumption(contract, getBillSearchingDate()));
+                // if (contract.getProduct().getProductType().contains(Product.ProductType.MOVIL) || 
+                //     contract.getProduct().getProductType().contains(Product.ProductType.FIJO))
+                //     bill.setminutesConsumed(contractService.getContractCallConsumption(contract, getBillSearchingDate()));
+                if (this.productService.findByIdAndProductType(contract.getProduct().getId(), Product.ProductType.MOVIL).isPresent())
+                    bill.setdataConsumed(contractService.getDataConsumption(contract, contract.getLastBillUpdate()));
+                
+                if (this.productService.findByIdAndProductType(contract.getProduct().getId(), Product.ProductType.MOVIL).isPresent() || 
+                    this.productService.findByIdAndProductType(contract.getProduct().getId(), Product.ProductType.FIJO).isPresent())
+                    bill.setminutesConsumed(contractService.getContractCallConsumption(contract, contract.getLastBillUpdate()));
+                
                 contract.getBills().add(bill);
+                contract.setLastBillUpdate(getNextBillSearchingDate(contract.getLastBillUpdate()));
                 this.contractService.save(contract);
                 this.billRepository.save(bill);
-
-                contract.setLastBillUpdate(getNextBillSearchingDate(contract.getLastBillUpdate()));
             }
         }
     }
 
     // Search by last month
-    public Date getBillSearchingDate() {
+    // HAY QUE PONERLO PARA QUE SE PUEDA EJECUTAR CON LA FECHA QUE YO QUIERA
+    public Date getBillSearchingDate(Date date) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
+        calendar.setTime(date);
 
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
-        calendar.add(Calendar.MONTH, -1);
+        calendar.set(Calendar.SECOND , 0);
+        // calendar.add(Calendar.MONTH, -1);
 
         return calendar.getTime();
     }
@@ -79,7 +99,7 @@ public class BillService {
 
     private Date getNextBillSearchingDate(Date date) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
+        calendar.setTime(date);
 
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);

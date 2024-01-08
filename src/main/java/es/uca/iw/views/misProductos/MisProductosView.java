@@ -21,10 +21,10 @@ import es.uca.iw.services.ContractService;
 import es.uca.iw.model.Product;
 import es.uca.iw.views.MainUserLayout;
 import es.uca.iw.views.productosDisponibles.ImageGalleryViewCard;
-import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 
 @Route(value = "user/MisProductos", layout = MainUserLayout.class)
-@PermitAll
+@RolesAllowed({"ADMIN", "USER"})
 public class MisProductosView extends VerticalLayout{
     private ContractService contractService;
 

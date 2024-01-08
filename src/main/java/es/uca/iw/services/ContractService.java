@@ -191,8 +191,6 @@ public class ContractService {
         }
         return megaBytes;
     }
-////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
 
     public Optional<Contract> findById(long id) {
         return contractRepository.findById(id);
@@ -265,21 +263,15 @@ public class ContractService {
             
             String dataRequestUrl = "http://omr-simulator.us-east-1.elasticbeanstalk.com/" + contract.getApiId().toString() 
                 + "/datausagerecords?carrier=PhoneNet" 
-                + (contract.getLastCallDataUpdate() != null ? "&startDate=" + contract.getLastCallDataUpdate().toString() : "");
+                + (contract.getLastCallDataUpdate() != null ? "&startDate=" + contract.getLastCallDataUpdate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString() : "");
 
             String callRecordRequest = "http://omr-simulator.us-east-1.elasticbeanstalk.com/" + contract.getApiId().toString() 
                 + "/callrecords?carrier=PhoneNet" 
-                + (contract.getLastCallDataUpdate() != null ? "&startDate=" + contract.getLastCallDataUpdate().toString() : "");
+                + (contract.getLastCallDataUpdate() != null ? "&startDate=" + contract.getLastCallDataUpdate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString() : "");
             
             try {
                 DataUsageRecord[] dataUsageRecords = restTemplate.getForObject(dataRequestUrl, DataUsageRecord[].class);
                 CallRecord[] callRecords = restTemplate.getForObject(callRecordRequest, CallRecord[].class);
-
-                System.out.println("----------DATOS DE DATAUSAGE RECORDS----------\n" );
-                for (CallRecord callRecord : callRecords) {
-                    System.out.println(callRecord.getDetinationPhoneNumber() + " " + callRecord.getSeconds() + " " + callRecord.getDate());
-                }
-                System.out.println("----------FIN DE DATA USAGE RECORDS---------");
 
                 for (DataUsageRecord dataUsageRecord : dataUsageRecords) {
                     contract.getDataUsageRecords().add(dataUsageRecord);

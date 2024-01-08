@@ -19,6 +19,7 @@
 // import es.uca.iw.data.UserRoleRepository;
 // import es.uca.iw.model.User;
 // import es.uca.iw.model.UserRole;
+// import es.uca.iw.services.BillService;
 // import es.uca.iw.services.ContractService;
 // import es.uca.iw.model.CallRecord;
 
@@ -35,20 +36,21 @@
 //     // private final PhoneNumberRepository phoneNumberRepository;
 //     private ContractRepository contractRepository;
 //     private BillRepository billRepository;
+//     private BillService billService;
+//     private ContractService contractService;
 
 //     @Autowired
 //     private RestTemplate restTemplate;
 
-//     @Autowired
-//     private ContractService contractService;
-
-//     DataLoader(ContractRepository contractRepository, BillRepository billRepository) {
+//     DataLoader(ContractRepository contractRepository, BillRepository billRepository, BillService billService, ContractService contractService) {
 //         // this.userRepository = userRepository;
 //         // this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 //         // this.userRoleRepository = userRoleRepository;
 //         // this.phoneNumberRepository = phoneNumberRepository;
 //         this.contractRepository = contractRepository;
 //         this.billRepository = billRepository;
+//         this.billService = billService;
+//         this.contractService = contractService;
 //     }
 
 //     @Override
@@ -99,12 +101,12 @@
 
 //         // contractService.updateAllContractsDataAndCallsUsage();
 
-//         Bill bill = new Bill();
-//         Calendar calendar = Calendar.getInstance();
-//         calendar.setTime(new Date());
-//         calendar.set(Calendar.DAY_OF_MONTH, 1);
-//         calendar.set(Calendar.HOUR_OF_DAY, 0);
-//         calendar.set(Calendar.MINUTE, 0);
+//         // Bill bill = new Bill();
+//         // Calendar calendar = Calendar.getInstance();
+//         // calendar.setTime(new Date());
+//         // calendar.set(Calendar.DAY_OF_MONTH, 1);
+//         // calendar.set(Calendar.HOUR_OF_DAY, 0);
+//         // calendar.set(Calendar.MINUTE, 0);
 
 //         // bill.setDate(calendar.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 //         // bill.setdataConsumed(200);
@@ -114,6 +116,8 @@
 //         // billRepository.save(bill);
 //         // billService.generateBills();
 //         // contractService.updateAllContractsDataAndCallsUsage();
-//         billService.generateBills();
+//         // billService.generateBills();
+//         contractService.updateAllContractsDataAndCallsUsage();
+//         // billService.generateBills();
 //     }
 // }
