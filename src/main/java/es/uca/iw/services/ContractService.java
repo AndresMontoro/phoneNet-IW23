@@ -181,11 +181,9 @@ public class ContractService {
     }
 
     // No vamos a actualizar nada cada vez que queramos obtener los datos de consumo
-    public Integer getDataConsumption(Contract contract, Date startDate) {
-        Date searchingEndDate = addMonthToDate(startDate);
-        
+    public Integer getDataConsumption(Contract contract, Date startDate) {       
         Integer megaBytes = 0;      
-        List<DataUsageRecord> dataUsageRecords = dataUsageRecordRepository.findByContractAndDate(contract, startDate, searchingEndDate);
+        List<DataUsageRecord> dataUsageRecords = dataUsageRecordRepository.findByContractAndDate(contract, startDate, new Date());
         for(DataUsageRecord dataUsageRecord : dataUsageRecords) {
             megaBytes = megaBytes + dataUsageRecord.getMegaBytes();
         }

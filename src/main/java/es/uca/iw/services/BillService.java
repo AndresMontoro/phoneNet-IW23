@@ -60,12 +60,6 @@ public class BillService {
                 bill.setdataConsumed(0);
                 bill.setminutesConsumed(0);
 
-                // if (contract.getProduct().getProductType().contains(Product.ProductType.MOVIL))
-                //     bill.setdataConsumed(contractService.getDataConsumption(contract, getBillSearchingDate()));
-                
-                // if (contract.getProduct().getProductType().contains(Product.ProductType.MOVIL) || 
-                //     contract.getProduct().getProductType().contains(Product.ProductType.FIJO))
-                //     bill.setminutesConsumed(contractService.getContractCallConsumption(contract, getBillSearchingDate()));
                 if (this.productService.findByIdAndProductType(contract.getProduct().getId(), Product.ProductType.MOVIL).isPresent())
                     bill.setdataConsumed(contractService.getDataConsumption(contract, contract.getLastBillUpdate()));
                 

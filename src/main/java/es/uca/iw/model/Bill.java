@@ -70,17 +70,14 @@ public class Bill {
         totalPrice = contract.getProduct().getPrice();
         dataTotalPrice = new BigDecimal(0);
         callTotalPrice = new BigDecimal(0);
-            
-        if (dataConsumed - contract.getProduct().getDataUsageLimit() > 0 
-            /*&& contract.getProduct().getProductType().contains(Product.ProductType.MOVIL)*/) {
-            dataTotalPrice = new BigDecimal(contract.getProduct().getDataUsageLimit()).multiply(contract.getProduct().getDataPenaltyPrice());
+        
+        if (contract.getProduct().getDataUsageLimit() - dataConsumed < 0) {
+            dataTotalPrice = new BigDecimal(dataConsumed - contract.getProduct().getDataUsageLimit()).multiply(contract.getProduct().getDataPenaltyPrice());
             totalPrice = totalPrice.add(dataTotalPrice);
         }
-
-        if (minutesConsumed - contract.getProduct().getCallLimit() > 0
-            /*&& ((contract.getProduct().getProductType().contains(Product.ProductType.MOVIL)
-            || contract.getProduct().getProductType().contains(Product.ProductType.FIJO)))*/) {
-            callTotalPrice = new BigDecimal(contract.getProduct().getCallLimit()).multiply(contract.getProduct().getCallPenaltyPrice());
+        
+        if (contract.getProduct().getCallLimit() - minutesConsumed < 0) {
+            callTotalPrice = new BigDecimal(minutesConsumed - contract.getProduct().getCallLimit()).multiply(contract.getProduct().getCallPenaltyPrice());
             totalPrice = totalPrice.add(callTotalPrice);
         }
     }
