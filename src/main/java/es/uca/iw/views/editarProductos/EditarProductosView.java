@@ -1,5 +1,6 @@
 package es.uca.iw.views.editarProductos;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -50,7 +51,7 @@ public class EditarProductosView extends VerticalLayout {
 
         for (Product product : products) {
                 imageContainer.add(new ImageGalleryViewCard2(productService,product.getId(), product.getName(), product.getImage(),
-                        product.getDescription(), product.getPrice(), false));
+                        product.getDescription(), product.getPrice(), product.getCallLimit(), product.getDataUsageLimit(), product.getCallPenaltyPrice(), product.getDataPenaltyPrice(), product.getRouterSpeed(),false));
             
         }
     }
@@ -88,6 +89,7 @@ public class EditarProductosView extends VerticalLayout {
             TextField newDataUsageLimit = new TextField("Límite de datos");
             TextField newCallPenalty = new TextField("Penalización por llamada");
             TextField newDataPenalty = new TextField("Penalización por datos");
+            TextField newRouterSpeed = new TextField("Velocidad del router");
 
             Checkbox availableCheckbox = new Checkbox("Disponible");
             Checkbox fiberTypeCheckbox = new Checkbox("Fibra");
@@ -105,6 +107,7 @@ public class EditarProductosView extends VerticalLayout {
                 Integer newProductDataUsageLimit = Integer.parseInt(newDataUsageLimit.getValue());
                 BigDecimal newProductCallPenalty = new BigDecimal(newCallPenalty.getValue());
                 BigDecimal newProductDataPenalty = new BigDecimal(newDataPenalty.getValue());
+                Integer newProductRouterSpeed = Integer.parseInt(newRouterSpeed.getValue());
                 boolean available = availableCheckbox.getValue();
      
                 Set<Product.ProductType> productTypes = new HashSet<>();
@@ -114,7 +117,7 @@ public class EditarProductosView extends VerticalLayout {
         
                 productService.saveProductWithDetails(newProductName, newProductDescription, newProductImageUrl,
                         newProductPrice, newProductCallLimit,
-                        newProductDataUsageLimit, newProductCallPenalty, newProductDataPenalty, available, productTypes);
+                        newProductDataUsageLimit, newProductCallPenalty, newProductDataPenalty, newProductRouterSpeed, available, productTypes);
 
                 Notification.show("Producto añadido con éxito.");
                 dialog.close();
@@ -123,7 +126,7 @@ public class EditarProductosView extends VerticalLayout {
 
             Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
 
-            dialog.add(newNameField, newDescriptionField, newImageUrlField, newPriceField, newCallLimit, newDataUsageLimit, newCallPenalty, newDataPenalty, availableCheckbox, fiberTypeCheckbox, mobileTypeCheckbox, fixedTypeCheckbox, saveButton, cancelButton);
+            dialog.add(newNameField, newDescriptionField, newImageUrlField, newPriceField, newCallLimit, newDataUsageLimit, newCallPenalty, newDataPenalty, newRouterSpeed, availableCheckbox, fiberTypeCheckbox, mobileTypeCheckbox, fixedTypeCheckbox, saveButton, cancelButton);
 
             dialog.open();
         });
@@ -165,8 +168,8 @@ public class EditarProductosView extends VerticalLayout {
             showAllProducts();
         } else {
             for (Product product : filteredProducts) {
-                    imageContainer.add(new ImageGalleryViewCard2(productService,product.getId(), product.getName(),
-                            product.getImage(), product.getDescription(), product.getPrice(), false));
+                    imageContainer.add(new ImageGalleryViewCard2(productService,product.getId(), product.getName(), product.getImage(),
+                        product.getDescription(), product.getPrice(), product.getCallLimit(), product.getDataUsageLimit(), product.getCallPenaltyPrice(), product.getDataPenaltyPrice(), product.getRouterSpeed(), false));
                 
             }
         }
@@ -177,7 +180,7 @@ public class EditarProductosView extends VerticalLayout {
         imageContainer.removeAll();
         for (Product product : products) {
                 imageContainer.add(new ImageGalleryViewCard2(productService,product.getId(), product.getName(), product.getImage(),
-                        product.getDescription(), product.getPrice(), false));
+                        product.getDescription(), product.getPrice(), product.getCallLimit(), product.getDataUsageLimit(), product.getCallPenaltyPrice(), product.getDataPenaltyPrice(), product.getRouterSpeed(), false));
         }
     }
 
