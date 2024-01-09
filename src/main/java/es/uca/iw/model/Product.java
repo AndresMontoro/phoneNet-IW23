@@ -97,7 +97,7 @@ public class Product {
         this.callLimit = callLimit;
     }
 
-    private int routerSpeed = 0;
+    private int routerSpeed;
     public int getRouterSpeed() { return routerSpeed; }
     public void setRouterSpeed(int routerSpeed) {
         if (routerSpeed < 0)
