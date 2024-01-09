@@ -1,6 +1,9 @@
 package es.uca.iw.views;
 
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -12,14 +15,13 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.VaadinServletRequest;
 
 import es.uca.iw.views.miPerfil.MiPerfilView;
 import es.uca.iw.views.misConsumos.MisConsumosView;
 import es.uca.iw.views.misFacturas.MisFacturasView;
 import es.uca.iw.views.misProductos.MisProductosView;
 import es.uca.iw.views.Reclamaciones.ReclamacionesView;
-import es.uca.iw.views.login.LoginView;
 
 public class MainUserLayout extends AppLayout {
     
@@ -71,8 +73,12 @@ public class MainUserLayout extends AppLayout {
         return new Tab(link);
     }
 
-    private void logout() {
-        VaadinSession.getCurrent().getSession().invalidate();
-        getUI().ifPresent(ui -> ui.navigate(LoginView.class));
+
+    public void logout() {
+        UI.getCurrent().getPage().setLocation("/web/");
+        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+        logoutHandler.logout(
+                VaadinServletRequest.getCurrent().getHttpServletRequest(), null,
+                null);
     }
 }
