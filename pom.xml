@@ -109,6 +109,18 @@
             <version>0.15.0</version>
         </dependency>
 
+        <!-- Mail -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>smtp</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
         <!-- Pdf -->
         <dependency>
             <groupId>com.itextpdf</groupId>
