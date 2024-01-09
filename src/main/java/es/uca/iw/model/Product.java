@@ -97,6 +97,14 @@ public class Product {
         this.callLimit = callLimit;
     }
 
+    private int routerSpeed = 0;
+    public int getRouterSpeed() { return routerSpeed; }
+    public void setRouterSpeed(int routerSpeed) {
+        if (routerSpeed < 0)
+            throw new IllegalArgumentException("La velocidad no puede ser negativa");
+        this.routerSpeed = routerSpeed;
+    }
+
     @Column(nullable = false)
     private boolean available;
     public boolean getAvailable() { return available; }

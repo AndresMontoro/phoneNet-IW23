@@ -18,6 +18,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Vertical;
 import com.vaadin.flow.theme.lumo.LumoUtility.Background;
 
 import es.uca.iw.services.ContractService;
+import es.uca.iw.services.ProductService;
 import es.uca.iw.model.Product;
 import es.uca.iw.views.MainUserLayout;
 import es.uca.iw.views.productosDisponibles.ImageGalleryViewCard;
@@ -27,9 +28,11 @@ import jakarta.annotation.security.RolesAllowed;
 @RolesAllowed({"ADMIN", "USER"})
 public class MisProductosView extends VerticalLayout{
     private ContractService contractService;
+    private ProductService productService;
 
-    public MisProductosView(ContractService contractService) {
+    public MisProductosView(ContractService contractService, ProductService productService) {
         this.contractService = contractService;
+        this.productService = productService;
 
         addClassNames(Padding.MEDIUM, Display.FLEX, FlexDirection.COLUMN, Gap.LARGE,Horizontal.AUTO, Vertical.AUTO);
 
@@ -42,8 +45,8 @@ public class MisProductosView extends VerticalLayout{
         
         if (actualUserProducts.size() != 0) {
             for (Product product : actualUserProducts) {
-                add(new ImageGalleryViewCard(contractService, product.getName(), product.getImage(), product.getDescription(), product.getPrice(), 
-                    product.getDataPenaltyPrice(), product.getDataUsageLimit(), product.getCallPenaltyPrice(), product.getCallLimit(), false));
+                add(new ImageGalleryViewCard(this.productService, this.contractService, product.getName(), product.getImage(), product.getDescription(), product.getPrice(), 
+                    product.getDataPenaltyPrice(), product.getDataUsageLimit(), product.getCallPenaltyPrice(), product.getCallLimit(), false, product.getRouterSpeed(), product.getId()));
             }
         } else {
             add(new H2("No tienes productos contratados"));
@@ -51,7 +54,7 @@ public class MisProductosView extends VerticalLayout{
 
         Button seeMoreButton = new Button("Catálogo de productos");
         seeMoreButton.addClickListener(event -> {
-            seeMoreButton.getUI().ifPresent(ui -> ui.navigate("productosDisponibles"));
+            seeMoreButton.getUI().ifPresent(ui -> ui.navigate("user/ProductosDisponibles"));
         });
 
         add(seeMoreButton);

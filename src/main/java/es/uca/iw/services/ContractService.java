@@ -5,9 +5,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import es.uca.iw.model.Product;
@@ -145,10 +143,6 @@ public class ContractService {
         Contract contract = contractRepository.findByUserAndProduct(actualUser, product).orElse(null);
         if (contract == null)
             throw new IllegalArgumentException("No tiene contratado este producto");
-
-        Map<String, String> requestParams = new HashMap<String, String>();
-        requestParams.put("id", contract.getApiId().toString());
-        requestParams.put("carrier", "PhoneNet");
         
         deleteContractFromApi(contract);
         callRecordRepository.deleteByContractId(contract);

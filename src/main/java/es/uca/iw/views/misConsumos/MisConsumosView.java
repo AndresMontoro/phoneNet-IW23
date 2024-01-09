@@ -18,7 +18,9 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Vertical;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 
 import es.uca.iw.model.Contract;
+import es.uca.iw.model.Product;
 import es.uca.iw.services.ContractService;
+import es.uca.iw.services.ProductService;
 import es.uca.iw.views.MainUserLayout;
 import jakarta.annotation.security.RolesAllowed;
 
@@ -27,9 +29,11 @@ import jakarta.annotation.security.RolesAllowed;
 public class MisConsumosView extends VerticalLayout {
 
     private ContractService contractService;
+    private ProductService productService;
 
-    public MisConsumosView(ContractService contractService) {
+    public MisConsumosView(ContractService contractService, ProductService productService) {
         this.contractService = contractService;
+        this.productService = productService;
 
         addClassNames(Padding.MEDIUM, Display.FLEX, FlexDirection.COLUMN, Gap.LARGE,Horizontal.AUTO, Vertical.AUTO);
 
@@ -41,12 +45,19 @@ public class MisConsumosView extends VerticalLayout {
         List<Contract> actualUserContracts = contractService.getContracts();
 
         for (Contract contract : actualUserContracts) {
+            Boolean isFibra = this.productService.findByIdAndProductType(contract.getProduct().getId(), Product.ProductType.FIBRA).isPresent();
+            Boolean isMovil = this.productService.findByIdAndProductType(contract.getProduct().getId(), Product.ProductType.MOVIL).isPresent();
+            Boolean isFijo = this.productService.findByIdAndProductType(contract.getProduct().getId(), Product.ProductType.FIJO).isPresent();
+
             add(new H2("Tarifa: " + contract.getProduct().getName()));
-            add(new H3("Consumo de datos: " + this.contractService.getDataConsumption(contract, this.contractService.getFirstDayOfMonth()) + " MB de " 
-                + contract.getProduct().getDataUsageLimit() + " MB"));
-            add(new H3("Consumo de llamadas: " + this.contractService.getContractCallConsumption(contract, this.contractService.getFirstDayOfMonth()) 
-                + " minutos de " + contract.getProduct().getCallLimit() + " minutos"));
-            
+            if(isMovil)
+                add(new H3("Consumo de datos: " + this.contractService.getDataConsumption(contract, this.contractService.getFirstDayOfMonth()) + " MB de " 
+                    + contract.getProduct().getDataUsageLimit() + " MB"));
+            if(isMovil || isFijo)
+                add(new H3("Consumo de llamadas: " + this.contractService.getContractCallConsumption(contract, this.contractService.getFirstDayOfMonth()) 
+                    + " minutos de " + contract.getProduct().getCallLimit() + " minutos"));
+            if(isFibra && !isMovil && !isFijo)
+                add(new H3("Este contrato no tiene consumos asociados"));
         }
     }
 }

@@ -6,6 +6,7 @@ import com.vaadin.flow.router.Route;
 
 import java.util.List;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.OrderedList;
 import com.vaadin.flow.component.html.Paragraph;
@@ -19,6 +20,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
+import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Horizontal;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import com.vaadin.flow.theme.lumo.LumoUtility.Display;
 
@@ -26,7 +28,7 @@ import es.uca.iw.services.ContractService;
 import es.uca.iw.services.ProductService;
 import es.uca.iw.model.Product;
 
-@Route(value = "user/productosDisponibles")
+@Route(value = "user/ProductosDisponibles")
 @RolesAllowed({"ADMIN", "USER"})
 public class ProductosDisponiblesView extends VerticalLayout {
     
@@ -48,10 +50,17 @@ public class ProductosDisponiblesView extends VerticalLayout {
 
         for (Product product : products) {
             if (product.getAvailable() && !contractProducts.contains(product))
-                imageContainer.add(new ImageGalleryViewCard(contractService, product.getName(), product.getImage(), 
+                imageContainer.add(new ImageGalleryViewCard(this.productService, this.contractService, product.getName(), product.getImage(), 
                     product.getDescription(), product.getPrice(), product.getDataPenaltyPrice(), product.getDataUsageLimit(),
-                    product.getCallPenaltyPrice(), product.getCallLimit(), true));
+                    product.getCallPenaltyPrice(), product.getCallLimit(), true, product.getRouterSpeed(), product.getId()));
         }
+
+        Button getBack = new Button("Volver atrás");
+        getBack.addClassName(Horizontal.AUTO);
+        getBack.addClickListener(event -> {
+            getBack.getUI().ifPresent(ui -> ui.navigate("user/MisProductos"));
+        });
+        add(getBack);
     }   
 
     private void constructUI() {

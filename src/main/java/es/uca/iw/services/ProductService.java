@@ -1,6 +1,7 @@
 package es.uca.iw.services;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -36,6 +37,18 @@ public class ProductService {
 
     public Optional<Product> findByIdAndProductType(Long id, Product.ProductType productType) {
         return productRepository.findByIdAndProductType(id, productType);
+    }
+
+    public Set<Product.ProductType> getProductTypes(Long id) {
+        Set<Product.ProductType> productTypes = new HashSet<>();
+        if (findByIdAndProductType(id, Product.ProductType.FIBRA).isPresent())
+            productTypes.add(Product.ProductType.FIBRA);
+        if (findByIdAndProductType(id, Product.ProductType.MOVIL).isPresent())
+            productTypes.add(Product.ProductType.MOVIL);
+        if (findByIdAndProductType(id, Product.ProductType.FIJO).isPresent())
+            productTypes.add(Product.ProductType.FIJO);
+            
+        return productTypes;
     }
  
     public void saveProductWithDetails(String name, String description, String imageUrl, BigDecimal price,

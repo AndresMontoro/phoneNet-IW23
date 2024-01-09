@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.itextpdf.text.BaseColor;
@@ -60,11 +62,11 @@ public class BillService {
                 bill.setdataConsumed(0);
                 bill.setminutesConsumed(0);
 
-                if (this.productService.findByIdAndProductType(contract.getProduct().getId(), Product.ProductType.MOVIL).isPresent())
+                Set<Product.ProductType> productTypes = productService.getProductTypes(contract.getProduct().getId());
+
+                if (productTypes.contains(Product.ProductType.MOVIL))
                     bill.setdataConsumed(contractService.getDataConsumption(contract, contract.getLastBillUpdate()));
-                
-                if (this.productService.findByIdAndProductType(contract.getProduct().getId(), Product.ProductType.MOVIL).isPresent() || 
-                    this.productService.findByIdAndProductType(contract.getProduct().getId(), Product.ProductType.FIJO).isPresent())
+                if (productTypes.contains(Product.ProductType.MOVIL) || productTypes.contains(Product.ProductType.FIJO))
                     bill.setminutesConsumed(contractService.getContractCallConsumption(contract, contract.getLastBillUpdate()));
                 
                 contract.getBills().add(bill);
@@ -75,8 +77,7 @@ public class BillService {
         }
     }
 
-    // Search by last month
-    // HAY QUE PONERLO PARA QUE SE PUEDA EJECUTAR CON LA FECHA QUE YO QUIERA
+    // Search by this month
     public Date getBillSearchingDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
