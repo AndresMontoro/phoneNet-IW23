@@ -52,7 +52,7 @@ public class ProductService {
     }
  
     public void saveProductWithDetails(String name, String description, String imageUrl, BigDecimal price,
-           Integer CallLimit , Integer DataUsageLimit, BigDecimal callPenaltyPrice, BigDecimal dataPenaltyPrice, boolean available, Set<Product.ProductType> productTypes) {
+           Integer CallLimit , Integer DataUsageLimit, BigDecimal callPenaltyPrice, BigDecimal dataPenaltyPrice, Integer newProductRouterSpeed, boolean available, Set<Product.ProductType> productTypes) {
         Product newProduct = new Product();
         newProduct.setName(name);
         newProduct.setDescription(description);
@@ -62,6 +62,7 @@ public class ProductService {
         newProduct.setDataUsageLimit(DataUsageLimit);
         newProduct.setCallPenaltyPrice(callPenaltyPrice);
         newProduct.setDataPenaltyPrice(dataPenaltyPrice);
+        newProduct.setRouterSpeed(newProductRouterSpeed);
         newProduct.setAvailable(available);
         newProduct.setProductType(productTypes);
 
@@ -70,7 +71,7 @@ public class ProductService {
 
     public void editProductWithDetails(Long id, String newName, String newDescription, String newImageUrl, BigDecimal newPrice,
                                        int newCallLimit, int newDataUsageLimit,
-                                       BigDecimal newCallPenaltyPrice, BigDecimal newDataPenaltyPrice, boolean newAvailable) {
+                                       BigDecimal newCallPenaltyPrice, BigDecimal newDataPenaltyPrice, int newRouterSpeed, boolean newAvailable) {
         Optional<Product> optionalProduct = findById(id);
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
@@ -82,10 +83,10 @@ public class ProductService {
             product.setDataUsageLimit(newDataUsageLimit);
             product.setCallPenaltyPrice(newCallPenaltyPrice);
             product.setDataPenaltyPrice(newDataPenaltyPrice);
+            product.setRouterSpeed(newRouterSpeed);
             product.setAvailable(newAvailable);
 
             saveProduct(product);
         }
     }
 }
-
