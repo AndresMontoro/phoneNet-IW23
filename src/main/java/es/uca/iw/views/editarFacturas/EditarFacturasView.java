@@ -22,13 +22,13 @@ import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import es.uca.iw.model.Bill;
 import es.uca.iw.services.BillService;
-import es.uca.iw.views.MainLayout;
+import es.uca.iw.views.MainAdminLayout;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 
 
-@Route(value = "admin/EditarFacturas", layout = MainLayout.class)
+@Route(value = "admin/EditarFacturas", layout = MainAdminLayout.class)
 @RolesAllowed("ADMIN")
 public class EditarFacturasView extends VerticalLayout {
 

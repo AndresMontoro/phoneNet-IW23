@@ -1,6 +1,5 @@
 package es.uca.iw.views.editarProductos;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
