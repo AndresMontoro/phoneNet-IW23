@@ -20,6 +20,7 @@ import com.vaadin.flow.server.VaadinServletRequest;
 import es.uca.iw.views.editarContratos.EditarContratosView;
 import es.uca.iw.views.editarProductos.EditarProductosView;
 import es.uca.iw.views.editarUsuarios.EditarUsuariosView;
+import es.uca.iw.views.editarFacturas.EditarFacturasView;
 import es.uca.iw.views.editarReclamaciones.EditarReclamacionesView;
 
 public class MainAdminLayout extends AppLayout{
@@ -47,6 +48,7 @@ public class MainAdminLayout extends AppLayout{
         tabs.add(createTab(VaadinIcon.CLIPBOARD, "Editar Productos", EditarProductosView.class),
             createTab(VaadinIcon.CLIPBOARD, "Editar Usuarios", EditarUsuariosView.class),
             createTab(VaadinIcon.CLIPBOARD, "Editar Contratos", EditarContratosView.class),
+            createTab(VaadinIcon.CLIPBOARD, "Editar Facturas", EditarFacturasView.class),
             createTab(VaadinIcon.CLIPBOARD, "Editar Reclamaciones", EditarReclamacionesView.class)
         );
 
