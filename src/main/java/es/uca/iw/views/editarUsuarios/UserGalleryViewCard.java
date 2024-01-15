@@ -8,6 +8,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
 import com.vaadin.flow.theme.lumo.LumoUtility.BorderRadius;
@@ -84,7 +85,8 @@ public class UserGalleryViewCard extends ListItem {
                 TextField newNameField = new TextField("Nuevo Nombre");
                 TextField newSurnameField = new TextField("Nuevo Apellido");
                 TextField newUsernameField = new TextField("Nuevo Username");
-                TextField newPasswordField = new TextField("Nueva Contraseña");
+                PasswordField newPasswordField = new PasswordField("Nueva Contraseña");
+
                 TextField newDniField = new TextField("Nuevo DNI");
                 TextField newEmailField = new TextField("Nuevo Email");
                 TextField newPhoneNumberField = new TextField("Nuevo Número de teléfono");
@@ -92,7 +94,7 @@ public class UserGalleryViewCard extends ListItem {
                 newNameField.setValue(user.getName());
                 newSurnameField.setValue(user.getSurname());
                 newUsernameField.setValue(user.getUsername());
-                newPasswordField.setValue(user.getPassword());
+                //newPasswordField.setValue(user.getPassword());
                 newDniField.setValue(user.getDni());
                 newEmailField.setValue(user.getEmail());
                 newPhoneNumberField.setValue(user.getPhoneNumber());
@@ -101,7 +103,11 @@ public class UserGalleryViewCard extends ListItem {
                     String newUserName = newNameField.getValue();
                     String newUserSurname = newSurnameField.getValue();
                     String newUsername = newUsernameField.getValue();
-                    String newPassword = newPasswordField.getValue();
+                    String newPassword = null;
+                    if (!newPasswordField.isEmpty()) {
+                        newPassword = newPasswordField.getValue();
+                    }
+                    //String newPassword = newPasswordField.getValue();
                     String newDni = newDniField.getValue();
                     String newEmail = newEmailField.getValue();
                     String newPhoneNumber = newPhoneNumberField.getValue();
@@ -113,8 +119,11 @@ public class UserGalleryViewCard extends ListItem {
                         newRoles.add(UserRole.Role.USER);
 
 // el primer argumento se corresponde con el id del usuario
-
-                    userService.editUserWithDetails(user.getId() ,newUserName, newUserSurname, newUsername, newPassword, newDni, newEmail, newPhoneNumber, newRoles);
+                    if (newPassword != null) {
+                        userService.editUserWithDetails(user.getId(), newUserName, newUserSurname, newUsername, newPassword, newDni, newEmail, newPhoneNumber, newRoles);
+                    } else {
+                        userService.editUserWithoutPassword(user.getId(), newUserName, newUserSurname, newUsername, newDni, newEmail, newPhoneNumber, newRoles);
+                    }
                     dialog.close();
                     UI.getCurrent().getPage().executeJs("location.reload();");
                 });
@@ -136,4 +145,6 @@ public class UserGalleryViewCard extends ListItem {
         deleteButton.getStyle().set("color", "black");
         add(editButton, deleteButton);
     }
+
+    
 }
