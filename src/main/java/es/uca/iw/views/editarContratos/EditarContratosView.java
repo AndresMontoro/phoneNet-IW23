@@ -20,7 +20,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import com.vaadin.flow.theme.lumo.LumoUtility.MaxWidth;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import es.uca.iw.model.Contract;
-import es.uca.iw.model.Product;
+//import es.uca.iw.model.Product;
 import es.uca.iw.services.ContractService;
 import es.uca.iw.views.MainAdminLayout;
 import jakarta.annotation.security.RolesAllowed;
@@ -37,15 +37,17 @@ public class EditarContratosView extends VerticalLayout {
     private final ContractService contractService;
     private List<Contract> contracts;
     private OrderedList contractContainer;
-    private ComboBox<String> nameComboBox;
     private Button clearFilterButton;
     private Button addButton;
+    private ComboBox<String> dniFilterComboBox;
+    private ComboBox<String> tarifaFilterComboBox;
 
     public EditarContratosView(ContractService contractService) {
         this.contractService = contractService;
         contracts = contractService.getAllContracts();
         creartext();
-        loadComboBoxItems();
+        loadDniComboBoxItems();
+        loadTarifaComboBoxItems();
 
         for (Contract contract : contracts) {
             contractContainer.add(new ContractGalleryViewCard(contractService, contract.getId(), contract.getStartDate(),
@@ -66,30 +68,43 @@ public class EditarContratosView extends VerticalLayout {
         header.addClassNames(Margin.Bottom.NONE, Margin.Top.XLARGE, FontSize.XXXLARGE);
         headerContainer.add(header);
 
-        nameComboBox = new ComboBox<>("Seleccione un Contrato");
-        nameComboBox.setAllowCustomValue(true);
-        nameComboBox.addValueChangeListener(event -> filterContractsByProductName(event.getValue()));
-
         clearFilterButton = new Button("Limpiar filtro", event -> {
-            nameComboBox.setValue(null);
+            tarifaFilterComboBox.setValue(null);
+            dniFilterComboBox.setValue(null);
+            loadTarifaComboBoxItems(); // Vuelve a cargar todas las tarifas
+
             showAllContracts();
         });
+
+        // Filtro de contratos por DNI
+        dniFilterComboBox = new ComboBox<>("Filtrar por DNI");
+        dniFilterComboBox.setAllowCustomValue(true);
+        dniFilterComboBox.addValueChangeListener(event -> filterContractsByDNI(event.getValue()));
+
+        // Filtro de contratos por nombre de tarifa
+        tarifaFilterComboBox = new ComboBox<>("Filtrar por Tarifa");
+        tarifaFilterComboBox.setAllowCustomValue(true);
+        tarifaFilterComboBox.addValueChangeListener(event -> filterContractsByTarifa(event.getValue()));
+
+
+
+
     
         addButton = new Button("Añadir Nuevo Contrato", event -> {
             Dialog dialog = new Dialog();
            
             TextField phoneNumber = new TextField("Número de teléfono");
             TextField productName = new TextField("Nombre del producto");
-            TextField userName = new TextField("Nombre del usuario");
+            TextField userDNI = new TextField("DNI del usuario");
 
             Button saveButton = new Button("Guardar", saveEvent -> {
 
                 String phoneNumberString = phoneNumber.getValue();
                 String productNameString = productName.getValue();
-                String userNameString = userName.getValue();
+                String userDNIString = userDNI.getValue();
                 
 
-                contractService.saveContractWithDetails(phoneNumberString, productNameString, userNameString);
+                contractService.saveContractWithDetails(phoneNumberString, productNameString, userDNIString);
                 
                 Notification.show("Contrato añadido con éxito.");
                 UI.getCurrent().getPage().reload();
@@ -97,17 +112,20 @@ public class EditarContratosView extends VerticalLayout {
 
             Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
        
-            dialog.add(phoneNumber, productName, userName, saveButton, cancelButton);
+            dialog.add(phoneNumber, productName, userDNI, saveButton, cancelButton);
             dialog.open();
         });
     
-        nameComboBox.getStyle().set("align-self", "center");
-        nameComboBox.getStyle().set("margin-bottom", "2em");
+   
+        dniFilterComboBox.getStyle().set("align-self", "center");
+        dniFilterComboBox.getStyle().set("margin-bottom", "2em");
+        tarifaFilterComboBox.getStyle().set("align-self", "center");
+        tarifaFilterComboBox.getStyle().set("margin-bottom", "2em");
         clearFilterButton.getStyle().set("align-self", "center");
         addButton.getStyle().set("margin-top", "2.25em");
     
         add(headerContainer);
-        add(new HorizontalLayout(nameComboBox, clearFilterButton, addButton));
+        add(new HorizontalLayout(dniFilterComboBox, tarifaFilterComboBox, clearFilterButton, addButton));
     
         contractContainer = new OrderedList();
         contractContainer.addClassNames(Gap.MEDIUM, Display.GRID, ListStyleType.NONE, Margin.NONE, Padding.NONE);
@@ -118,22 +136,70 @@ public class EditarContratosView extends VerticalLayout {
 
 
 
-    private void loadComboBoxItems() {
-        nameComboBox.setItems(contracts.stream().map(Contract::getProduct).map(Product::getName).collect(Collectors.toList()));
+    private void loadDniComboBoxItems() {
+        dniFilterComboBox.setItems(contracts.stream()
+                .map(contract -> contract.getUser().getDni())
+                .distinct()
+                .collect(Collectors.toList()));
     }
     
-    private void filterContractsByProductName(String selectedName) {
-        if (selectedName == null || selectedName.isEmpty()) {
-            showAllContracts();
+    private void loadTarifaComboBoxItems() {
+        tarifaFilterComboBox.setItems(contracts.stream().map(contract -> contract.getProduct().getName()).collect(Collectors.toList()));
+    }
+    
+    private void loadProductsByDNI(String selectedDNI) {
+        List<String> productNames = contracts.stream()
+                .filter(contract -> contract.getUser().getDni().equals(selectedDNI))
+                .map(contract -> contract.getProduct().getName())
+                .collect(Collectors.toList());
+    
+        tarifaFilterComboBox.setItems(productNames);
+    }
+
+
+
+
+
+
+    private void filterContractsByDNI(String selectedDNI) {
+        if (selectedDNI == null || selectedDNI.isEmpty()) {
+            filterContractsByTarifa(tarifaFilterComboBox.getValue()); 
             return;
         }
     
         List<Contract> filteredContracts = contracts.stream()
-                .filter(contract -> contract.getProduct().getName().equals(selectedName))
+                .filter(contract -> contract.getUser().getDni().equals(selectedDNI))
                 .collect(Collectors.toList());
+        loadProductsByDNI(selectedDNI);
+        filterContractsByTarifaAndDNI(tarifaFilterComboBox.getValue(), selectedDNI, filteredContracts);
+    }
+
+
+    
+    private void filterContractsByTarifa(String selectedTarifa) {
+        if (selectedTarifa == null || selectedTarifa.isEmpty()) {
+            showAllContracts(); 
+            return;
+        }
+    
+        List<Contract> filteredContracts = contracts.stream()
+                .filter(contract -> contract.getProduct().getName().equals(selectedTarifa))
+                .collect(Collectors.toList());
+    
+        filterContractsByTarifaAndDNI(selectedTarifa, dniFilterComboBox.getValue(), filteredContracts);
+    }
+    
+    private void filterContractsByTarifaAndDNI(String selectedTarifa, String selectedDNI, List<Contract> filteredContracts) {
+        if (selectedDNI != null && !selectedDNI.isEmpty()) {
+            filteredContracts = filteredContracts.stream()
+                    .filter(contract -> contract.getUser().getDni().equals(selectedDNI))
+                    .collect(Collectors.toList());
+        }
     
         updateContractContainer(filteredContracts);
     }
+
+
 
 
     private void updateContractContainer(List<Contract> filteredContracts) {
@@ -158,6 +224,7 @@ public class EditarContratosView extends VerticalLayout {
                     contract.getPhoneNumber(), contract.getProduct().getImage()));
         }
     }
+
 
 
 }
