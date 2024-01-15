@@ -102,13 +102,29 @@ public class EditarContratosView extends VerticalLayout {
                 String phoneNumberString = phoneNumber.getValue();
                 String productNameString = productName.getValue();
                 String userDNIString = userDNI.getValue();
-                
 
-                contractService.saveContractWithDetails(phoneNumberString, productNameString, userDNIString);
-                
-                Notification.show("Contrato añadido con éxito.");
-                UI.getCurrent().getPage().reload();
+
+                boolean dniExists = contractService.checkIfDNIExists(userDNIString);
+                boolean productNameExists = contractService.checkIfProductNameExists(productNameString);
+                if (!dniExists && !productNameExists) {
+                    Notification.show("Ni el producto existe ni el DNI existe para ningun usuario", 5000, Notification.Position.BOTTOM_START);
+                } else if (!dniExists) {
+                    Notification.show("El DNI no existe para ningun usuario", 5000, Notification.Position.BOTTOM_START);
+                } else if (!productNameExists) {
+                    Notification.show("El producto no existe", 5000, Notification.Position.BOTTOM_START);
+                } else {
+                    try {
+                        contractService.saveContractWithDetails(phoneNumberString, productNameString, userDNIString);
+                        Notification.show("Contrato añadido con éxito.");
+                        UI.getCurrent().getPage().reload();
+                        dialog.close();
+                    } catch (Exception e) {
+                        Notification.show("Error al agregar el contrato: " + e.getMessage(), 5, Notification.Position.BOTTOM_CENTER);
+                    }
+                }
             });
+
+
 
             Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
        
