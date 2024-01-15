@@ -222,6 +222,18 @@ public class ContractService {
         }
     }
 
+
+    public boolean checkIfDNIExists(String userDNI) {
+        Optional<User> user = userDetailsServiceImpl.findByDni(userDNI);
+        return user.isPresent();
+    }
+
+    public boolean checkIfProductNameExists(String productName) {
+        Optional<Product> product = productRepository.findByname(productName);
+        return product.isPresent();
+    }
+
+
     public void deleteContract(long id) {
         contractRepository.deleteById(id);
     }
