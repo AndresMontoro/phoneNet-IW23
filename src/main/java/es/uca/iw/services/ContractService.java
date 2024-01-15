@@ -188,11 +188,11 @@ public class ContractService {
         return contractRepository.findById(id);
     }
 
-    public void saveContractWithDetails(String phoneNumber, String productName, String userName) {
+    public void saveContractWithDetails(String phoneNumber, String productName, String userDNI) {
         Optional<Product> optionalProduct = productRepository.findByname(productName);
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
-            Optional<User> optionalUser = userDetailsServiceImpl.findByUsername(userName);
+            Optional<User> optionalUser = userDetailsServiceImpl.findByDni(userDNI);
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
                 Contract contract = new Contract();
@@ -204,14 +204,14 @@ public class ContractService {
         }
     }
 
-    public void editContractWithDetails(long contractId, String productName, String userName) {
+    public void editContractWithDetails(long contractId, String productName, String userDNI) {
         Optional<Contract> optionalContract = contractRepository.findById(contractId);
         if (optionalContract.isPresent()) {
             Contract contract = optionalContract.get();
             Optional<Product> optionalProduct = productRepository.findByname(productName);
             if (optionalProduct.isPresent()) {
                 Product product = optionalProduct.get();
-                Optional<User> optionalUser = userDetailsServiceImpl.findByUsername(userName);
+                Optional<User> optionalUser = userDetailsServiceImpl.findByDni(userDNI);
                 if (optionalUser.isPresent()) {
                     User user = optionalUser.get();
                     contract.setProduct(product);
