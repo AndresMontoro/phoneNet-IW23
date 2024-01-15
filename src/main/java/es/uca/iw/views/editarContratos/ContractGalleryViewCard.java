@@ -69,18 +69,18 @@ public class ContractGalleryViewCard extends ListItem {
                 Contract contract = optionalContract.get();
                 Dialog dialog = new Dialog();
 
-                TextField userNameField = new TextField("Usuario");
+                TextField userDNIField = new TextField("DNI del Usuario");
                 TextField productNameField = new TextField("Producto");
 
-                userNameField.setValue(contract.getUser().getName());
+                userDNIField.setValue(contract.getUser().getDni());
                 productNameField.setValue(contract.getProduct().getName());
 
                 Button saveButton = new Button("Guardar", saveEvent -> {
                     
-                    String userNameValue = userNameField.getValue();
+                    String userdniValue = userDNIField.getValue();
                     String productNameValue = productNameField.getValue();
 
-                    contractService.editContractWithDetails(contractId, productNameValue, userNameValue);
+                    contractService.editContractWithDetails(contractId, productNameValue, userdniValue);
 
                     dialog.close();
                     UI.getCurrent().getPage().reload();
@@ -88,7 +88,7 @@ public class ContractGalleryViewCard extends ListItem {
 
                 Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
 
-                dialog.add(userNameField, productNameField, saveButton, cancelButton);
+                dialog.add(userDNIField, productNameField, saveButton, cancelButton);
                 dialog.open();
             } else {
                 Notification.show("Contrato no encontrado");
