@@ -32,11 +32,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public Optional<User> findByUsername(String username) {
         return userRepository.findByusername(username);
     }
-    
+
     public Optional<User> findByDni(String dni) {
         return userRepository.findByDni(dni);
     }
-    
+
     public boolean existsByUsername(String username) {
         return userRepository.findByusername(username).isPresent();
     }
@@ -195,6 +195,38 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             userRepository.save(user);
         }
     }
+
+
+
+    public void editUserWithoutPassword(Long id, String newName, String newSurname, String newUsername, String newDni, String newEmail, String phoneNumber, Set<UserRole.Role> roles) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (existsByUsername(newUsername) && !optionalUser.get().getUsername().equals(newUsername))
+            throw new IllegalArgumentException("El nombre de usuario ya está en uso");
+        if (existsByDni(newDni) && !optionalUser.get().getDni().equals(newDni))
+            throw new IllegalArgumentException("El DNI ya está en uso");
+        if (existsByEmail(newEmail) && !optionalUser.get().getEmail().equals(newEmail))
+            throw new IllegalArgumentException("El email ya está en uso");
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setName(newName);
+            user.setSurname(newSurname);
+            user.setUsername(newUsername);
+            user.setDni(newDni);
+            user.setEmail(newEmail);
+            user.setPhoneNumber(phoneNumber);
+            user.getRoles().clear();
+            for (UserRole.Role role : roles) {
+                UserRole userRole = userRoleRepository.findByRole(role).orElse(null);
+                if (userRole != null) {
+                    user.getRoles().add(userRole);
+                }
+            }
+            userRepository.save(user);
+        }
+    }
+
 
     //borrar usuario con el id
     public void deleteUser(Long id) {
