@@ -80,10 +80,24 @@ public class ContractGalleryViewCard extends ListItem {
                     String userdniValue = userDNIField.getValue();
                     String productNameValue = productNameField.getValue();
 
-                    contractService.editContractWithDetails(contractId, productNameValue, userdniValue);
-
-                    dialog.close();
-                    UI.getCurrent().getPage().reload();
+                    boolean dniExists = contractService.checkIfDNIExists(userdniValue);
+                    boolean productNameExists = contractService.checkIfProductNameExists(productNameValue);
+                    if (!dniExists && !productNameExists) {
+                        Notification.show("Ni el producto existe ni el DNI existe para ningun usuario", 5000, Notification.Position.BOTTOM_START);
+                    } else if (!dniExists) {
+                        Notification.show("El DNI no existe para ningun usuario", 5000, Notification.Position.BOTTOM_START);
+                    } else if (!productNameExists) {
+                        Notification.show("El producto no existe", 5000, Notification.Position.BOTTOM_START);
+                    } else {
+                        try {
+                            contractService.editContractWithDetails(contractId, productNameValue, userdniValue);
+                            Notification.show("Contrato editadoo con éxito.");
+                            UI.getCurrent().getPage().reload();
+                            dialog.close();
+                        } catch (Exception e) {
+                            Notification.show("Error al editar el contrato: " + e.getMessage(), 5, Notification.Position.BOTTOM_CENTER);
+                        }
+                    }                    
                 });
 
                 Button cancelButton = new Button("Cancelar", cancelEvent -> dialog.close());
