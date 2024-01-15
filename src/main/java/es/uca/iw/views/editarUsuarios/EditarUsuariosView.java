@@ -74,9 +74,9 @@ public class EditarUsuariosView extends VerticalLayout {
         headerContainer.add(subheader);
 
         // Filtro de usuarios
-        nameComboBox = new ComboBox<>("Seleccione un Usuario");
+        nameComboBox = new ComboBox<>("Seleccione un DNI del usuario");
         nameComboBox.setAllowCustomValue(true);
-        nameComboBox.addValueChangeListener(event -> filterUsersByName(event.getValue()));
+        nameComboBox.addValueChangeListener(event -> filterUsersByDNI(event.getValue()));
 
         // Botón para limpiar el filtro
         clearFilterButton = new Button("Limpiar filtro", event -> {
@@ -154,16 +154,16 @@ public class EditarUsuariosView extends VerticalLayout {
 
 
     private void loadComboBoxItems() {
-        nameComboBox.setItems(users.stream().map(User::getName).collect(Collectors.toList()));
+        nameComboBox.setItems(users.stream().map(User::getDni).collect(Collectors.toList()));
     }
 
-    private void filterUsersByName(String selectedName) {
-        if (selectedName == null || selectedName.isEmpty()) {
+    private void filterUsersByDNI(String selectedDNI) {
+        if (selectedDNI == null || selectedDNI.isEmpty()) {
             showAllUsers();
             return;
         }
 
-        List<User> filteredUsers = users.stream().filter(user -> user.getName().equals(selectedName))
+        List<User> filteredUsers = users.stream().filter(user -> user.getDni().equals(selectedDNI))
                 .collect(Collectors.toList());
 
         updateUsersContainer(filteredUsers);
