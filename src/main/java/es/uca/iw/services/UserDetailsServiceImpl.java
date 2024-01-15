@@ -32,7 +32,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public Optional<User> findByUsername(String username) {
         return userRepository.findByusername(username);
     }
-
+    
+    public Optional<User> findByDni(String dni) {
+        return userRepository.findByDni(dni);
+    }
+    
     public boolean existsByUsername(String username) {
         return userRepository.findByusername(username).isPresent();
     }
