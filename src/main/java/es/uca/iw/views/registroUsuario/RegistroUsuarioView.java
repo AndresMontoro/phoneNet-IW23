@@ -105,6 +105,12 @@ public class RegistroUsuarioView extends Div {
         dniField.setErrorMessage("Por favor, introduzca su DNI");
         form.add(dniField);
 
+        PasswordField confirmPasswordField = new PasswordField("Repita su contraseña");
+        confirmPasswordField.setRequired(true);
+        confirmPasswordField.setRequiredIndicatorVisible(true);
+        confirmPasswordField.setErrorMessage("Por favor, repita su contraseña");
+        form.add(confirmPasswordField);
+
         EmailField emailField = new EmailField("Email");
         emailField.setRequired(true);
         emailField.setRequiredIndicatorVisible(true);
@@ -121,6 +127,16 @@ public class RegistroUsuarioView extends Div {
 
         Button registerButton = new Button("Registrarse");
         registerButton.addClickListener(event -> {
+            // Verificar si las contraseñas coinciden
+            String enteredPassword = passwordField.getValue();
+            String enteredConfirmPassword = confirmPasswordField.getValue();
+
+            if (!enteredPassword.equals(enteredConfirmPassword)) {
+                confirmPasswordField.setInvalid(true);
+                confirmPasswordField.setErrorMessage("Las contraseñas no coinciden");
+                return;
+            }
+
             Set<UserRole> userRoles = new HashSet<>();
             UserRole userRole = this.userRoleRepository.findByRole(UserRole.Role.USER).orElse(null);
             userRoles.add(userRole);
