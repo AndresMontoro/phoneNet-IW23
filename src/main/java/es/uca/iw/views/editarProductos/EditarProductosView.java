@@ -75,7 +75,17 @@ public class EditarProductosView extends VerticalLayout {
         grid.addColumn(Product::getDataPenaltyPrice).setHeader("Penalización por datos");
         grid.addColumn(Product::getRouterSpeed).setHeader("Velocidad del router");
         grid.addColumn(Product::getAvailable).setHeader("Disponible");
-        grid.addComponentColumn(product -> createEditButton(product.getId())).setHeader("Acciones");
+        grid.addComponentColumn(product -> {
+            Button editButton = createEditButton(product.getId());
+            Button otherButton = createDeleteButton(product.getId());
+        
+            HorizontalLayout buttonLayout = new HorizontalLayout(editButton, otherButton);
+            buttonLayout.setSpacing(true);
+        
+            return buttonLayout;
+        }).setHeader("Acciones");
+        
+
         add(grid);
     }
 
@@ -283,4 +293,12 @@ public class EditarProductosView extends VerticalLayout {
 
         return editButton;
     }
+
+    private Button createDeleteButton(Long id) {
+        return new Button(VaadinIcon.TRASH.create(), deleteEvent -> {
+            this.productService.deleteProduct(id);
+            UI.getCurrent().getPage().executeJs("location.reload();");
+        });
+    }
 }
+
