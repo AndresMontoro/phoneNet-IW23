@@ -6,6 +6,8 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.router.Route;
@@ -78,7 +80,8 @@ public class EditarReclamacionesView extends VerticalLayout {
         cambiarEstadoButton.addClickListener(e -> mostrarOpcionesCambioEstado(complaint));
 
         Button eliminarReclamacionButton = new Button("Eliminar Reclamación");
-        eliminarReclamacionButton.addClickListener(e -> eliminarReclamacion(complaint));
+        eliminarReclamacionButton.addClickListener(e -> mostrarConfirmacionEliminarReclamacion(complaint));
+
 
         Button añadirComentariosButton = new Button("Añadir Comentarios");
         añadirComentariosButton.addClickListener(e -> mostrarFormularioAñadirComentarios(complaint));
@@ -90,6 +93,34 @@ public class EditarReclamacionesView extends VerticalLayout {
         dialog.add(formLayout);
 
         dialog.open();
+    }
+
+    private void mostrarConfirmacionEliminarReclamacion(Complaint complaint) {
+        Dialog confirmDialog = new Dialog();
+        confirmDialog.setCloseOnOutsideClick(false);
+
+        VerticalLayout confirmLayout = new VerticalLayout();
+
+        Span confirmMessage = new Span("¿Estás seguro de que deseas eliminar esta reclamación?");
+        Button confirmButton = new Button("Confirmar");
+        confirmButton.addClickListener(e -> {
+            eliminarReclamacion(complaint);
+            confirmDialog.close();
+        });
+
+        Button cancelButton = new Button("Cancelar");
+        cancelButton.addClickListener(e -> confirmDialog.close());
+
+        confirmLayout.add(confirmMessage);
+        confirmLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, confirmMessage);
+
+        HorizontalLayout buttonLayout = new HorizontalLayout(confirmButton, cancelButton);
+        buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+
+        confirmLayout.add(buttonLayout);
+        confirmDialog.add(confirmLayout);
+
+        confirmDialog.open();
     }
 
     private void eliminarReclamacion(Complaint complaint) {

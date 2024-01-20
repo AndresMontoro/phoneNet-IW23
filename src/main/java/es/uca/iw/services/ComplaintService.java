@@ -1,12 +1,15 @@
 package es.uca.iw.services;
 
 import es.uca.iw.data.ComplaintRepository;
+import es.uca.iw.data.UserRepository;
 import es.uca.iw.model.Complaint;
 import es.uca.iw.model.User;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,9 +20,14 @@ import java.util.Optional;
 public class ComplaintService {
 
     private final ComplaintRepository complaintRepository;
+    private final UserRepository userRepository;
 
-    public ComplaintService(ComplaintRepository complaintRepository) {
+
+
+    @Autowired
+    public ComplaintService(ComplaintRepository complaintRepository, UserRepository userRepository) {
         this.complaintRepository = complaintRepository;
+        this.userRepository = userRepository;
     }
 
     public Complaint addComplaint(Complaint complaint) {
@@ -32,12 +40,26 @@ public class ComplaintService {
         return savedComplaint;
     }
 
+    private String getUserEmail(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        return userOptional.map(User::getEmail).orElse(null);
+    }
+
     public void addComentariosAReclamacion(Complaint complaint, String nuevoComentario) {
         List<String> comentariosActuales = complaint.getComments();
         comentariosActuales.add(nuevoComentario);
         complaint.setComments(comentariosActuales);
         complaintRepository.save(complaint);
-    }  
+
+        String userEmail = getUserEmail(complaint.getUserId());
+        if (userEmail != null) {
+            try {
+                EmailService.sendComentarioEmail(userEmail, nuevoComentario);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public List<Complaint> getComplaintsByAuthenticatedUser() {
         User authenticatedUser = getAuthenticatedUser();

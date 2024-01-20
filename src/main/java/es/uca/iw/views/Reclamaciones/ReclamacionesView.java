@@ -6,6 +6,8 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Background;
@@ -77,7 +79,7 @@ public class ReclamacionesView extends VerticalLayout {
         FormLayout formLayout = new FormLayout();
 
         Button opcion1Button = new Button("Eliminar Reclamación");
-        opcion1Button.addClickListener(e -> eliminarReclamacion(complaint));
+        opcion1Button.addClickListener(e -> mostrarConfirmacionEliminarReclamacion(complaint));
 
         Button opcion2Button = new Button("Añadir Comentarios");
         opcion2Button.addClickListener(e -> mostrarFormularioAñadirComentarios(complaint));
@@ -90,6 +92,35 @@ public class ReclamacionesView extends VerticalLayout {
 
         dialog.open();
     }
+
+    private void mostrarConfirmacionEliminarReclamacion(Complaint complaint) {
+        Dialog confirmDialog = new Dialog();
+        confirmDialog.setCloseOnOutsideClick(false);
+
+        VerticalLayout confirmLayout = new VerticalLayout();
+
+        Span confirmMessage = new Span("¿Estás seguro de que deseas eliminar esta reclamación?");
+        Button confirmButton = new Button("Confirmar");
+        confirmButton.addClickListener(e -> {
+            eliminarReclamacion(complaint);
+            confirmDialog.close();
+        });
+
+        Button cancelButton = new Button("Cancelar");
+        cancelButton.addClickListener(e -> confirmDialog.close());
+
+        confirmLayout.add(confirmMessage);
+        confirmLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, confirmMessage);
+
+        HorizontalLayout buttonLayout = new HorizontalLayout(confirmButton, cancelButton);
+        buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+
+        confirmLayout.add(buttonLayout);
+        confirmDialog.add(confirmLayout);
+
+        confirmDialog.open();
+    }
+
 
     private void eliminarReclamacion(Complaint complaint) {
         complaintService.eliminarReclamacion(complaint.getId());
@@ -130,7 +161,7 @@ public class ReclamacionesView extends VerticalLayout {
     
         FormLayout formLayout = new FormLayout();
     
-        Span descripcionLabel = new Span("Descripción");
+        Span descripcionLabel = new Span("Descripción *");
         TextArea descripcionField = new TextArea();
         descripcionField.setWidthFull();
     

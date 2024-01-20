@@ -67,4 +67,36 @@ public class EmailService {
             System.err.println("Error al enviar el correo de bienvenida.");
         }
     }
+
+
+    public static void sendComentarioEmail(String toEmail, String comentario) {
+        final String fromEmail = "PhoneNetIW@gmail.com";
+        final String password = "qfjn gpku ultj mgab";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(fromEmail, password);
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(fromEmail));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+            message.setSubject("Nuevo comentario en tu reclamación");
+            message.setText("Se ha añadido un nuevo comentario a tu reclamación:\n\n" + comentario);
+
+            Transport.send(message, fromEmail, password);
+            System.out.println("Correo de comentario enviado correctamente.");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            System.err.println("Error al enviar el correo de comentario.");
+        }
+    }
 }
