@@ -26,6 +26,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import es.uca.iw.model.User;
 import es.uca.iw.model.UserRole;
+import es.uca.iw.services.EmailService;
 import es.uca.iw.services.UserDetailsServiceImpl;
 import com.vaadin.flow.component.notification.Notification;
 import java.util.Set;
@@ -117,6 +118,10 @@ public class EditarUsuariosView extends VerticalLayout {
                 try {
                     userDetailsServiceImpl.saveUserWithDetails(newName, newSurname, newUsername, newPassword, 
                         newDni, newEmail, newPhoneNumber, userRoles);
+
+                    String welcomeMessage = "¡Bienvenido a PhoneNet! Gracias por registrarte.";
+                    EmailService.sendWelcomeEmail(newEmail, welcomeMessage);
+                        
                     Notification.show("Usuario añadido con éxito.");
                     dialog.close();
                     UI.getCurrent().getPage().reload();
