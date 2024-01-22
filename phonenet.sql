@@ -320,7 +320,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `dni`, `email`, `name`, `password`, `phone_number`, `surname`, `username`) VALUES
-(3, '32094459Y', 'admin@gmail.com', 'Admin', '$2a$10$09hljkZaT7lUxzcHINcE2OM2WHUghQf3vKOFJrH.njzWFHrrc7t/O', '679109619', 'Admin', 'Admin');
+(3, '32094459Y', 'admin@gmail.com', 'Admin', '$2a$10$09hljkZaT7lUxzcHINcE2OM2WHUghQf3vKOFJrH.njzWFHrrc7t/O', '679109619', 'Admin', 'Admin'),
+(4, '23432343R', 'user111@gmail.com', 'userr', '$2a$10$m.85tdlmJf4wBRhmwuw9Le8uYIrMc/2yVwarIrTwy/IsjvsuGupee', '566767678', 'userr userr', 'user1');
 
 -- --------------------------------------------------------
 
@@ -357,7 +358,8 @@ CREATE TABLE `user_roles` (
 --
 
 INSERT INTO `user_roles` (`user_id`, `roles_id`) VALUES
-(3, 1);
+(3, 1),
+(4, 2);
 
 --
 -- Índices para tablas volcadas
